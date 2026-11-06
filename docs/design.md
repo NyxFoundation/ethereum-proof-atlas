@@ -55,14 +55,17 @@ be presented as established claims.
 
 ## Architecture views
 
-Provide two tabs with these exact English labels:
+Provide three tabs with these exact English labels:
 
 - **Beacon Spec**
 - **Lean Spec**
+- **Execution Spec**
 
-Do not show a scope caption beside the tabs. The tab names identify the
-consensus design family, not a restriction to consensus-only content. Execution and compiler areas remain explicitly labeled
-within each diagram wherever their specification relationships are established.
+Do not show a scope caption beside the tabs. The consensus tabs identify the
+consensus design family; the Execution tab identifies the execution design
+family. No tab borrows another tab's snapshot: consensus views carry no
+execution, compiler, or execution-networking instances, and the Execution view
+carries none of the consensus instances.
 
 Each tab selects an independently sourced architecture view, including its
 components, relationships, and applicable claims. This is not a label change or
@@ -83,10 +86,15 @@ a filter over one assumed common specification.
 - Protocol, implementation, formal-model, and proof-artifact versions are
   separate identities.
 
-The consensus repositories are not sufficient sources for the entire Ethereum
-architecture. Execution and compiler components need their own primary sources.
-Do not invent future execution-layer connections because they exist in the
-Beacon view.
+No single repository is a sufficient source for an entire architecture view.
+Execution and compiler components need their own primary sources and, per the
+recorded split, live in their own tab. The Engine API payload boundary between
+execution and consensus is therefore not drawn as a cross-layer component;
+each tab shows where its record ends. Do not invent execution-layer
+connections in a consensus view, and do not copy consensus-side connections
+into the Execution view. The consensus views keep the blob availability
+checks that the consensus spec itself performs, without introducing execution
+components for them.
 
 ### Structure and placement
 
@@ -458,7 +466,9 @@ The implementation tests behavior, not just schema shapes or type
 checking. Target at least 80% application code coverage and cover these flows:
 
 - Switching tabs changes the snapshot, relationships, and applicable claims
-  without leaking a claim or check result from the other view.
+  without leaking a claim or check result from the other view; the Execution
+  snapshot renders its own map and an index table whose populated cells are
+  execution- and development-only with zero catalogued claims.
 - Component selection, expansion, pan/zoom, and claim detail navigation work
   together and remain usable by keyboard.
 - Read-only interactions cannot move, delete, or reconnect components.

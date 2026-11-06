@@ -180,7 +180,7 @@ describe('index presentation', () => {
     fireEvent.click(within(table).getByRole('button', {name: 'Fork choice: No catalogued claims'}));
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
-    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThan(5);
+    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThanOrEqual(5);
     expect(within(table).getByRole('rowheader', {name: 'Development'})).toBeTruthy();
     expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
     expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
@@ -202,9 +202,11 @@ describe('index presentation', () => {
     const table = screen.getByRole('table');
     expect(within(table).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
     expect(within(table).queryByRole('button', {name: /^Solidity \/ solc/})).toBeNull();
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'Home'});
-    await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
+    fireEvent.click(screen.getByRole('tab', {name: 'Execution Spec'}));
+    await screen.findByText('Osaka');
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
     expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
+    expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
   });
 });
 
@@ -235,12 +237,18 @@ describe('application lifecycle', () => {
     await screen.findByText('Lstar (experimental)');
     expect(screen.getByRole('tab', {name: 'Lean Spec'}).getAttribute('aria-selected')).toBe('true');
     expect(screen.queryByRole('button', {name: 'Select BLS signatures'})).toBeNull();
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'Home'});
-    await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'End'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'ArrowRight'});
+    await screen.findByText('Osaka');
+    expect(screen.getByRole('tab', {name: 'Execution Spec'}).getAttribute('aria-selected')).toBe('true');
+    expect(screen.queryByRole('button', {name: 'Select BLS signatures'})).toBeNull();
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Execution Spec'}), {key: 'ArrowLeft'});
     await screen.findByText('Lstar (experimental)');
-    fireEvent.click(screen.getByRole('tab', {name: 'Beacon Spec'}));
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'End'});
+    await screen.findByText('Osaka');
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Execution Spec'}), {key: 'Home'});
     await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
+    fireEvent.click(screen.getByRole('tab', {name: 'Lean Spec'}));
+    await screen.findByText('Lstar (experimental)');
   });
   it('should display an English error and recover when a request can be retried', async () => {
     vi.mocked(loadAtlas).mockRejectedValueOnce(new Error('Atlas data is unavailable. Try again.')).mockResolvedValue(bundle);

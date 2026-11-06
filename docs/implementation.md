@@ -124,6 +124,13 @@ dataset. No percentage, coverage vocabulary or whole-table rollup is
 rendered, and the legend replaces the relationship legend while Index is
 shown.
 
+The consensus snapshots and the Execution snapshot are separate architecture
+views since 2026-11-08: the former execution, execution-networking and
+compiler instances moved out of the Beacon view into a dedicated `Execution
+Spec` tab with its own recorded edges, and the bundle digest was recomputed
+through the packaging validator. The Engine-result interface is recorded in
+the research notes rather than drawn as a cross-layer component.
+
 The snapshot bar carries only the display-mode toggle and the active legend.
 The former global component select was removed: both presentations reach any
 component instance directly (keyboard-operable map nodes; selectable index
@@ -131,13 +138,14 @@ cells), and the view itself is already selected through the tab and dataset
 selectors at the HTTP boundary.
 
 Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
-`npm run verify`: 170 unit/component/package-gate cases and 12 workerd browser
-cases passed, including the new index layout suite, mode-toggle/tab-persistence
-tests and two Index browser journeys. Coverage was 99.84% lines, 99.03%
-statements, 95.91% branches and 98.72% functions; `indexLayout.ts` itself was
-100% lines. A rendered desktop screenshot confirmed the caption, group rows,
-count chips and legend before release. These results remain observations of
-this application revision.
+`npm run verify`: 171 unit/component/package-gate cases and 12 workerd browser
+cases passed, including the index layout suite (with the Execution view
+assembled as its own foundation-first table), mode-toggle/tab-persistence
+tests and two Index browser journeys with direct node interaction. Coverage
+was 99.84% lines, 99.04% statements, 96.13% branches and 98.73% functions;
+`indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
+confirmed the caption, group rows, count chips and legend before release.
+These results remain observations of this application revision.
 
 ## Automated update acceptance
 

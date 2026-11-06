@@ -1,6 +1,6 @@
 ---
 title: Research and intake notes
-last_updated: 2026-11-06
+last_updated: 2026-11-08
 tags:
   - evidence
   - research
@@ -39,6 +39,11 @@ use full commits, not those moving discovery URLs.
   `d2acac1a0109f88224896e8e6e6d41a6a8e53673`, compiler output
   and EVM targets (Osaka is the documented default). The generated-code edge
   points to EVM, never a runtime call from an execution client to solc.
+- **Execution view assembly:** these three snapshots form the third tab as a
+  separate architecture view. Its four edges re-use the recorded primary
+  sources; the Engine-result interface to the consensus transition stays out
+  of both views because no consensus instance exists inside the Execution
+  view, and the consensus views borrow no execution instance.
 - **Future consensus:** leanSpec
   `0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8`, experimental Lstar.
   Its fork choice, transition, signature aggregation, XMSS, Poseidon,

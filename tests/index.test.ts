@@ -15,10 +15,10 @@ describe('index table layout', () => {
     const { bands } = build(beacon);
     expect(bands).toHaveLength(5);
     expect(bands[0].cells.map(c => c.instanceId).sort()).toEqual(
-      ['b-bls', 'b-elp2p', 'b-kzg', 'b-ssz', 'b-trie'].sort());
+      ['b-bls', 'b-kzg', 'b-ssz'].sort());
     expect(bands[1].cells.map(c => c.instanceId)).toEqual(['b-p2p']);
-    expect(bands[2].cells.map(c => c.instanceId)).toEqual(['b-finality', 'b-evm', 'b-solc']);
-    expect(bands[3].cells.map(c => c.instanceId)).toEqual(['b-da', 'b-state', 'b-execution']);
+    expect(bands[2].cells.map(c => c.instanceId)).toEqual(['b-finality']);
+    expect(bands[3].cells.map(c => c.instanceId)).toEqual(['b-da', 'b-state']);
     expect(bands[4].cells.map(c => c.instanceId)).toEqual(['b-head']);
   });
   it('should keep parallel lean bands and their foundation order', () => {
@@ -30,23 +30,35 @@ describe('index table layout', () => {
   });
   it('should place each area in its catalogued group row', () => {
     expect(cell(beacon, 'b-state').group).toBe('consensus');
-    expect(cell(beacon, 'b-evm').group).toBe('execution');
     expect(cell(beacon, 'b-bls').group).toBe('cryptography');
     expect(cell(beacon, 'b-ssz').group).toBe('serialization');
-    expect(cell(beacon, 'b-solc').group).toBe('development');
     expect(cell(lean, 'l-xmss').group).toBe('cryptography');
     expect(cell(lean, 'l-signatures').group).toBe('cryptography');
+    expect(cells(beacon).some(c => c.group === 'development')).toBe(false);
+    expect(cells(beacon).some(c => c.group === 'execution')).toBe(false);
   });
   it('should resolve networking groups from recorded edges of the selected view', () => {
+    const execution = bundle.architectureViews.find(v => v.id === 'execution')!;
     expect(cell(beacon, 'b-p2p').group).toBe('consensus');
-    expect(cell(beacon, 'b-elp2p').group).toBe('execution');
     expect(cell(lean, 'l-p2p').group).toBe('consensus');
+    expect(cell(execution, 'x-elp2p').group).toBe('execution');
     expect(cells(lean).some(c => c.group === 'development')).toBe(false);
   });
-  it('should keep execution-side networking beside trie in one band, not a new column', () => {
-    const band = build(beacon).bands[0];
-    expect(band.cells.filter(c => c.group === 'execution').map(c => c.instanceId))
-      .toEqual(['b-trie', 'b-elp2p']);
+  it('should assemble the execution view as its own foundation-first table', () => {
+    const execution = bundle.architectureViews.find(v => v.id === 'execution')!;
+    const { bands } = build(execution);
+    expect(bands).toHaveLength(3);
+    expect(bands[0].cells.map(c => c.instanceId)).toEqual(['x-elp2p', 'x-solc']);
+    expect(bands[1].cells.map(c => c.instanceId)).toEqual(['x-evm', 'x-trie']);
+    expect(bands[2].cells.map(c => c.instanceId)).toEqual(['x-transition']);
+    expect(cell(execution, 'x-evm').group).toBe('execution');
+    expect(cell(execution, 'x-trie').group).toBe('execution');
+    expect(cell(execution, 'x-solc').group).toBe('development');
+    expect(cell(execution, 'x-transition').count).toBe(0);
+  });
+  it('should keep execution-side networking beside trie order in stored x direction', () => {
+    const execution = bundle.architectureViews.find(v => v.id === 'execution')!;
+    expect(build(execution).bands[1].cells.map(c => c.instanceId)).toEqual(['x-evm', 'x-trie']);
   });
   it('should expose catalogued claim counts per view without inflating evidence', () => {
     expect(cell(beacon, 'b-state').count).toBe(1);

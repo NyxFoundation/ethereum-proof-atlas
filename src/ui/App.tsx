@@ -4,9 +4,10 @@ import { loadAtlas } from './api';
 import { Atlas } from './Atlas';
 
 type LoadState = { kind: 'loading' } | { kind: 'ready'; bundle: AtlasBundle } | { kind: 'error'; message: string };
-const tabs = [{ id: 'beacon', label: 'Beacon Spec' }, { id: 'lean', label: 'Lean Spec' }] as const;
+const tabs = [{ id: 'beacon', label: 'Beacon Spec' }, { id: 'lean', label: 'Lean Spec' },
+  { id: 'execution', label: 'Execution Spec' }] as const;
 export function App() {
-  const [viewId, setView] = useState<'beacon' | 'lean'>('beacon');
+  const [viewId, setView] = useState<'beacon' | 'lean' | 'execution'>('beacon');
   const [mode, setMode] = useState<'map' | 'index'>('map');
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<LoadState>({ kind: 'loading' });
@@ -27,7 +28,9 @@ export function App() {
   const tabKey = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
-    const next = event.key === 'Home' ? 'beacon' : event.key === 'End' ? 'lean' : viewId === 'beacon' ? 'lean' : 'beacon';
+    const index = tabs.findIndex(tab => tab.id === viewId);
+    const next = event.key === 'Home' ? tabs[0].id : event.key === 'End' ? tabs[tabs.length - 1].id
+      : tabs[(index + (event.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length].id;
     switchTab(next);
     document.getElementById('tab-' + next)?.focus();
   };

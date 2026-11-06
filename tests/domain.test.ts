@@ -12,7 +12,7 @@ const changed = async (mutate: (bundle: any) => void) => {
 
 describe('bundle integrity', () => {
   it('should accept the inspected, pinned dataset when all references resolve', async () => {
-    expect((await validateBundle(raw)).architectureViews).toHaveLength(2);
+    expect((await validateBundle(raw)).architectureViews).toHaveLength(3);
   });
   it('should reject tampering when the canonical digest differs', async () => {
     await expect(validateBundle({ ...raw, datasetRevision: '0'.repeat(64) })).rejects.toThrow();

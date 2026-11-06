@@ -84,6 +84,8 @@ test('should expand and pan with keyboard without permitting graph mutation', as
   await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
   await expect(viewport).not.toHaveAttribute('style', panned!);
   await page.getByRole('button', { name: 'Fit map', exact: true }).click();
+  await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Select Solidity / solc', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select Solidity / solc', exact: true }).click();
   await page.getByRole('button', { name: 'EVM bytecode · generated-code', exact: true }).click();
   await expect(page.getByRole('complementary').getByText(/Execution does not invoke the compiler/)).toBeVisible();
@@ -193,6 +195,13 @@ test('should inventory catalogued claims in the index table across views', async
   const leanTable = page.getByRole('table');
   await leanTable.getByRole('button', { name: 'State transition: Claims: 1' }).click();
   await expect(page.getByRole('button', { name: 'Post-genesis checkpoints stay unchanged or move strictly forward' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
+  const execTable = page.getByRole('table');
+  await expect(execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' })).toBeVisible();
+  expect(await execTable.getByRole('button').count()).toBe(5);
+  await expect(execTable.getByRole('button', { name: 'Fork choice: No catalogued claims' })).toHaveCount(0);
+  await execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' }).click();
+  await expect(page.getByRole('complementary', { name: 'Details panel' }).getByRole('heading', { name: '0 claims' })).toBeVisible();
   await page.getByRole('button', { name: 'Map', exact: true }).click();
   await expect(page.locator('.react-flow')).toBeVisible();
 });
