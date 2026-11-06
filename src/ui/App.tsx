@@ -4,7 +4,7 @@ import { loadAtlas } from './api';
 import { Atlas } from './Atlas';
 
 type LoadState = { kind: 'loading' } | { kind: 'ready'; bundle: AtlasBundle } | { kind: 'error'; message: string };
-const tabs = [{ id: 'beacon', label: 'Beacon Spec (Current)' }, { id: 'lean', label: 'Lean Spec (Future)' }] as const;
+const tabs = [{ id: 'beacon', label: 'Beacon Spec' }, { id: 'lean', label: 'Lean Spec' }] as const;
 export function App() {
   const [viewId, setView] = useState<'beacon' | 'lean'>('beacon');
   const [attempt, setAttempt] = useState(0);
@@ -30,13 +30,12 @@ export function App() {
     switchTab(next);
     document.getElementById('tab-' + next)?.focus();
   };
-  return <><header><a className="brand" href="/">EPA <span>Ethereum Proof Atlas</span></a><p>Claims, not certifications.</p></header>
-    <main><div className="intro"><p className="eyebrow">A source-pinned evidence map</p><h1>What has been proved?</h1>
-      <p>Explore the architecture. Inspect the subject, assumptions and limits behind each claim.</p></div>
-      <div className="view-bar"><div role="tablist" aria-label="Architecture view">{tabs.map(tab =>
+  return <><header><h1><a className="brand" href="/">Ethereum Proof Atlas</a></h1>
+    <p>Formal verification across Ethereum.</p></header>
+    <main><div className="view-bar"><div role="tablist" aria-label="Architecture view">{tabs.map(tab =>
         <button id={'tab-' + tab.id} key={tab.id} role="tab" aria-selected={viewId === tab.id} aria-controls="atlas-view"
           tabIndex={viewId === tab.id ? 0 : -1} onKeyDown={tabKey} onClick={() => { if (viewId !== tab.id) switchTab(tab.id); }}>{tab.label}</button>)}</div>
-        <span>Ethereum L1 and supporting infrastructure</span></div>
+    </div>
       <div id="atlas-view" role="tabpanel" aria-labelledby={'tab-' + viewId}>
         {state.kind === 'loading' && <p className="loading" role="status">Loading the selected architecture…</p>}
         {state.kind === 'error' && <div className="error" role="alert"><h2>Unable to display the atlas</h2><p>{state.message}</p>

@@ -65,7 +65,7 @@ const binding = z.strictObject({
   ]),
 });
 const architectureView = z.strictObject({
-  id: z.enum(['beacon', 'lean']), label: z.enum(['Beacon Spec (Current)', 'Lean Spec (Future)']),
+  id: z.enum(['beacon', 'lean']), label: z.enum(['Beacon Spec', 'Lean Spec']),
   fork: text, experimental: z.boolean(), description: text, sources, inheritance: texts.min(1),
   componentInstances: z.array(z.strictObject({ instanceId: idSchema, componentId: idSchema,
     subjectArtifactIds: ids.min(1), sources, position, parentInstanceId: idSchema.nullable() })).min(1).max(200),

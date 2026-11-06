@@ -1,6 +1,24 @@
 import { test, expect } from '@playwright/test';
 import { request as httpRequest } from 'node:http';
 
+for (const width of [1280, 390, 320]) {
+  test(`should keep the introduction compact and the map in view at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({width, height: 844});
+    await page.goto('/');
+    const header = page.getByRole('banner');
+    await expect(header.getByRole('heading', {level: 1, name: 'Ethereum Proof Atlas'})).toBeVisible();
+    const description = header.getByText('Formal verification across Ethereum.');
+    await expect(description).toBeVisible();
+    expect(await description.evaluate(element => element.getBoundingClientRect().height <=
+      Number.parseFloat(getComputedStyle(element).lineHeight) + 1)).toBe(true);
+    expect((await header.boundingBox())!.height).toBeLessThanOrEqual(104);
+    expect((await page.getByRole('tablist').boundingBox())!.y).toBeLessThanOrEqual(112);
+    await expect(page.getByRole('button', {name: 'Select State transition', exact: true})).toBeVisible();
+    await expect(page.locator('.map')).toBeInViewport({ratio: 0.5});
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  });
+}
+
 test('should navigate independently sourced views and evidence in the Workers runtime', async ({ page }) => {
   const foreignRequests: string[] = [];
   const errors: string[] = [];
@@ -21,7 +39,7 @@ test('should navigate independently sourced views and evidence in the Workers ru
   const theorem = panel.getByRole('link', { name: 'GasperBeaconChain.Core.accountable_safety' });
   await expect(theorem).toHaveAttribute('href', /7650709170327c5f10c8b5da99b10941e208ef5d/);
   await expect(theorem).toHaveAttribute('rel', 'noopener noreferrer');
-  await page.getByRole('tab', { name: 'Lean Spec (Future)' }).click();
+  await page.getByRole('tab', { name: 'Lean Spec' }).click();
   await expect(page.getByText('Lstar (experimental)', { exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Select BLS signatures', exact: true })).toHaveCount(0);
   await expect(panel.getByText('Conflicting finality implies a slashed quorum intersection')).toHaveCount(0);
@@ -30,7 +48,7 @@ test('should navigate independently sourced views and evidence in the Workers ru
   await expect(panel.getByText(/genesis anchoring is excluded/)).toBeVisible();
   await expect(panel.getByRole('link', { name: 'State.checkpoint_forward' })).toHaveAttribute('href', /ba7284513031eac5c66bfb8221d27b6154cf240b/);
   await page.getByRole('button', { name: 'Select XMSS signatures', exact: true }).click();
-  await expect(panel.getByRole('heading', { name: 'No catalogued claims' })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: '0 claims' })).toBeVisible();
   expect(foreignRequests).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -69,7 +87,7 @@ test('should expand and pan with keyboard without permitting graph mutation', as
   await page.getByRole('combobox', {name: 'Component'}).selectOption('b-solc');
   await page.getByRole('button', {name: 'EVM bytecode · generated-code', exact: true}).click();
   await expect(page.getByRole('complementary').getByText(/Execution does not invoke the compiler/)).toBeVisible();
-  await page.getByRole('tab', { name: 'Beacon Spec (Current)' }).focus();
+  await page.getByRole('tab', { name: 'Beacon Spec' }).focus();
   await page.keyboard.press('Home');
   await expect(node).toBeVisible();
   await page.keyboard.press('ArrowRight');
@@ -89,7 +107,7 @@ test('should fail explicitly when an open browser encounters a newer schema', as
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Select State transition', exact: true })).toBeVisible();
   await page.route('**/api/atlas?view=lean', route => route.fulfill({json: {schemaVersion: 2}}));
-  await page.getByRole('tab', {name: 'Lean Spec (Future)'}).click();
+  await page.getByRole('tab', {name: 'Lean Spec'}).click();
   await expect(page.getByRole('alert')).toContainText('Unsupported atlas schema version');
   await expect(page.locator('.react-flow')).toHaveCount(0);
 });

@@ -120,7 +120,7 @@ function validateBinding(c: Context, view: ArchitectureView, binding: ClaimBindi
     s.locationId === ref.locationId)), 'comparison source scope');
 }
 function validateView(c: Context, view: ArchitectureView) {
-  requireValid(view.label === (view.id === 'beacon' ? 'Beacon Spec (Current)' : 'Lean Spec (Future)'), 'tab identity');
+  requireValid(view.label === (view.id === 'beacon' ? 'Beacon Spec' : 'Lean Spec'), 'tab identity');
   requireValid(view.experimental === (view.id === 'lean'), 'experimental status');
   references(c, view.sources);
   unique(view.componentInstances.map(i => i.instanceId), 'instance ID');

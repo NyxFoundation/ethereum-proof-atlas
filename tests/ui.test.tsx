@@ -104,14 +104,14 @@ describe('evidence presentation', () => {
   it('should show neutral empty states and source-backed relationships when components change', () => {
     const props = {bundle,view,instanceId: 'b-bls',claimId: null,edgeId: null,onClaim: vi.fn(),onEdge: vi.fn()};
     const {rerender} = render(<Details {...props} />);
-    expect(screen.getByRole('heading', {name: 'No catalogued claims'})).toBeTruthy();
+    expect(screen.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     fireEvent.click(screen.getByRole('button', {name: 'Signatures · dependency'}));
     expect(props.onEdge).toHaveBeenCalledWith('b-bls-state');
     rerender(<Details {...props} instanceId="b-state" />);
     fireEvent.click(screen.getByRole('button', {name: claim.title}));
     expect(props.onClaim).toHaveBeenCalledWith(claim.id);
     rerender(<Details {...props} instanceId="b-state" claimId={claim.id} />);
-    fireEvent.click(screen.getByRole('button', {name: 'Back to claim list'}));
+    fireEvent.click(screen.getByRole('button', {name: 'Back'}));
     expect(props.onClaim).toHaveBeenCalledWith(null);
     rerender(<Details {...props} edgeId="b-bls-state" />);
     expect(screen.getByText(/RANDAO processing call BLS/)).toBeTruthy();
@@ -129,7 +129,7 @@ describe('map interaction', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Expand Fixture node'}));
     expect(data.select).toHaveBeenCalledOnce(); expect(data.expand).toHaveBeenCalledOnce();
     rerender(<ReactFlowProvider><ComponentNode {...props} data={{...data,count: 0,expanded: true}} /></ReactFlowProvider>);
-    expect(screen.getByText('No catalogued claims')).toBeTruthy();
+    expect(screen.getByText('0 claims')).toBeTruthy();
     expect(screen.getByRole('button', {name: 'Collapse Fixture node'}).getAttribute('aria-expanded')).toBe('true');
   });
   it('should offer keyboard-operable viewport controls without mutating domain geometry', () => {
@@ -147,7 +147,7 @@ describe('map interaction', () => {
     const panel = within(screen.getByRole('complementary'));
     fireEvent.click(panel.getByRole('button', {name: claim.title}));
     expect(panel.getByText('Property')).toBeTruthy();
-    fireEvent.click(panel.getByRole('button', {name: 'Back to claim list'}));
+    fireEvent.click(panel.getByRole('button', {name: 'Back'}));
     fireEvent.click(panel.getByRole('button', {name: 'Epoch processing · dependency'}));
     expect(panel.getByText(/Fulu process_epoch invokes/)).toBeTruthy();
     fireEvent.click(await screen.findByRole('button', {name: 'Collapse State transition'}));
@@ -155,27 +155,42 @@ describe('map interaction', () => {
     fireEvent.click(await screen.findByRole('button', {name: 'Expand State transition'}));
     expect(await screen.findByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy();
     fireEvent.click(await screen.findByRole('button', {name: 'Select BLS signatures'}));
-    expect(panel.getByRole('heading', {name: 'No catalogued claims'})).toBeTruthy();
+    expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
   });
 });
 
 describe('application lifecycle', () => {
+  it('should introduce the atlas with its name and one description when the page opens', async () => {
+    vi.mocked(loadAtlas).mockResolvedValue(bundle);
+    render(<App />);
+    const header = within(screen.getByRole('banner'));
+    expect(header.getByRole('heading', {level: 1, name: 'Ethereum Proof Atlas'})).toBeTruthy();
+    expect(header.getByRole('link', {name: 'Ethereum Proof Atlas'}).getAttribute('href')).toBe('/');
+    expect(header.getByText('Formal verification across Ethereum.')).toBeTruthy();
+    expect(screen.getAllByRole('heading', {level: 1})).toHaveLength(1);
+    for (const text of ['Claims, not certifications.', 'A source-pinned evidence map', 'What has been proved?',
+      'Explore the architecture. Inspect the subject, assumptions and limits behind each claim.']) {
+      expect(screen.queryByText(text)).toBeNull();
+    }
+    expect(screen.queryByText('Ethereum L1 and supporting infrastructure')).toBeNull();
+    await screen.findByRole('heading', {name: 'Select a component'});
+  });
   it('should reset selected evidence and support tab keyboard navigation on view changes', async () => {
     vi.mocked(loadAtlas).mockResolvedValue(bundle);
     render(<App />);
     expect(screen.getByRole('status').textContent).toContain('Loading');
     await screen.findByRole('heading', {name: 'Select a component'});
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec (Current)'}), {key: 'Home'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'Home'});
     expect(screen.queryByRole('status')).toBeNull();
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec (Current)'}), {key: 'ArrowRight'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'ArrowRight'});
     await screen.findByText('Lstar (experimental)');
-    expect(screen.getByRole('tab', {name: 'Lean Spec (Future)'}).getAttribute('aria-selected')).toBe('true');
+    expect(screen.getByRole('tab', {name: 'Lean Spec'}).getAttribute('aria-selected')).toBe('true');
     expect(screen.queryByRole('button', {name: 'Select BLS signatures'})).toBeNull();
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec (Future)'}), {key: 'Home'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'Home'});
     await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec (Current)'}), {key: 'End'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'End'});
     await screen.findByText('Lstar (experimental)');
-    fireEvent.click(screen.getByRole('tab', {name: 'Beacon Spec (Current)'}));
+    fireEvent.click(screen.getByRole('tab', {name: 'Beacon Spec'}));
     await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
   });
   it('should display an English error and recover when a request can be retried', async () => {

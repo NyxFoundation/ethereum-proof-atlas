@@ -11,7 +11,7 @@ export function ComponentNode({ data }: NodeProps<AtlasNode>) {
     <Handle type="target" position={Position.Bottom} isConnectable={false} />
     <span className="node-area">{data.area}</span>
     <button className="node-select nodrag nopan" onClick={data.select} aria-label={`Select ${data.name}`}>{data.name}</button>
-    <span className="node-count">{data.count ? `Claims: ${data.count}` : 'No catalogued claims'}</span>
+    <span className="node-count" title={data.count ? undefined : 'No catalogued claims'}>{data.count ? `Claims: ${data.count}` : '0 claims'}</span>
     {data.expandable && <button className="node-expand nodrag nopan" onClick={data.expand} aria-expanded={data.expanded}
       aria-label={`${data.expanded ? 'Collapse' : 'Expand'} ${data.name}`}>{data.expanded ? '− Collapse' : '+ Expand'}</button>}
     <Handle type="source" position={Position.Top} isConnectable={false} />

@@ -53,16 +53,16 @@ tests. These commands test the atlas, **not external proof replay**.
 
 ## Read the map
 
-- **Beacon Spec (Current)**: mainnet Fulu / Osaka (Fusaka, BPO2), checked
+- **Beacon Spec**: mainnet Fulu / Osaka (Fusaka, BPO2), checked
   2026-11-06; inherited specification definitions remain explicit.
-- **Lean Spec (Future)**: an independent, pinned Lstar experiment, not a promised
+- **Lean Spec**: an independent, pinned Lstar experiment, not a promised
   deployment. Unsupported future execution/compiler connections are omitted.
 - Select a node, then a claim in the adjacent panel. Expand state transition for
   checkpoint detail. Use Tab/Enter, the component selector and viewport controls
   for keyboard navigation; arrow keys switch tabs.
 - Dependency arrows point from provider to consumer. Dashed lines are interface
   interactions; dotted lines are generated code. Relationships have source links.
-- “No catalogued claims” is not “unsafe.” Counts deduplicate claims within a view.
+- “0 claims” is not “unsafe.” Counts deduplicate claims within a view.
   Source availability, correspondence review and replay are separate observations.
 
 The initial bundle contains three individually scoped claims from gasper-lean4,

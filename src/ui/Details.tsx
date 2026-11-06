@@ -32,7 +32,7 @@ export function ClaimDetails({ bundle, claim, binding }: { bundle: AtlasBundle; 
     <h4>Limitations</h4><ul>{claim.limitations.map(limit => <li key={limit}>{limit}</li>)}</ul>
     {claim.relation && <section><h4>{claim.relation.kind} direction</h4>
       <p>{claim.relation.fromArtifactId} → {claim.relation.toArtifactId}: {claim.relation.direction}</p></section>}
-    <h4>Evidence and recorded checks</h4>
+    <h4>Evidence</h4>
     {bundle.evidence.filter(e => e.claimId === claim.id).map(e => <Evidence key={e.id} bundle={bundle} evidence={e} />)}
   </article>;
 }
@@ -44,19 +44,19 @@ export function Details({ bundle, view, instanceId, claimId, edgeId, onClaim, on
   const component = bundle.components.find(c => c.id === instance?.componentId);
   if (edge) return <aside aria-label="Details panel"><h2>{edge.label}</h2><p className="tag">{edge.kind}</p>
     <p>{edge.explanation}</p><p>{edge.source} → {edge.target}</p><Sources bundle={bundle} sources={edge.sources} /></aside>;
-  if (!component || !instance) return <aside aria-label="Details panel"><p className="eyebrow">Read the evidence</p>
-    <h2>Select a component</h2><p>Choose a node to inspect its catalogued claims, subjects and source revisions.</p>
-    <p>Claims are not coverage scores or safety rankings. Architecture arrows never propagate proof guarantees.</p>
-    <h3>Reading the map</h3><p>Foundations sit below their consumers. Parallel areas are not a single verification chain.</p>
-    <p>Use Tab to reach nodes and controls. Enter selects; expansion reveals finer components. Nodes cannot be moved or deleted.</p></aside>;
+  if (!component || !instance) return <aside aria-label="Details panel"><h2>Select a component</h2>
+    <details><summary>Help</summary>
+      <p>Claims are not coverage scores or safety rankings. Architecture arrows never propagate proof guarantees.</p>
+      <p>Foundations sit below their consumers. Parallel areas are not a single verification chain.</p>
+      <p>Use Tab to reach nodes and controls. Enter selects; expansion reveals finer components. Nodes cannot be moved or deleted.</p></details></aside>;
   const claims = claimsFor(bundle, view.id, instance.instanceId);
   const claim = claims.find(c => c.id === claimId);
   const binding = view.claimBindings.find(b => b.componentInstanceId === instanceId && b.claimId === claimId);
   return <aside aria-label="Details panel"><p className="eyebrow">{component.area}</p><h2>{component.name}</h2>
     <p>{component.description}</p>
-    {claim && binding ? <><button onClick={() => onClaim(null)}>Back to claim list</button>
+    {claim && binding ? <><button onClick={() => onClaim(null)}>Back</button>
       <ClaimDetails bundle={bundle} claim={claim} binding={binding} /></> :
-      <><h3>{claims.length ? `Claims: ${claims.length}` : 'No catalogued claims'}</h3>
+      <><h3>{claims.length ? `Claims: ${claims.length}` : '0 claims'}</h3>
         {!claims.length && <p>No records in this view. This does not mean unproved or unsafe.</p>}
         <ul className="claim-list">{claims.map(c => {
           const association = view.claimBindings.find(b => b.componentInstanceId === instanceId && b.claimId === c.id)!;
