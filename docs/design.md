@@ -203,10 +203,11 @@ commit-pinned reference. An availability check records its date and outcome in a
   this scope. An external host may return an error when a reader follows a link;
   the atlas itself must still render the stored record without fetching that page.
 
-The application consumes these supplied observations; it does not produce them.
-The choice of intake tooling, responsible curator, and later refresh workflow is
-intentionally deferred. This input requirement is not a new availability service
-or a schedule for checking links.
+The browser and Worker consume these supplied observations; they do not produce
+them. The release-side [proof update workflow](proof-updates.md) records source
+GET observations when proposing or accepting updates to the three catalogued
+proofs. It does not periodically probe unchanged source links or generate human
+review results. Curator ownership remains an operational responsibility.
 
 ## Data model
 
@@ -371,11 +372,14 @@ to be established. No candidate is certified by this design document.
 - User-visible application errors must not expose stack traces, local paths, or
   other server internals.
 
-There is no account system, editing API, database requirement, crawler, or
-server-side proof-execution service in this scope. Record authoring and update
-workflows are deliberately deferred, not missing requirements to fill during
-implementation. Defining read-only delivery does not decide who authors records
-or how they are updated.
+There is no account system, editing API, database requirement, general crawler,
+or server-side proof-execution service. A separate release-side updater tracks
+`main` for the three catalogued proof repositories and opens draft candidate PRs.
+A curator must inspect the proposed sources and record a fresh review before
+publishing the updated bundle. It never transfers old checks to a new revision,
+executes upstream proof code, modifies architecture snapshots, or overwrites an
+open PR. See [the update contract and procedure](proof-updates.md).
+General record authoring and submissions remain deferred.
 
 ### Read-only HTTP and browser boundary
 
@@ -454,8 +458,9 @@ production-like local preview commands. `npm run verify` runs the acceptance gat
 
 Explicitly deferred:
 
-- Record authoring, review ownership, submissions, and update workflows.
-- Automated discovery, synchronization, and proof replay.
+- General record authoring, review ownership and submissions beyond the scoped
+  three-repository update workflow.
+- New-claim discovery, architecture/specification synchronization and proof replay.
 - Production domain, deployment credentials, and release operations, including
   platform traffic limits, abuse controls, and monitoring configuration.
 

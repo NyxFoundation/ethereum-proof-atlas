@@ -1,0 +1,64 @@
+name: Proof updates
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  propose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [gasper-lean4, formal-leanSpec, arklib]
+    concurrency:
+      group: proof-updates-${{ matrix.target }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: true
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Detect a new pinned candidate
+        id: detect
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TARGET: ${{ matrix.target }}
+        run: npm --ignore-scripts run proofs:check -- --target "$TARGET" --write --github
+      - name: Create a new draft without updating existing branches
+        if: steps.detect.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET: ${{ matrix.target }}
+          BRANCH: ${{ steps.detect.outputs.branch }}
+          BASE: ${{ github.event.repository.default_branch }}
+        run: |
+          test -s "$RUNNER_TEMP/proof-update-body.md" || { echo "::error::Missing proof update report"; exit 1; }
+          if git ls-remote --exit-code --heads origin "$BRANCH"; then
+            echo "::error::Update branch already exists; refusing to change it"
+            exit 1
+          else
+            status=$?
+            test "$status" -eq 2 || exit "$status"
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "updates/$TARGET.json"
+          git commit -m "chore: propose $TARGET proof update"
+          git push origin "HEAD:refs/heads/$BRANCH"
+          gh pr create --draft --base "$BASE" --head "$BRANCH" \
+            --title "chore: review $TARGET proof update" \
+            --body-file "$RUNNER_TEMP/proof-update-body.md"

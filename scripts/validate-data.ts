@@ -1,9 +1,9 @@
-import { readFile } from 'node:fs/promises';
-import { validateBundle } from '../src/domain/validate';
+import { fileURLToPath } from 'node:url';
+import { loadRelease } from '../src/intake/files.ts';
 try {
-  const bundle = await validateBundle(JSON.parse(await readFile(new URL('../data/atlas.json', import.meta.url), 'utf8')));
+  const bundle = await loadRelease(fileURLToPath(new URL('../', import.meta.url)));
   process.stdout.write(`Atlas schema ${bundle.schemaVersion}: ${bundle.datasetRevision}\n`);
 } catch {
-  process.stderr.write('Atlas validation failed. Check schema, references, source identities and datasetRevision.\n');
+  process.stderr.write('Atlas validation failed. Check schema, references, source identities, datasetRevision and proof update reviews.\n');
   process.exitCode = 1;
 }

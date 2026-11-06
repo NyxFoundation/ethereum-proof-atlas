@@ -39,7 +39,8 @@ installed with `npx playwright install --with-deps chromium` (may require sudo).
 
 | Command | Checks |
 | --- | --- |
-| `npm run data:validate` | Schema, canonical SHA-256 revision, source identities and cross-references |
+| `npm run data:validate` | Schema, canonical SHA-256 revision, source identities, cross-references and update review receipts |
+| `npm run proofs:check` | Read-only comparison of the three tracked upstream `main` heads |
 | `npm test` | Domain, HTTP boundary, API-response and React component behavior |
 | `npm run test:coverage` | At least 80% statements, branches, functions and lines |
 | `npm run build` | Type checking and mandatory dataset validation, then Vite/Cloudflare packaging |
@@ -88,7 +89,20 @@ unknown or inapplicable records 404, queries over 2,048 encoded bytes 414, and
 other methods 405 with `Allow: GET, HEAD`. Bodies are rejected without parsing.
 Responses are same-origin only; evidence links are ordinary external navigation.
 
+## Upstream proof updates
+
+GitHub Actions checks the three catalogued proof repositories' `main` branches
+hourly and can be run manually. A changed head produces a pinned, unpublished
+candidate in a draft PR. Open PRs and human edits are never overwritten.
+
+A curator inspects and edits the candidate, records the review with
+`npm run proofs:accept`, commits the resulting bundle and receipt, then obtains
+review and merges. Old checks are not inherited by new commits. Pending updates
+fail the package gate. See [the review procedure](docs/proof-updates.md) for exact
+commands, permissions and recovery steps. The schedule starts after the workflow
+is merged into the default branch; merging data does not deploy a site.
+
 See [implementation notes](docs/implementation.md) for module boundaries,
 data invariants, local-runtime caveats and the acceptance matrix. Accounts,
-authoring workflows, crawlers, automatic checks, production deployment and release
-operations remain outside this implementation.
+general submissions, new-claim discovery, external proof replay, production
+deployment and release operations remain outside this implementation.

@@ -21,6 +21,8 @@ Use the root README for runnable setup and verification commands.
 | `src/domain/validate.ts` | Cross-references, snapshot applicability, evidence/check scope and RFC 8785 digest |
 | `src/domain/selectors.ts` | Shared claim lists/counts, source availability and graph expansion |
 | `src/server/` | Hono read-only HTTP boundary, headers and structured failure logging |
+| `src/intake/`, `scripts/proof-updates.ts` | Bounded GitHub source reads, unpublished proposals, explicit review acceptance and package gates |
+| `.github/workflows/` | Hourly draft update proposals and application/review verification |
 | `src/ui/` | Same-origin API validation, fixed-position React Flow map and evidence panel |
 | `vite.config.ts` | Mandatory validation before development/build/packaging via the Cloudflare plugin |
 | `tests/`, `e2e/` | Synthetic edge cases and production-build browser/Worker integration |
@@ -43,7 +45,9 @@ if a later availability check fails.
 This implementation supports GitHub commit identities and SHA-256-addressed
 locations. Neither a moving branch nor a release label is an artifact revision.
 The validator recomputes, but never silently rewrites, `datasetRevision`.
-Record-authoring and update workflows remain deferred.
+The [scoped update workflow](proof-updates.md) follows the three catalogued proof
+repositories' `main` branches without changing the runtime's immutable-bundle
+contract. General authoring and new-claim discovery remain deferred.
 
 ## Runtime and security
 
@@ -101,6 +105,38 @@ Local acceptance on 2026-11-06 used Node 24.21.0, a fresh `npm ci`, and
 cases passed. Coverage was 100% lines, 99.12% statements, 96.64% branches and
 98.34% functions. `npm audit` reported no known vulnerabilities. These results
 are observations of this application revision, not guarantees of future runs.
+
+## Automated update acceptance
+
+The updater captures one upstream head per candidate and fetches only fixed-commit
+source paths. A proposal is separate from the published bundle until explicit
+curator acceptance. Its baseline fingerprint covers only the affected records,
+so unrelated repository updates can be accepted independently. Old checks are
+removed rather than implicitly rebound to a new artifact revision. Availability
+observations come from source GETs; new correspondence and manual-comparison
+records come from the curator's explicit review command. No replay is recorded.
+
+`src/intake/files.ts` is shared by the data command and direct Vite configuration.
+It rejects pending or mismatched receipts before packaging. Acceptance writes
+its receipt before the bundle; an interrupted write can be completed by repeating
+the same command. A shared `proper-lockfile` lease serializes local intake writes;
+changed datasets or proposals are rejected before writing. Bounded file reads do
+not depend on a separate size observation.
+
+Tests cover unchanged heads, source outages and relocation, byte observations,
+credential separation, response bounds, stale proposals, independent acceptance,
+old-check invalidation, repeated/interrupted acceptance, storage failure cleanup,
+response-reader cleanup and PR deduplication.
+A subprocess test drives the actual CLI against a local HTTP source fixture,
+then reads the accepted release through Hono. This fixture is not a public proof.
+The build-gate suite also rejects a pending candidate through a direct Vite build.
+Local verification of the update implementation on 2026-11-06 passed all 159
+unit/component/package/CLI cases and 7 workerd browser cases after a fresh
+`npm ci --ignore-scripts`. Coverage was 99.83% lines, 98.98% statements, 96.04%
+branches and 98.65% functions; `actionlint` passed. Hosted scheduling and remote
+PR publication activate only after the workflows reach the default branch.
+Live read-only checks on the same date found all three tracked `main` heads equal to
+the published revisions; no synthetic update was proposed to GitHub.
 
 The initial implementation was also rendered at desktop and narrow viewport
 sizes and smoke-tested through the Vite development server. Runtime startup,
