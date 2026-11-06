@@ -57,20 +57,21 @@ summary { cursor: pointer; color: #304f7d; }
 .mode-toggle button[aria-pressed="true"] { background: #344f7d; border-color: #344f7d; color: #fff; }
 .index-view { min-width: 0; height: 680px; background: #f7f9fa; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 .index-scroll { overflow: auto; border: 1px solid #ccd2d7; border-radius: 5px; background: #fff; }
-.index-table { width: 100%; min-width: 620px; border-collapse: collapse; }
+.index-table { width: 100%; max-width: 860px; border-collapse: collapse; }
 .index-table caption { caption-side: top; text-align: left; padding: 12px 14px; font-size: 12px; color: #596575; }
+.index-table .index-claims-head { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; text-align: left; color: #525e6a; padding: 10px 12px; border-bottom: 2px solid #ccd2d7; background: #f7f9fa; white-space: nowrap; width: 230px; }
 .index-table thead th { padding: 0; border: 0; }
 .index-table th[scope="row"] { text-align: left; padding: 10px 12px; white-space: nowrap; border: 1px solid #ccd2d7; border-right: 2px solid #ccd2d7; background: #f7f9fa; }
 .index-table th[scope="row"] .index-name { display: block; font-size: 13px; font-weight: 650; color: #242a33; }
 .index-table .row-area { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #77828d; margin-top: 2px; }
-.index-table td { min-width: 96px; height: 78px; padding: 6px; border: 1px solid #dde2e6; vertical-align: top; }
+.index-table td { padding: 6px; border: 1px solid #dde2e6; vertical-align: top; }
+.index-table tbody th { border-bottom: 1px solid #d3d9de; }
 .index-cell { display: flex; flex-direction: column; gap: 3px; width: 100%; min-height: 48px; align-items: flex-start; text-align: left; border-radius: 4px; padding: 8px 10px; }
 .index-cell.band-0 { background: #fff; border-color: #a9b3bd; }
 .index-cell.band-1 { background: #e4e9f1; border-color: #8fa0b8; }
 .index-cell.band-2 { background: #cdd7e4; border-color: #7186a5; }
 .index-cell.band-3 { background: #b3c3d8; border-color: #4d6488; }
 .index-cell[aria-pressed="true"] { outline: 2px solid #344f7d; outline-offset: 2px; }
-.index-name { font-size: 13px; font-weight: 650; color: #242a33; }
 .index-count { font-size: 11px; color: #525e6a; }
 .index-legend { display: flex; flex-wrap: wrap; gap: 16px; list-style: none; margin: 0; padding: 0; font-size: 11px; color: #515d69; }
 .index-legend li { display: inline-flex; align-items: center; gap: 6px; }

@@ -173,9 +173,10 @@ describe('index presentation', () => {
     const table = screen.getByRole('table');
     const rowNames = () => within(table).getAllByRole('rowheader').map(row =>
       row.querySelector('.index-name')?.textContent);
-    expect(within(table).getAllByRole('columnheader')).toHaveLength(5);
-    expect(rowNames()).toEqual(['KZG commitments', 'SSZ / Merkleization', 'BLS signatures',
-      'Consensus Gossipsub', 'Justification / finalization', 'PeerDAS', 'State transition', 'Fork choice']);
+    expect(within(table).getAllByRole('columnheader').map(header => header.textContent))
+      .toEqual(['Catalogued claims']);
+    expect(rowNames()).toEqual(['Fork choice', 'State transition', 'Justification / finalization',
+      'PeerDAS', 'Consensus Gossipsub', 'SSZ / Merkleization', 'BLS signatures', 'KZG commitments']);
     fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
     const panel = within(screen.getByRole('complementary'));
     expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
@@ -212,7 +213,7 @@ describe('index presentation', () => {
     expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
     expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(row =>
       row.querySelector('.index-name')?.textContent))
-      .toEqual(['Execution ETH / RLPx', 'Solidity / solc', 'EVM', 'State / Patricia trie', 'Execution transition']);
+      .toEqual(['Execution transition', 'EVM', 'State / Patricia trie', 'Execution ETH / RLPx', 'Solidity / solc']);
   });
 });
 
