@@ -187,10 +187,11 @@ A component instance appears in the row of its `component.area`; networking
 instances resolve their side from the recorded architecture edges of that
 instance in the selected view, so consensus-side and execution-side
 networking never share one cell.
-- Columns preserve the stored overview layout: the table derives column
-bands from the instances' deliberate positions, with foundations on the
-left and their consumers to the right. A column is a band of positions; it
-carries no header label.
+- The table is independent of the map's deliberate geometry: no column is a
+layer. Each group row packs its components one per cell, left to right, in
+foundations-first reading order; empty positions occur only to the right of
+a row that has fewer components than the widest row. No cell holds more than
+one component.
 - Every populated cell shows the component, its exact catalogued-claim count
 (for example `Claims: 2` or `0 claims`) and a neutral fill tint banded over
 that count. The exact count is always visible: color is never the only

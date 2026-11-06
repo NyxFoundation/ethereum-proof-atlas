@@ -10,20 +10,22 @@ export const COLUMN_GROUPS: ReadonlyArray<{ id: ColumnId; label: string }> = [
   { id: 'serialization', label: 'Serialization' },
   { id: 'development', label: 'Development' },
 ];
-// Stored overview positions closer than this tolerance share one index column band.
+// Stored overview positions closer than this tolerance share one reading band.
 const ROW_BAND_TOLERANCE = 60;
+// Within a packed group row, cells read foundations first: descending band
+// index (low y bands are upper layers) then stored x.
+const READING_ORDER = (a: { band: number; order: number }, b: { band: number; order: number }) =>
+  b.band - a.band || a.order - b.order;
 
 export type IndexCell = {
   instanceId: string;
   componentId: string;
   name: string;
-  group: ColumnId;
-  order: number;
-  count: number;
   band: 0 | 1 | 2 | 3;
+  count: number;
 };
-export type IndexBand = { key: string; cells: IndexCell[] };
-export type IndexTable = { groups: ColumnId[]; bands: IndexBand[] };
+export type IndexRow = { group: ColumnId; cells: IndexCell[] };
+export type IndexTable = { columns: number; rows: IndexRow[] };
 
 export function countBand(count: number): 0 | 1 | 2 | 3 {
   return count <= 0 ? 0 : count <= 2 ? 1 : count <= 4 ? 2 : 3;
@@ -52,26 +54,28 @@ export function buildIndex(bundle: AtlasBundle, view: ArchitectureView): IndexTa
     }
     return neighborAreas.has('execution') && !neighborAreas.has('consensus') ? 'execution' : 'consensus';
   };
-  const sorted = [...view.componentInstances]
+  // Stored positions only order the cells inside a row: foundations first.
+  const ascending = [...view.componentInstances]
     .sort((a, b) => a.position.y - b.position.y || a.position.x - b.position.x);
-  const ascending: { top: number; cells: IndexCell[] }[] = [];
-  for (const instance of sorted) {
+  const cellByGroup = new Map<ColumnId, { cell: IndexCell; band: number; order: number }[]>();
+  const bands: number[] = [];
+  for (const instance of ascending) {
     const component = bundle.components.find(c => c.id === instance.componentId)!;
     const count = claimsFor(bundle, view.id, instance.instanceId).length;
-    const band = ascending.at(-1);
-    if (!band || instance.position.y - band.top > ROW_BAND_TOLERANCE) {
-      ascending.push({ top: instance.position.y, cells: [] });
+    const band = bands.at(-1);
+    if (band === undefined || instance.position.y - band > ROW_BAND_TOLERANCE) {
+      bands.push(instance.position.y);
     }
-    ascending.at(-1)!.cells.push({
+    const groupIndex = bands.length - 1;
+    const cells = cellByGroup.get(group(instance.instanceId, component.area)) ?? [];
+    cells.push({ cell: {
       instanceId: instance.instanceId, componentId: component.id, name: component.name,
-      group: group(instance.instanceId, component.area), order: instance.position.x,
-      count, band: countBand(count),
-    });
+      band: countBand(count), count,
+    }, band: groupIndex, order: instance.position.x });
+    cellByGroup.set(group(instance.instanceId, component.area), cells);
   }
-  // Foundations (lowest stored positions) become the leftmost columns.
-  return { groups: COLUMN_GROUPS.map(col => col.id)
-    .filter(id => ascending.some(band => band.cells.some(cell => cell.group === id))),
-    bands: [...ascending].reverse().map((band, index) => ({
-    key: `band-${index}`, cells: [...band.cells].sort((a, b) => a.order - b.order),
-  })) };
+  const rows = COLUMN_GROUPS.map(col => ({ group: col.id, cells: (cellByGroup.get(col.id) ?? [])
+    .sort((a, b) => READING_ORDER(a, b)).map(entry => entry.cell) }))
+    .filter(row => row.cells.length > 0);
+  return { columns: Math.max(0, ...rows.map(row => row.cells.length)), rows };
 }
