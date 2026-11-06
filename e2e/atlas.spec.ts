@@ -1,6 +1,24 @@
 import { test, expect } from '@playwright/test';
 import { request as httpRequest } from 'node:http';
 
+for (const width of [1280, 390, 320]) {
+  test(`should keep the introduction compact and the map in view at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({width, height: 844});
+    await page.goto('/');
+    const header = page.getByRole('banner');
+    await expect(header.getByRole('heading', {level: 1, name: 'Ethereum Proof Atlas'})).toBeVisible();
+    const description = header.getByText('Formal verification across Ethereum.');
+    await expect(description).toBeVisible();
+    expect(await description.evaluate(element => element.getBoundingClientRect().height <=
+      Number.parseFloat(getComputedStyle(element).lineHeight) + 1)).toBe(true);
+    expect((await header.boundingBox())!.height).toBeLessThanOrEqual(104);
+    expect((await page.getByRole('tablist').boundingBox())!.y).toBeLessThanOrEqual(112);
+    await expect(page.getByRole('button', {name: 'Select State transition', exact: true})).toBeVisible();
+    await expect(page.locator('.map')).toBeInViewport({ratio: 0.5});
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  });
+}
+
 test('should navigate independently sourced views and evidence in the Workers runtime', async ({ page }) => {
   const foreignRequests: string[] = [];
   const errors: string[] = [];

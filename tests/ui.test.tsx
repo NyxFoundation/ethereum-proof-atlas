@@ -160,6 +160,21 @@ describe('map interaction', () => {
 });
 
 describe('application lifecycle', () => {
+  it('should introduce the atlas with its name and one description when the page opens', async () => {
+    vi.mocked(loadAtlas).mockResolvedValue(bundle);
+    render(<App />);
+    const header = within(screen.getByRole('banner'));
+    expect(header.getByRole('heading', {level: 1, name: 'Ethereum Proof Atlas'})).toBeTruthy();
+    expect(header.getByRole('link', {name: 'Ethereum Proof Atlas'}).getAttribute('href')).toBe('/');
+    expect(header.getByText('Formal verification across Ethereum.')).toBeTruthy();
+    expect(screen.getAllByRole('heading', {level: 1})).toHaveLength(1);
+    for (const text of ['Claims, not certifications.', 'A source-pinned evidence map', 'What has been proved?',
+      'Explore the architecture. Inspect the subject, assumptions and limits behind each claim.']) {
+      expect(screen.queryByText(text)).toBeNull();
+    }
+    expect(screen.getByText('Ethereum L1 and supporting infrastructure')).toBeTruthy();
+    await screen.findByRole('heading', {name: 'Select a component'});
+  });
   it('should reset selected evidence and support tab keyboard navigation on view changes', async () => {
     vi.mocked(loadAtlas).mockResolvedValue(bundle);
     render(<App />);
