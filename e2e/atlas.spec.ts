@@ -178,9 +178,10 @@ test('should inventory catalogued claims in the index table across views', async
   await page.goto('/');
   await page.getByRole('button', { name: 'Index', exact: true }).click();
   const table = page.getByRole('table');
-  for (const group of ['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']) {
+  for (const group of ['Consensus', 'Cryptography', 'Serialization']) {
     await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
   }
+  await expect(table.getByRole('rowheader', { name: 'Development', exact: true })).toHaveCount(0);
   await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
   await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();

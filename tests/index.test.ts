@@ -72,6 +72,12 @@ describe('index table layout', () => {
     expect(cell(beacon, 'b-head')!.band).toBe(0);
     expect([0, 1, 2, 3, 4, 5, 9].map(countBand)).toEqual([0, 1, 1, 2, 2, 3, 3]);
   });
+  it('should list only the group rows present in each view, in fixed order', () => {
+    const execution = bundle.architectureViews.find(v => v.id === 'execution')!;
+    expect(build(beacon).groups).toEqual(['consensus', 'cryptography', 'serialization']);
+    expect(build(lean).groups).toEqual(['consensus', 'cryptography', 'serialization']);
+    expect(build(execution).groups).toEqual(['execution', 'development']);
+  });
   it('should declare every catalogued group row in fixed order', () => {
     expect(COLUMN_GROUPS.map(group => group.id))
       .toEqual(['consensus', 'execution', 'cryptography', 'serialization', 'development']);

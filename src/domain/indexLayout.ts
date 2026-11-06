@@ -23,7 +23,7 @@ export type IndexCell = {
   band: 0 | 1 | 2 | 3;
 };
 export type IndexBand = { key: string; cells: IndexCell[] };
-export type IndexTable = { bands: IndexBand[] };
+export type IndexTable = { groups: ColumnId[]; bands: IndexBand[] };
 
 export function countBand(count: number): 0 | 1 | 2 | 3 {
   return count <= 0 ? 0 : count <= 2 ? 1 : count <= 4 ? 2 : 3;
@@ -69,7 +69,9 @@ export function buildIndex(bundle: AtlasBundle, view: ArchitectureView): IndexTa
     });
   }
   // Foundations (lowest stored positions) become the leftmost columns.
-  return { bands: [...ascending].reverse().map((band, index) => ({
+  return { groups: COLUMN_GROUPS.map(col => col.id)
+    .filter(id => ascending.some(band => band.cells.some(cell => cell.group === id))),
+    bands: [...ascending].reverse().map((band, index) => ({
     key: `band-${index}`, cells: [...band.cells].sort((a, b) => a.order - b.order),
   })) };
 }

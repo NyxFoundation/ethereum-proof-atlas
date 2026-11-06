@@ -172,7 +172,7 @@ describe('index presentation', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Index'}));
     const table = screen.getByRole('table');
     expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
-      .toEqual(['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']);
+      .toEqual(['Consensus', 'Cryptography', 'Serialization']);
     fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
     const panel = within(screen.getByRole('complementary'));
     expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
@@ -181,7 +181,7 @@ describe('index presentation', () => {
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
     expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThanOrEqual(5);
-    expect(within(table).getByRole('rowheader', {name: 'Development'})).toBeTruthy();
+    expect(within(table).queryByRole('rowheader', {name: 'Development'})).toBeNull();
     expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
     expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
     expect(screen.queryByRole('list', {name: 'Relationship legend'})).toBeNull();
@@ -207,6 +207,8 @@ describe('index presentation', () => {
     expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
     expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
     expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
+    expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(header => header.textContent))
+      .toEqual(['Execution', 'Development']);
   });
 });
 

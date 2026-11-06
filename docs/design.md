@@ -171,8 +171,10 @@ second map, a dashboard, or a coverage report.
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells
 are selectable and open the neutral "No catalogued claims" panel state.
-- Rows are the five catalogued groups: Consensus, Execution, Cryptography,
-Serialization, and Development. A component instance appears in the row of
+- Rows are the catalogued groups present in the selected view, always in the
+fixed order: Consensus, Execution, Cryptography, Serialization, Development.
+A group with no instance in the view renders no row instead of an empty row.
+A component instance appears in the row of
 its `component.area`; networking instances resolve their side (and row)
 from the recorded architecture edges of that instance in the selected view,
 so consensus-side and execution-side networking never share one cell.

@@ -138,11 +138,12 @@ cells), and the view itself is already selected through the tab and dataset
 selectors at the HTTP boundary.
 
 Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
-`npm run verify`: 171 unit/component/package-gate cases and 12 workerd browser
+`npm run verify`: 172 unit/component/package-gate cases and 12 workerd browser
 cases passed, including the index layout suite (with the Execution view
-assembled as its own foundation-first table), mode-toggle/tab-persistence
+assembled as its own foundation-first table, and group rows that follow each
+view's instance roster), mode-toggle/tab-persistence
 tests and two Index browser journeys with direct node interaction. Coverage
-was 99.84% lines, 99.04% statements, 96.13% branches and 98.73% functions;
+was 99.84% lines, 99.04% statements, 96.13% branches and 98.75% functions;
 `indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
 confirmed the caption, group rows, count chips and legend before release.
 These results remain observations of this application revision.

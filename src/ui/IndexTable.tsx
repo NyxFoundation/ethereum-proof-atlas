@@ -5,16 +5,17 @@ import { buildIndex, COLUMN_GROUPS } from '../domain/indexLayout';
 type Props = { bundle: AtlasBundle; view: ArchitectureView; selected: string | null; onSelect: (id: string) => void };
 
 export function IndexTable({ bundle, view, selected, onSelect }: Props) {
-  const bands = useMemo(() => buildIndex(bundle, view).bands, [bundle, view]);
+  const table = useMemo(() => buildIndex(bundle, view), [bundle, view]);
+  const labelOf = new Map(COLUMN_GROUPS.map(group => [group.id, group.label] as const));
   return <section className="index-view" aria-label="Claims index table">
     <div className="index-scroll"><table className="index-table">
       <caption>Catalogued claims per component in this view. Foundations sit on the left, consumers to the right.
         Shading reflects the claim count, not a coverage score.</caption>
-      <thead><tr>{bands.map(band => <th key={band.key} scope="col"></th>)}</tr></thead>
-      <tbody>{COLUMN_GROUPS.map(col => <tr key={col.id}>
-        <th scope="row">{col.label}</th>
-        {bands.map(band => {
-          const cells = band.cells.filter(cell => cell.group === col.id);
+      <thead><tr>{table.bands.map(band => <th key={band.key} scope="col"></th>)}</tr></thead>
+      <tbody>{table.groups.map(group => <tr key={group}>
+        <th scope="row">{labelOf.get(group)}</th>
+        {table.bands.map(band => {
+          const cells = band.cells.filter(cell => cell.group === group);
           return <td key={band.key}>{cells.map(cell =>
             <button key={cell.instanceId} type="button"
               className={`index-cell band-${cell.band}`} aria-pressed={selected === cell.instanceId}
