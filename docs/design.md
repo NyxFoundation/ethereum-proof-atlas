@@ -180,21 +180,26 @@ second map, a dashboard, or a coverage report.
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells
 are selectable and open the neutral "No catalogued claims" panel state.
-- Rows are the selected view's component instances, in the recorded
-`componentInstances` order: the table subdivides the view's architecture
-into one row per component, so nothing is catalogued behind an aggregate.
-Row headers carry the component name and its `area` label. Consensus-side
-and execution-side networking instances always get their own rows.
-- The table is independent of the map's deliberate geometry: each row has a
-single **Catalogued claims** cell, and the table derives no axis from stored
-positions. A zero cell means **No catalogued claims**, not
-"Unproved" or "Unsafe". The row's claims cell shows the exact count(for
-example `Claims: 2` or `0 claims`) with a neutral fill tint banded over that
-count: color is never the only channel, and bands are restrained
-tints, not traffic-light colors, and do not resemble certification or
-safety ordering. The table shows no percentages, no "proved" wording,
-and no per-column or whole-table rollup; only the count-band legend explains
-the fill. The legend replaces the relationship legend while Index is shown.
+- Rows are the catalogued groups present in the selected view, always in the
+fixed order: Consensus, Execution, Cryptography, Serialization, Development.
+A group with no instance in the view renders no row instead of an empty row.
+A component instance appears in the row of its `component.area`; networking
+instances resolve their side from the recorded architecture edges of that
+instance in the selected view, so consensus-side and execution-side
+networking never share one cell.
+- Columns preserve the stored overview layout: the table derives column
+bands from the instances' deliberate positions, with foundations on the
+left and their consumers to the right. A column is a band of positions; it
+carries no header label.
+- Every populated cell shows the component, its exact catalogued-claim count
+(for example `Claims: 2` or `0 claims`) and a neutral fill tint banded over
+that count. The exact count is always visible: color is never the only
+channel, and bands are restrained tints, not traffic-light colors, and do
+not resemble certification or safety ordering. A zero cell means **No
+catalogued claims**, not "Unproved" or "Unsafe". The table shows no
+percentages, no "proved" wording, and no per-column or whole-table rollup;
+only the count-band legend explains the fill. The legend replaces the
+relationship legend while Index is shown.
 - Counts derive from the same view-specific
 `componentInstances` and `claimBindings` as the map; the table keeps no
 separate inventory dataset.

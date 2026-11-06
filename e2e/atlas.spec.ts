@@ -196,9 +196,10 @@ test('should inventory catalogued claims in the index table across views', async
   await page.goto('/');
   await page.getByRole('button', { name: 'Index', exact: true }).click();
   const table = page.getByRole('table');
-  expect(await table.getByRole('rowheader').count()).toBe(8);
-  await expect(table.getByRole('rowheader', { name: /Fork choice/ })).toBeVisible();
-  expect(await table.getByRole('rowheader').filter({ hasText: 'Solidity / solc' }).count()).toBe(0);
+  for (const group of ['Consensus', 'Cryptography', 'Serialization']) {
+    await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
+  }
+  await expect(table.getByRole('rowheader', { name: 'Development', exact: true })).toHaveCount(0);
   await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
   await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();

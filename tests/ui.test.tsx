@@ -194,12 +194,8 @@ describe('index presentation', () => {
     render(<Harness />);
     fireEvent.click(screen.getByRole('button', {name: 'Index'}));
     const table = screen.getByRole('table');
-    const rowNames = () => within(table).getAllByRole('rowheader').map(row =>
-      row.querySelector('.index-name')?.textContent);
-    expect(within(table).getAllByRole('columnheader').map(header => header.textContent))
-      .toEqual(['Catalogued claims']);
-    expect(rowNames()).toEqual(['Fork choice', 'State transition', 'Justification / finalization',
-      'PeerDAS', 'Consensus Gossipsub', 'SSZ / Merkleization', 'BLS signatures', 'KZG commitments']);
+    expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
+      .toEqual(['Consensus', 'Cryptography', 'Serialization']);
     fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
     const panel = within(screen.getByRole('complementary'));
     expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
@@ -251,9 +247,8 @@ describe('index presentation', () => {
     expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
     expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
     expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
-    expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(row =>
-      row.querySelector('.index-name')?.textContent))
-      .toEqual(['Execution transition', 'EVM', 'State / Patricia trie', 'Execution ETH / RLPx', 'Solidity / solc']);
+    expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(header => header.textContent))
+      .toEqual(['Execution', 'Development']);
   });
 });
 

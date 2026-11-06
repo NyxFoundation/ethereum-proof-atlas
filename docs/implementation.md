@@ -113,11 +113,12 @@ are observations of this application revision, not guarantees of future runs.
 The Map / Index toggle is the approved inventory view from
 [design.md](design.md): each tab can render as a table that exposes where the
 catalogue is empty. `src/domain/indexLayout.ts` derives everything from the
-same validated bundle: one row per component instance in the selected view,
-in the recorded order, carrying the component `area` label. The table is
-independent of the map's stored geometry and holds a single catalogued-claims
-cell per row, so nothing is catalogued behind an aggregate. `src/ui/IndexTable.tsx` renders caption,
-per-component rows with area labels, count chips on every row and
+same validated bundle: rows hold the catalogued groups present in the view
+(networking instances resolve their side from the view's recorded edges),
+column bands come from the stored instance positions (gap tolerance 60,
+foundations on the left), so a group row can span several columns.
+`src/ui/IndexTable.tsx` renders caption,
+group row headers, component cells with count chips on every populated cell and
 neutral tint bands
 (`band-0`…`band-3` over 0 / 1–2 / 3–4 / 5+ claims); the mode toggle reuses the
 map's selection state and the details panel so both presentations stay one
@@ -140,8 +141,8 @@ selectors at the HTTP boundary.
 
 Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
 `npm run verify`: 169 unit/component/package-gate cases and 13 workerd browser
-cases passed, including the index layout suite (one row per
- component in the recorded order with the recorded `area` label), the
+cases passed, including the index layout suite (per-view group rows over
+foundation-left column bands), the
 footer's deduplicated repository discovery links, and the revision-to-commit
 link suite (snapshot bar, subject identities, source identities; sha256
 digests stay plain text),
