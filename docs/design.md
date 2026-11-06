@@ -171,13 +171,12 @@ second map, a dashboard, or a coverage report.
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells
 are selectable and open the neutral "No catalogued claims" panel state.
-- Rows are the catalogued groups present in the selected view, always in the
-fixed order: Consensus, Execution, Cryptography, Serialization, Development.
-A group with no instance in the view renders no row instead of an empty row.
-A component instance appears in the row of
-its `component.area`; networking instances resolve their side (and row)
-from the recorded architecture edges of that instance in the selected view,
-so consensus-side and execution-side networking never share one cell.
+- Rows are the selected view's component instances: the table subdivides the
+view's architecture into one row per component instead of coarse area
+buckets, so nothing is catalogued behind an aggregate. Row headers carry the
+component name and its `area` label, and follow the stored overview
+positions (foundations first, consumers last). Consensus-side and
+execution-side networking instances always get their own rows.
 - Columns preserve the stored overview layout: the table derives column
 bands from the instances' deliberate positions, with foundations on the
 left and their consumers to the right. A column is a band of positions; it
@@ -192,14 +191,12 @@ anything is proved. A zero cell means **No catalogued claims**, not
 "Unproved" or "Unsafe". The table shows no percentages, no "proved" wording,
 and no per-column or whole-table rollup; only the count-band legend explains
 the fill. The legend replaces the relationship legend while Index is shown.
-- Row bands, columns, and counts derive from the same view-specific
-`componentInstances` and `claimBindings` as the map. There is no separate
-inventory dataset to keep in sync.
+- Counts derive from the same view-specific
+`componentInstances` and `claimBindings` as the map; the table keeps no
+separate inventory dataset.
 - The map-bar carries only the display-mode toggle and the active legend;
   components are reached directly in the map (keyboard-operable nodes) and in
-  the index (cells). There is no global component select control. There is no separate
-inventory dataset to keep in sync.
-
+  the index (cells). There is no global component select control.
 ### Evidence presentation
 
 A claim's subject type must be visible before a reader opens its source:

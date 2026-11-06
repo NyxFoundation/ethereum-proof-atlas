@@ -114,10 +114,11 @@ The Map / Index toggle is the approved inventory view from
 [design.md](design.md): each tab can render as a table that exposes where the
 catalogue is empty. `src/domain/indexLayout.ts` derives everything from the
 same validated bundle: column bands from the stored instance positions (gap
-tolerance 60, foundations on the left), five group rows, and the
-consensus/execution side of a networking instance from the recorded
-architecture edges of that view. `src/ui/IndexTable.tsx` renders caption,
-group row headers, count chips on every populated cell and neutral tint bands
+tolerance 60, foundations on the left); each view's component instances
+subdivide the table into per-component rows carrying the component `area`
+label, so nothing is catalogued behind an aggregate. `src/ui/IndexTable.tsx` renders caption,
+per-component rows with area labels, count chips on every populated cell and
+neutral tint bands
 (`band-0`…`band-3` over 0 / 1–2 / 3–4 / 5+ claims); the mode toggle reuses the
 map's selection state and the details panel so both presentations stay one
 dataset. No percentage, coverage vocabulary or whole-table rollup is
@@ -138,14 +139,14 @@ cells), and the view itself is already selected through the tab and dataset
 selectors at the HTTP boundary.
 
 Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
-`npm run verify`: 172 unit/component/package-gate cases and 12 workerd browser
-cases passed, including the index layout suite (with the Execution view
-assembled as its own foundation-first table, and group rows that follow each
-view's instance roster), mode-toggle/tab-persistence
+`npm run verify`: 169 unit/component/package-gate cases and 12 workerd browser
+cases passed, including the index layout suite (each view subdivided into
+component rows with area labels, the Execution view assembled as its own
+foundation-first table), mode-toggle/tab-persistence
 tests and two Index browser journeys with direct node interaction. Coverage
-was 99.84% lines, 99.04% statements, 96.13% branches and 98.75% functions;
+was 99.83% lines, 99.01% statements, 96.47% branches and 98.72% functions;
 `indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
-confirmed the caption, group rows, count chips and legend before release.
+confirmed the caption, component rows, count chips and legend before release.
 These results remain observations of this application revision.
 
 ## Automated update acceptance

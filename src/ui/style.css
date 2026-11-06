@@ -60,9 +60,11 @@ summary { cursor: pointer; color: #304f7d; }
 .index-table { width: 100%; min-width: 620px; border-collapse: collapse; }
 .index-table caption { caption-side: top; text-align: left; padding: 12px 14px; font-size: 12px; color: #596575; }
 .index-table thead th { padding: 0; border: 0; }
-.index-table th[scope="row"] { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; text-align: left; color: #525e6a; padding: 10px 12px; white-space: nowrap; border: 1px solid #ccd2d7; border-right: 2px solid #ccd2d7; background: #f7f9fa; }
+.index-table th[scope="row"] { text-align: left; padding: 10px 12px; white-space: nowrap; border: 1px solid #ccd2d7; border-right: 2px solid #ccd2d7; background: #f7f9fa; }
+.index-table th[scope="row"] .index-name { display: block; font-size: 13px; font-weight: 650; color: #242a33; }
+.index-table .row-area { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: #77828d; margin-top: 2px; }
 .index-table td { min-width: 96px; height: 78px; padding: 6px; border: 1px solid #dde2e6; vertical-align: top; }
-.index-cell { display: flex; flex-direction: column; gap: 3px; width: 100%; min-height: 62px; align-items: flex-start; text-align: left; border-radius: 4px; padding: 8px 10px; }
+.index-cell { display: flex; flex-direction: column; gap: 3px; width: 100%; min-height: 48px; align-items: flex-start; text-align: left; border-radius: 4px; padding: 8px 10px; }
 .index-cell.band-0 { background: #fff; border-color: #a9b3bd; }
 .index-cell.band-1 { background: #e4e9f1; border-color: #8fa0b8; }
 .index-cell.band-2 { background: #cdd7e4; border-color: #7186a5; }
