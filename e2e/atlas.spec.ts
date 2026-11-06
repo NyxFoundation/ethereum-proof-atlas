@@ -170,3 +170,36 @@ test('should retain stored source details when external navigation is unavailabl
   await expect(page.getByText(/Available when last checked/)).toBeVisible();
   await expect(page.getByText('Not performed', {exact: true})).toBeVisible();
 });
+
+test('should inventory catalogued claims in the index table across views', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Index', exact: true }).click();
+  const table = page.getByRole('table');
+  for (const column of ['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']) {
+    await expect(table.getByRole('columnheader', { name: column, exact: true })).toBeVisible();
+  }
+  await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
+  const panel = page.getByRole('complementary', { name: 'Details panel' });
+  await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
+  await expect(panel.getByText('Property')).toBeVisible();
+  await panel.getByRole('button', { name: 'Back' }).click();
+  await table.getByRole('button', { name: 'Fork choice: No catalogued claims' }).click();
+  await expect(panel.getByRole('heading', { name: '0 claims' })).toBeVisible();
+  await expect(page.getByText(/does not mean unproved or unsafe/)).toBeVisible();
+  await expect(table.getByRole('button', { name: 'Fork choice: No catalogued claims' })).toHaveAttribute(
+    'aria-pressed', 'true');
+  await page.getByRole('tab', { name: 'Lean Spec' }).click();
+  const leanTable = page.getByRole('table');
+  await leanTable.getByRole('button', { name: 'State transition: Claims: 1' }).click();
+  await expect(page.getByRole('button', { name: 'Post-genesis checkpoints stay unchanged or move strictly forward' })).toBeVisible();
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
+  await expect(page.locator('.react-flow')).toBeVisible();
+});
+
+test('should keep the index table inside its container at narrow widths', async ({ page }) => {
+  await page.setViewportSize({width: 320, height: 844});
+  await page.goto('/');
+  await page.getByRole('button', {name: 'Index', exact: true}).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  await expect(page.getByRole('button', {name: 'State transition: Claims: 1'})).toBeVisible();
+});

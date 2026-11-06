@@ -1,6 +1,6 @@
 ---
 title: Ethereum Proof Atlas Design
-last_updated: 2026-11-07
+last_updated: 2026-11-08
 tags:
   - architecture
   - formal-verification
@@ -152,6 +152,38 @@ The count is neither a coverage percentage nor a safety ranking. Zero means
 The map is read-only. Selection, keyboard focus, expansion, and navigation remain
 available, but dragging nodes into new positions, connecting edges, and deleting
 graph elements are not reader actions.
+
+### Index table
+
+Each view tab also provides a **Map / Index** display-mode toggle so the same
+snapshot can be read as an inventory. Index renders the selected view as a
+table whose purpose is exposing where the catalogue is empty; it is not a
+second map, a dashboard, or a coverage report.
+
+- Modes share one selection state and the right-hand details panel. Selecting a
+cell selects that component instance in both presentations; zero-claim cells
+are selectable and open the neutral "No catalogued claims" panel state.
+- Columns are the five catalogued groups: Consensus, Execution, Cryptography,
+Serialization, and Development. A component instance appears in the column of
+its `component.area`; networking instances resolve their side (and column)
+from the recorded architecture edges of that instance in the selected view,
+so consensus-side and execution-side networking never share one cell.
+- Rows preserve the stored overview layout: the table derives row bands from
+the instances' deliberate positions, with foundations at the bottom and their
+consumers above. A row is a band of positions; it has no semantic name.
+- Every populated cell shows the exact number of catalogued claims bound in
+this view (for example `Claims: 2` or `0 claims`), plus a neutral fill tint
+banded over that count. The exact count is always visible: color is never the
+only channel. Bands are neutral, restrained tints, not traffic-light colors,
+and do not resemble certification or safety ordering.
+- Empty grid positions mean the view has no instance there, never that
+anything is proved. A zero cell means **No catalogued claims**, not
+"Unproved" or "Unsafe". The table shows no percentages, no "proved" wording,
+and no per-column or whole-table rollup; only the count-band legend explains
+the fill. The legend replaces the relationship legend while Index is shown.
+- Row bands, columns, and counts derive from the same view-specific
+`componentInstances` and `claimBindings` as the map. There is no separate
+inventory dataset to keep in sync.
 
 ### Evidence presentation
 
@@ -430,6 +462,11 @@ checking. Target at least 80% application code coverage and cover these flows:
 - Counts deduplicate claims; multiple evidence records do not inflate them.
 - Bounded results and unbounded theorems cannot be confused in the display.
 - Components with no records say "0 claims", not "Unproved".
+- The Map / Index toggle reuses the same selection state and details panel;
+  switching tabs keeps the mode while isolating claim lists per view; Index
+  cells render exact counts with tint bands, zero cells read "No catalogued
+  claims", the legend explains bands, and the layout introduces no page-level
+  horizontal scrolling at supported widths.
 - Invalid dataset references and unsafe evidence links fail build-time validation;
   invalid request selections fail at the HTTP boundary without fallback data.
 - Unsupported bundle schema versions fail before rendering, including when a

@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { useState } from 'react';
 import { webcrypto } from 'node:crypto';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
@@ -140,7 +141,7 @@ describe('map interaction', () => {
     expect(view.componentInstances[0].position).toEqual({x: 310,y: 0});
   });
   it('should preserve map context while selecting hidden children and navigating evidence', async () => {
-    render(<Atlas bundle={bundle} view={view} />);
+    render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     expect(screen.getByRole('heading', {name: 'Select a component'})).toBeTruthy();
     fireEvent.change(screen.getByRole('combobox'), {target: {value: 'b-finality'}});
     await waitFor(() => expect(screen.getByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy());
@@ -156,6 +157,51 @@ describe('map interaction', () => {
     expect(await screen.findByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy();
     fireEvent.click(await screen.findByRole('button', {name: 'Select BLS signatures'}));
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+  });
+});
+
+describe('index presentation', () => {
+  const Harness = () => {
+    const [mode, setMode] = useState<'map' | 'index'>('map');
+    return <Atlas bundle={bundle} view={view} mode={mode} onMode={setMode} />;
+  };
+  it('should share selection with the map and treat zero cells as selectable inventory', () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
+    const table = screen.getByRole('table');
+    expect(within(table).getAllByRole('columnheader').map(header => header.textContent))
+      .toEqual(['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']);
+    fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
+    const panel = within(screen.getByRole('complementary'));
+    expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
+    expect(panel.getByRole('button', {name: claim.title})).toBeTruthy();
+    fireEvent.click(within(table).getByRole('button', {name: 'Fork choice: No catalogued claims'}));
+    expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+    expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
+    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThan(5);
+    expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
+    expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
+    expect(screen.queryByRole('list', {name: 'Relationship legend'})).toBeNull();
+    fireEvent.click(screen.getByRole('button', {name: 'Map'}));
+    expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.getByRole('list', {name: 'Relationship legend'})).toBeTruthy();
+    expect(panel.getByRole('heading', {name: 'Fork choice'})).toBeTruthy();
+  });
+  it('should switch modes inside a tab and keep the mode across view changes', async () => {
+    vi.mocked(loadAtlas).mockResolvedValue(bundle);
+    render(<App />);
+    await screen.findByRole('heading', {name: 'Select a component'});
+    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'ArrowRight'});
+    await screen.findByText('Lstar (experimental)');
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    const table = screen.getByRole('table');
+    expect(within(table).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
+    expect(within(table).queryByRole('button', {name: /^Solidity \/ solc/})).toBeNull();
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'Home'});
+    await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
+    expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
   });
 });
 

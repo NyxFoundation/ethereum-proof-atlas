@@ -83,6 +83,7 @@ export const bundleSchema = z.strictObject({
   architectureViews: z.array(architectureView).length(2), architectureEdges: z.array(architectureEdge).max(2000),
 });
 export type AtlasBundle = z.infer<typeof bundleSchema>;
+export type Component = AtlasBundle['components'][number];
 export type ArchitectureView = AtlasBundle['architectureViews'][number];
 export type ComponentInstance = ArchitectureView['componentInstances'][number];
 export type ClaimBinding = ArchitectureView['claimBindings'][number];

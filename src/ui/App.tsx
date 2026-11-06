@@ -7,6 +7,7 @@ type LoadState = { kind: 'loading' } | { kind: 'ready'; bundle: AtlasBundle } | 
 const tabs = [{ id: 'beacon', label: 'Beacon Spec' }, { id: 'lean', label: 'Lean Spec' }] as const;
 export function App() {
   const [viewId, setView] = useState<'beacon' | 'lean'>('beacon');
+  const [mode, setMode] = useState<'map' | 'index'>('map');
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<LoadState>({ kind: 'loading' });
   useEffect(() => {
@@ -40,7 +41,8 @@ export function App() {
         {state.kind === 'loading' && <p className="loading" role="status">Loading the selected architecture…</p>}
         {state.kind === 'error' && <div className="error" role="alert"><h2>Unable to display the atlas</h2><p>{state.message}</p>
           <button onClick={() => setAttempt(n => n + 1)}>Try again</button><button onClick={() => window.location.reload()}>Reload page</button></div>}
-        {state.kind === 'ready' && <Atlas key={viewId} bundle={state.bundle} view={state.bundle.architectureViews.find(v => v.id === viewId)!} />}
+        {state.kind === 'ready' && <Atlas key={viewId} bundle={state.bundle}
+          view={state.bundle.architectureViews.find(v => v.id === viewId)!} mode={mode} onMode={setMode} />}
       </div>
     </main></>;
 }

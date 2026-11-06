@@ -1,6 +1,6 @@
 ---
 title: Implementation and local acceptance
-last_updated: 2026-11-06
+last_updated: 2026-11-08
 tags:
   - implementation
   - testing
@@ -20,6 +20,7 @@ Use the root README for runnable setup and verification commands.
 | `src/domain/schema.ts` | Strict Zod contract, bounded geometry and safe source URLs |
 | `src/domain/validate.ts` | Cross-references, snapshot applicability, evidence/check scope and RFC 8785 digest |
 | `src/domain/selectors.ts` | Shared claim lists/counts, source availability and graph expansion |
+| `src/domain/indexLayout.ts` | Index-table row bands, column groups and count shading bands derived from the same view-specific instances and bindings |
 | `src/server/` | Hono read-only HTTP boundary, headers and structured failure logging |
 | `src/intake/`, `scripts/proof-updates.ts` | Bounded GitHub source reads, unpublished proposals, explicit review acceptance and package gates |
 | `.github/workflows/` | Hourly draft update proposals and application/review verification |
@@ -93,6 +94,7 @@ status as JSON; public errors never include the thrown value.
 | Historic source details survive external outage | Availability mutation test, panel fixture, failed external-navigation browser test |
 | English text, escaped imported content | ASCII English data contract, English UI tests, script-text escaping fixture |
 | Worker, assets, UI and source navigation exercised together | Playwright uses the packaged local Worker, not a mock API server |
+| Index mode shares selection, derives rows/columns from recorded data, keeps exact counts visible and zero cells neutral | Index layout suite, React mode-toggle and tab-persistence tests, Index browser journey and narrow-viewport containment test |
 
 `npm run test:coverage` enforces 80% across statements, branches, functions and
 lines. Only the two import/mount entrypoints are excluded; domain, server and UI
@@ -105,6 +107,31 @@ Local acceptance on 2026-11-06 used Node 24.21.0, a fresh `npm ci`, and
 cases passed. Coverage was 100% lines, 99.12% statements, 96.64% branches and
 98.34% functions. `npm audit` reported no known vulnerabilities. These results
 are observations of this application revision, not guarantees of future runs.
+
+## Index table presentation
+
+The Map / Index toggle is the approved inventory view from
+[design.md](design.md): each tab can render as a table that exposes where the
+catalogue is empty. `src/domain/indexLayout.ts` derives everything from the
+same validated bundle: row bands from the stored instance positions (gap
+tolerance 60, foundations at the bottom), five column groups, and the
+consensus/execution side of a networking instance from the recorded
+architecture edges of that view. `src/ui/IndexTable.tsx` renders caption,
+column headers, count chips on every populated cell and neutral tint bands
+(`band-0`…`band-3` over 0 / 1–2 / 3–4 / 5+ claims); the mode toggle reuses the
+map's selection state and the details panel so both presentations stay one
+dataset. No percentage, coverage vocabulary or whole-table rollup is
+rendered, and the legend replaces the relationship legend while Index is
+shown.
+
+Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
+`npm run verify`: 170 unit/component/package-gate cases and 12 workerd browser
+cases passed, including the new index layout suite, mode-toggle/tab-persistence
+tests and two Index browser journeys. Coverage was 99.84% lines, 99.04%
+statements, 95.95% branches and 98.73% functions; `indexLayout.ts` itself was
+100% lines. A rendered desktop screenshot confirmed the caption, columns,
+count chips and legend before release. These results remain observations of
+this application revision.
 
 ## Automated update acceptance
 
