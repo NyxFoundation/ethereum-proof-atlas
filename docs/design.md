@@ -1,6 +1,6 @@
 ---
 title: Ethereum Proof Atlas Design
-last_updated: 2026-11-06
+last_updated: 2026-11-07
 tags:
   - architecture
   - formal-verification
@@ -57,12 +57,11 @@ be presented as established claims.
 
 Provide two tabs with these exact English labels:
 
-- **Beacon Spec (Current)**
-- **Lean Spec (Future)**
+- **Beacon Spec**
+- **Lean Spec**
 
-Show the scope caption **Ethereum L1 and supporting infrastructure** beside the
-tabs. The tab names identify the consensus design family, not a restriction to
-consensus-only content. Execution and compiler areas remain explicitly labeled
+Do not show a scope caption beside the tabs. The tab names identify the
+consensus design family, not a restriction to consensus-only content. Execution and compiler areas remain explicitly labeled
 within each diagram wherever their specification relationships are established.
 
 Each tab selects an independently sourced architecture view, including its
@@ -141,9 +140,9 @@ propagate a guarantee to a consumer.
 5. Follow a source link to the specific theorem, verification model, or source
    location at the recorded revision.
 
-Nodes can carry a neutral label such as **Claims: 3**. The count is the number of
-distinct catalogued claims explicitly associated with that component in that
-view. Multiple artifacts supporting one claim do not increase its count. A claim
+Nodes can carry a neutral label such as **Claims: 3**, or **0 claims** when none
+are catalogued. The count is the number of distinct catalogued claims explicitly
+associated with that component in that view. Multiple artifacts supporting one claim do not increase its count. A claim
 associated with multiple components is still one claim, not multiple proofs.
 
 The count is neither a coverage percentage nor a safety ranking. Zero means
@@ -426,7 +425,7 @@ checking. Target at least 80% application code coverage and cover these flows:
   and check state without converting unknowns into guarantees.
 - Counts deduplicate claims; multiple evidence records do not inflate them.
 - Bounded results and unbounded theorems cannot be confused in the display.
-- Components with no records say "No catalogued claims", not "Unproved".
+- Components with no records say "0 claims", not "Unproved".
 - Invalid dataset references and unsafe evidence links fail build-time validation;
   invalid request selections fail at the HTTP boundary without fallback data.
 - Unsupported bundle schema versions fail before rendering, including when a

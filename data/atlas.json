@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "a4e7af76f14b7d375f4d894c26b5f2129e19b741f5c551dca10cdc06de463a82",
+  "datasetRevision": "4a29f7ac1536589ad4cedbec6183aaa1122f3fe2f83a7fb44798d1fc8a517b34",
   "components": [
     {
       "id": "fork-choice",
@@ -405,7 +405,7 @@
   "architectureViews": [
     {
       "id": "beacon",
-      "label": "Beacon Spec (Current)",
+      "label": "Beacon Spec",
       "fork": "Fulu / Osaka (Fusaka; BPO2)",
       "experimental": false,
       "description": "Mainnet fork checked on 2026-11-06: Fulu epoch 411392; blob schedule through epoch 419072. Gloas and Heze are disabled in the pinned mainnet configuration. This is a sourced overview, not an exhaustive specification call graph.",
@@ -416,7 +416,7 @@
     },
     {
       "id": "lean",
-      "label": "Lean Spec (Future)",
+      "label": "Lean Spec",
       "fork": "Lstar (experimental)",
       "experimental": true,
       "description": "Independent leanSpec snapshot, not a promised mainnet upgrade. Execution and compiler connections are not established by this snapshot and are intentionally not copied from Beacon.",

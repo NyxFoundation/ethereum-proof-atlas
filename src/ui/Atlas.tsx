@@ -30,25 +30,24 @@ export function Atlas({ bundle, view }: { bundle: AtlasBundle; view: Architectur
   const primary = bundle.artifacts.find(a => a.id === view.sources[0].artifactId)!;
   return <>
     <section className="snapshot" aria-label="Selected snapshot"><div><strong>{view.fork}</strong>
-      {view.experimental && <span className="tag">Experimental</span>}<code>{primary.revision}</code></div>
-      <p>{view.description}</p>
-      <details><summary>Architecture sources and inheritance</summary>
+      <code title={primary.revision}>{primary.revision.slice(0, 12)}</code></div>
+      <details><summary>Sources</summary>
+        <p>{view.description}</p>
         <ul>{view.inheritance.map(note => <li key={note}>{note}</li>)}</ul><Sources bundle={bundle} sources={view.sources} /></details>
     </section>
-    <div className="map-bar"><label>Component <select aria-label="Component" value={instanceId ?? ''} onChange={e => select(e.target.value)}>
-      <option value="" disabled>Select a component</option>{view.componentInstances.map(i =>
-        <option key={i.instanceId} value={i.instanceId}>{bundle.components.find(c => c.id === i.componentId)!.name}</option>)}</select></label>
-      <div className="legend" aria-label="Relationship legend">
-        <span className="legend-dependency">Dependency: provider → consumer</span>
-        <span className="legend-interface">Interface: sender → receiver</span>
-        <span className="legend-generated-code">Generated code: compiler → target</span>
-      </div>
+    <div className="map-bar"><select aria-label="Component" value={instanceId ?? ''} onChange={e => select(e.target.value)}>
+      <option value="" disabled>Select</option>{view.componentInstances.map(i =>
+        <option key={i.instanceId} value={i.instanceId}>{bundle.components.find(c => c.id === i.componentId)!.name}</option>)}</select>
+      <ul className="legend" aria-label="Relationship legend">
+        <li className="legend-dependency"><span>Dependency</span><span className="legend-detail">: provider → consumer</span></li>
+        <li className="legend-interface"><span>Interface</span><span className="legend-detail">: sender → receiver</span></li>
+        <li className="legend-generated-code"><span>Generated code</span><span className="legend-detail">: compiler → target</span></li>
+      </ul>
     </div>
     <div className="workspace"><Graph bundle={bundle} view={view} expanded={expanded} selected={instanceId}
       onSelect={select} onExpand={expand} onEdge={chooseEdge} />
       <Details bundle={bundle} view={view} instanceId={instanceId} claimId={claimId} edgeId={edgeId} onClaim={setClaim} onEdge={chooseEdge} /></div>
-    <p className="map-note" aria-live="polite">{view.label} · {instanceId ? 'Component selected. Details are in the adjacent panel.' : 'Read-only map. Select a component to inspect claims.'}
-      {' '}Counts are distinct catalogued claims in this view, not proof coverage or safety.</p>
-    <footer>Dataset <code>{bundle.datasetRevision}</code> · Schema {bundle.schemaVersion}</footer>
+    <p className="map-note" aria-live="polite">{instanceId ? 'Component selected. Details are in the adjacent panel.' : 'Select a component to inspect claims.'}</p>
+    <footer><details><summary>Dataset</summary><code>{bundle.datasetRevision}</code> · Schema {bundle.schemaVersion}</details></footer>
   </>;
 }
