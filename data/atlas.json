@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "datasetRevision": "a4e7af76f14b7d375f4d894c26b5f2129e19b741f5c551dca10cdc06de463a82",
+  "components": [
+    {
+      "id": "fork-choice",
+      "name": "Fork choice",
+      "area": "consensus",
+      "description": "Select a head using this view's consensus rules. Similar placement is not semantic equivalence.",
+      "childComponentIds": []
+    },
+    {
+      "id": "transition",
+      "name": "State transition",
+      "area": "consensus",
+      "description": "Apply consensus blocks and update state. Expand to inspect checkpoint processing.",
+      "childComponentIds": ["finality"]
+    },
+    {
+      "id": "finality",
+      "name": "Justification / finalization",
+      "area": "consensus",
+      "description": "Checkpoint processing within the consensus state transition.",
+      "childComponentIds": []
+    },
+    {
+      "id": "peerdas",
+      "name": "PeerDAS",
+      "area": "consensus",
+      "description": "Fulu data-column availability sampling and verification.",
+      "childComponentIds": []
+    },
+    {
+      "id": "consensus-network",
+      "name": "Consensus Gossipsub",
+      "area": "networking",
+      "description": "Consensus-specific gossip and request/response; not execution RLPx.",
+      "childComponentIds": []
+    },
+    {
+      "id": "ssz",
+      "name": "SSZ / Merkleization",
+      "area": "serialization",
+      "description": "Consensus encoding and hash-tree roots; not a correctness endorsement of any library.",
+      "childComponentIds": []
+    },
+    {
+      "id": "bls",
+      "name": "BLS signatures",
+      "area": "cryptography",
+      "description": "Beacon signature verification used by consensus processing.",
+      "childComponentIds": []
+    },
+    {
+      "id": "kzg",
+      "name": "KZG commitments",
+      "area": "cryptography",
+      "description": "KZG-backed data availability. Related abstract claims do not prove the cell verifier.",
+      "childComponentIds": []
+    },
+    {
+      "id": "execution",
+      "name": "Execution transition",
+      "area": "execution",
+      "description": "Osaka block processing under the execution specifications.",
+      "childComponentIds": ["evm"]
+    },
+    {
+      "id": "evm",
+      "name": "EVM",
+      "area": "execution",
+      "description": "Execution of bytecode. A compiler is not invoked by the execution client.",
+      "childComponentIds": []
+    },
+    {
+      "id": "trie",
+      "name": "State / Patricia trie",
+      "area": "execution",
+      "description": "State, transaction and receipt roots consumed by block validation.",
+      "childComponentIds": []
+    },
+    {
+      "id": "execution-network",
+      "name": "Execution ETH / RLPx",
+      "area": "networking",
+      "description": "Execution chain synchronization and transaction exchange; consensus happens elsewhere.",
+      "childComponentIds": []
+    },
+    {
+      "id": "compiler",
+      "name": "Solidity / solc",
+      "area": "development",
+      "description": "Development-time code generation targeting the EVM, not a runtime dependency.",
+      "childComponentIds": []
+    },
+    {
+      "id": "signatures",
+      "name": "Signature aggregation",
+      "area": "cryptography",
+      "description": "Lstar merged block proof verification. A ZK execution proof is not a formal-verification claim.",
+      "childComponentIds": []
+    },
+    {
+      "id": "xmss",
+      "name": "XMSS signatures",
+      "area": "cryptography",
+      "description": "Lstar hash-based signatures, independently sourced from Beacon BLS.",
+      "childComponentIds": []
+    },
+    {
+      "id": "poseidon",
+      "name": "Poseidon / Merkle tree",
+      "area": "cryptography",
+      "description": "Lstar XMSS tree hashing; no proof implied by an implementation.",
+      "childComponentIds": []
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "consensus",
+      "title": "Ethereum consensus specifications",
+      "kind": "specification",
+      "repository": "https://github.com/ethereum/consensus-specs",
+      "revisionKind": "git-commit",
+      "revision": "204fb4a19774eabb7a2e91505365deed6b8afef8",
+      "version": "Mainnet Fulu; inherited Phase0 through Electra; BPO2",
+      "locations": [{"id":"mainnet","path":"configs/mainnet.yaml","label":"Mainnet fork epochs and blob schedule","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/configs/mainnet.yaml"},{"id":"phase0","path":"specs/phase0/beacon-chain.md","label":"Inherited types, BLS, SSZ and slashing","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/beacon-chain.md"},{"id":"finality","path":"specs/altair/beacon-chain.md","label":"Inherited justification and finalization","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/altair/beacon-chain.md#L724-L750"},{"id":"ffg","path":"specs/phase0/beacon-chain.md","label":"weigh_justification_and_finalization","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/beacon-chain.md#L1963-L2017"},{"id":"fork-choice","path":"specs/phase0/fork-choice.md","label":"Fork choice and on_block","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/fork-choice.md"},{"id":"fulu","path":"specs/fulu/beacon-chain.md","label":"Fulu changes and process_epoch","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/beacon-chain.md"},{"id":"engine","path":"specs/fulu/beacon-chain.md","label":"Execution engine interaction","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/beacon-chain.md#L112-L170"},{"id":"p2p","path":"specs/phase0/p2p-interface.md","label":"Consensus Gossipsub, Req/Resp and SSZ","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/p2p-interface.md"},{"id":"peerdas","path":"specs/fulu/p2p-interface.md","label":"PeerDAS data columns and KZG checks","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/p2p-interface.md"},{"id":"kzg","path":"specs/fulu/p2p-interface.md","label":"verify_data_column_sidecar_kzg_proofs","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/p2p-interface.md#L208-L243"},{"id":"fulu-fork-choice","path":"specs/fulu/fork-choice.md","label":"Fulu on_block and PeerDAS availability","url":"https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/fork-choice.md#L83-L161"}]
+    },
+    {
+      "id": "execution",
+      "title": "Ethereum execution specifications",
+      "kind": "specification",
+      "repository": "https://github.com/ethereum/execution-specs",
+      "revisionKind": "git-commit",
+      "revision": "a7dbafac0c0ec82e7b2e20959cc7c00ce958442a",
+      "version": "Osaka (Fusaka)",
+      "locations": [{"id":"transition","path":"src/ethereum/forks/osaka/fork.py","label":"Osaka state transition, EVM and trie roots","url":"https://github.com/ethereum/execution-specs/blob/a7dbafac0c0ec82e7b2e20959cc7c00ce958442a/src/ethereum/forks/osaka/fork.py#L198-L282"},{"id":"evm","path":"src/ethereum/forks/osaka/vm/interpreter.py","label":"Osaka EVM interpreter","url":"https://github.com/ethereum/execution-specs/blob/a7dbafac0c0ec82e7b2e20959cc7c00ce958442a/src/ethereum/forks/osaka/vm/interpreter.py"}]
+    },
+    {
+      "id": "devp2p",
+      "title": "Execution networking specifications",
+      "kind": "specification",
+      "repository": "https://github.com/ethereum/devp2p",
+      "revisionKind": "git-commit",
+      "revision": "88f1c80800d622cc3a542a2125bbe33cc18c9f9c",
+      "version": "ETH protocol snapshot; independently versioned from consensus",
+      "locations": [{"id":"eth","path":"caps/eth.md","label":"ETH over RLPx: execution chain synchronization","url":"https://github.com/ethereum/devp2p/blob/88f1c80800d622cc3a542a2125bbe33cc18c9f9c/caps/eth.md#L1-L68"}]
+    },
+    {
+      "id": "solidity",
+      "title": "Solidity compiler",
+      "kind": "implementation",
+      "repository": "https://github.com/ethereum/solidity",
+      "revisionKind": "git-commit",
+      "revision": "d2acac1a0109f88224896e8e6e6d41a6a8e53673",
+      "version": "Development infrastructure snapshot; not a consensus component",
+      "locations": [{"id":"compiler","path":"docs/using-the-compiler.rst","label":"solc binary output and EVM targets","url":"https://github.com/ethereum/solidity/blob/d2acac1a0109f88224896e8e6e6d41a6a8e53673/docs/using-the-compiler.rst"}]
+    },
+    {
+      "id": "leanspec",
+      "title": "leanSpec",
+      "kind": "specification",
+      "repository": "https://github.com/leanEthereum/leanSpec",
+      "revisionKind": "git-commit",
+      "revision": "0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8",
+      "version": "Experimental Lstar; not a deployment commitment",
+      "locations": [{"id":"overview","path":"README.md","label":"leanSpec overview","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/README.md"},{"id":"transition","path":"src/lean_spec/spec/forks/lstar/state_transition.py","label":"Lstar state transition","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/state_transition.py"},{"id":"checkpoints","path":"src/lean_spec/spec/forks/lstar/containers/checkpoint.py","label":"Slot-only checkpoint selection","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/containers/checkpoint.py#L16-L37"},{"id":"guards","path":"src/lean_spec/spec/forks/lstar/state_transition.py","label":"Strict checkpoint advancement guards","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/state_transition.py#L330-L363"},{"id":"fork-choice","path":"src/lean_spec/spec/forks/lstar/fork_choice.py","label":"Lstar fork choice and block processing","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/fork_choice.py#L550-L650"},{"id":"signatures","path":"src/lean_spec/spec/forks/lstar/signatures.py","label":"Block signature aggregation and SSZ messages","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/signatures.py"},{"id":"ssz","path":"src/lean_spec/spec/ssz_types.py","label":"SSZ containers and types","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/ssz_types.py"},{"id":"network","path":"src/lean_spec/node/networking/gossipsub/topic.py","label":"Consensus Gossipsub topics and SSZ-Snappy","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/gossipsub/topic.py"},{"id":"sync","path":"src/lean_spec/node/sync/service.py","label":"Gossip routing into fork choice","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/sync/service.py"},{"id":"xmss","path":"src/lean_spec/spec/crypto/xmss/interface.py","label":"XMSS signature interface","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/interface.py"},{"id":"merkle","path":"src/lean_spec/spec/crypto/xmss/merkle.py","label":"XMSS tree using Poseidon","url":"https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/merkle.py"}]
+    },
+    {
+      "id": "gasper-model",
+      "title": "gasper-lean4 abstract FFG model",
+      "kind": "formal-model",
+      "repository": "https://github.com/NyxFoundation/gasper-lean4",
+      "revisionKind": "git-commit",
+      "revision": "7650709170327c5f10c8b5da99b10941e208ef5d",
+      "version": "Lean 4.31.0; abstract weighted validator/block model",
+      "locations": [{"id":"definitions","path":"GasperBeaconChain/Core/Theories/AccountableSafety.lean","label":"finalization_fork and structural safety definitions","url":"https://github.com/NyxFoundation/gasper-lean4/blob/7650709170327c5f10c8b5da99b10941e208ef5d/GasperBeaconChain/Core/Theories/AccountableSafety.lean#L76-L158"}]
+    },
+    {
+      "id": "gasper-proof",
+      "title": "gasper-lean4 accountable-safety proof",
+      "kind": "proof",
+      "repository": "https://github.com/NyxFoundation/gasper-lean4",
+      "revisionKind": "git-commit",
+      "revision": "7650709170327c5f10c8b5da99b10941e208ef5d",
+      "version": "Lean 4.31.0; no atlas replay",
+      "locations": [{"id":"theorem","path":"GasperBeaconChain/Core/Theories/AccountableSafety.lean","label":"GasperBeaconChain.Core.accountable_safety","url":"https://github.com/NyxFoundation/gasper-lean4/blob/7650709170327c5f10c8b5da99b10941e208ef5d/GasperBeaconChain/Core/Theories/AccountableSafety.lean#L723-L774"}]
+    },
+    {
+      "id": "lstar-model",
+      "title": "formal-leanSpec state-transition model",
+      "kind": "formal-model",
+      "repository": "https://github.com/NyxFoundation/formal-leanSpec",
+      "revisionKind": "git-commit",
+      "revision": "ba7284513031eac5c66bfb8221d27b6154cf240b",
+      "version": "Lean 4.29.1; independently versioned model",
+      "locations": [{"id":"transition","path":"LeanSpec/Forks/Lstar/StateTransition.lean","label":"Lean transition, checkpoint guards and abstractions","url":"https://github.com/NyxFoundation/formal-leanSpec/blob/ba7284513031eac5c66bfb8221d27b6154cf240b/LeanSpec/Forks/Lstar/StateTransition.lean"}]
+    },
+    {
+      "id": "lstar-proof",
+      "title": "formal-leanSpec checkpoint-forward proof",
+      "kind": "proof",
+      "repository": "https://github.com/NyxFoundation/formal-leanSpec",
+      "revisionKind": "git-commit",
+      "revision": "ba7284513031eac5c66bfb8221d27b6154cf240b",
+      "version": "Lean 4.29.1; ST-7; no atlas replay",
+      "locations": [{"id":"theorem","path":"LeanSpec/Forks/Lstar/CheckpointForward.lean","label":"State.checkpoint_forward","url":"https://github.com/NyxFoundation/formal-leanSpec/blob/ba7284513031eac5c66bfb8221d27b6154cf240b/LeanSpec/Forks/Lstar/CheckpointForward.lean#L208-L237"}]
+    },
+    {
+      "id": "ark-model",
+      "title": "ArkLib KZG algebraic model",
+      "kind": "formal-model",
+      "repository": "https://github.com/Verified-zkEVM/ArkLib",
+      "revisionKind": "git-commit",
+      "revision": "34613d617af325fd0c4f525533a123195868129e",
+      "version": "Generic prime-order groups and coefficient-form polynomials",
+      "locations": [{"id":"definitions","path":"ArkLib/Commitments/Functional/KZG/Basic.lean","label":"KZG commit, generateOpening and verifyOpening","url":"https://github.com/Verified-zkEVM/ArkLib/blob/34613d617af325fd0c4f525533a123195868129e/ArkLib/Commitments/Functional/KZG/Basic.lean#L44-L77"}]
+    },
+    {
+      "id": "ark-proof",
+      "title": "ArkLib KZG correctness proof",
+      "kind": "proof",
+      "repository": "https://github.com/Verified-zkEVM/ArkLib",
+      "revisionKind": "git-commit",
+      "revision": "34613d617af325fd0c4f525533a123195868129e",
+      "version": "Algebraic single-opening correctness; no atlas replay",
+      "locations": [{"id":"theorem","path":"ArkLib/Commitments/Functional/KZG/Correctness.lean","label":"KZG.correctness","url":"https://github.com/Verified-zkEVM/ArkLib/blob/34613d617af325fd0c4f525533a123195868129e/ArkLib/Commitments/Functional/KZG/Correctness.lean#L58-L149"}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "ffg-structural-safety",
+      "title": "Conflicting finality implies a slashed quorum intersection",
+      "statement": "In the abstract model, a finalization fork implies q_intersection_slashed: there exist two quorums whose shared validators are all slashable.",
+      "subjectArtifactIds": ["gasper-model"],
+      "assumptions": {"status":"known","details":["A finite validator type with decidable equality; a hash type with decidable equality; threshold, stake, validator-set, parent, genesis and state parameters.","The hypothesis finalization_fork contains two finalized blocks with mutual non-ancestry. Justification derivations encode the quorum links."]},
+      "dependencies": {"status":"unknown","details":["Transitive dependencies and axioms have not been completely audited by the atlas. The proof assistant, libraries and recorded model remain part of the trust boundary."]},
+      "limitations": ["Structural result only: it does not assert that the shared set is nonempty or has positive weight.","Not a proof of Fulu state-transition conformance, deployed clients, signatures, network delivery or production accountable-safety thresholds."],
+      "relation": null
+    },
+    {
+      "id": "checkpoint-forward",
+      "title": "Post-genesis checkpoints stay unchanged or move strictly forward",
+      "statement": "A successful Lean model transition with a nonzero latest block-header slot leaves each justified/finalized checkpoint unchanged, including its root, or replaces it at a strictly greater slot.",
+      "subjectArtifactIds": ["lstar-model"],
+      "assumptions": {"status":"known","details":["State.transition s b = .ok s'.","The pre-state latestBlockHeader.slot is not zero; genesis anchoring is excluded."]},
+      "dependencies": {"status":"unknown","details":["Transitive dependencies and axioms have not been completely audited by the atlas. The proof assistant, libraries and recorded model remain part of the trust boundary."]},
+      "limitations": ["Does not establish checkpoint ancestry across branches.","The Lean transition model is the subject, not the Python leanSpec implementation. The manual correspondence is not a refinement proof."],
+      "relation": null
+    },
+    {
+      "id": "kzg-correctness",
+      "title": "Honestly generated KZG openings satisfy the pairing equation",
+      "statement": "For a coefficient vector, a generated power SRS and an evaluation point, KZG.correctness shows that the model's generated opening verifies for the polynomial's evaluation.",
+      "subjectArtifactIds": ["ark-model"],
+      "assumptions": {"status":"known","details":["Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; Nat.card G1 = p.","A bilinear pairing, generators, degree parameter n, SRS secret a, coefficient vector and evaluation point z, under the recorded Lean definitions."]},
+      "dependencies": {"status":"unknown","details":["Transitive dependencies and axioms have not been completely audited by the atlas. The proof assistant, libraries and recorded model remain part of the trust boundary."]},
+      "limitations": ["Algebraic correctness is not binding, knowledge soundness, ceremony security or zero knowledge.","Generic single-point coefficient-form opening, not Ethereum's batched cell verifier, blob encoding, BLS12-381 implementation or a deployed prover."],
+      "relation": null
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ffg-theorem",
+      "claimId": "ffg-structural-safety",
+      "artifactId": "gasper-proof",
+      "locationId": "theorem",
+      "method": "theorem-proving",
+      "scope": {"kind":"unbounded","statement":"Universally quantified Lean theorem over the abstract finite-validator model; not bounded state exploration.","abstractions":["Symbolic block hashes, parent relation, stakes and validator sets; no client binary or network semantics."],"configuration":"Lean 4.31.0; pinned gasper-lean4 lake manifest; accountable_safety only."}
+    },
+    {
+      "id": "checkpoint-theorem",
+      "claimId": "checkpoint-forward",
+      "artifactId": "lstar-proof",
+      "locationId": "theorem",
+      "method": "theorem-proving",
+      "scope": {"kind":"unbounded","statement":"Universal conditional statement about successful post-anchoring model transitions.","abstractions":["Lean State/Block and UInt64 slot semantics; Python conformance and cross-branch ancestry are not established."],"configuration":"Lean 4.29.1; pinned formal-leanSpec lake manifest; State.checkpoint_forward only."}
+    },
+    {
+      "id": "kzg-theorem",
+      "claimId": "kzg-correctness",
+      "artifactId": "ark-proof",
+      "locationId": "theorem",
+      "method": "theorem-proving",
+      "scope": {"kind":"unbounded","statement":"Parametric algebraic correctness for degree parameter n; n is not a finite model-checking search bound.","abstractions":["Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."],"configuration":"Pinned ArkLib lean-toolchain and lake manifest; KZG.correctness (algebraic theorem), not the whole library."}
+    }
+  ],
+  "checkRecords": [
+    {
+      "id": "availability-ffg-theorem",
+      "kind": "availability",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "gasper-proof",
+      "locationIds": ["theorem"],
+      "result": "available",
+      "details": "Public commit-pinned raw GitHub source was retrieved with HTTP 200 on this date and the theorem body was inspected. This is an intake observation, not a replay or promise of present reachability."
+    },
+    {
+      "id": "review-ffg-theorem",
+      "kind": "source-review",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "gasper-proof",
+      "evidenceId": "ffg-theorem",
+      "subjectArtifactIds": ["gasper-model"],
+      "result": "reviewed",
+      "scope": "Lean 4.31.0; pinned gasper-lean4 lake manifest; accountable_safety only.",
+      "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed."
+    },
+    {
+      "id": "availability-checkpoint-theorem",
+      "kind": "availability",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "lstar-proof",
+      "locationIds": ["theorem"],
+      "result": "available",
+      "details": "Public commit-pinned raw GitHub source was retrieved with HTTP 200 on this date and the theorem body was inspected. This is an intake observation, not a replay or promise of present reachability."
+    },
+    {
+      "id": "review-checkpoint-theorem",
+      "kind": "source-review",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "lstar-proof",
+      "evidenceId": "checkpoint-theorem",
+      "subjectArtifactIds": ["lstar-model"],
+      "result": "reviewed",
+      "scope": "Lean 4.29.1; pinned formal-leanSpec lake manifest; State.checkpoint_forward only.",
+      "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed."
+    },
+    {
+      "id": "availability-kzg-theorem",
+      "kind": "availability",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "ark-proof",
+      "locationIds": ["theorem"],
+      "result": "available",
+      "details": "Public commit-pinned raw GitHub source was retrieved with HTTP 200 on this date and the theorem body was inspected. This is an intake observation, not a replay or promise of present reachability."
+    },
+    {
+      "id": "review-kzg-theorem",
+      "kind": "source-review",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "artifactId": "ark-proof",
+      "evidenceId": "kzg-theorem",
+      "subjectArtifactIds": ["ark-model"],
+      "result": "reviewed",
+      "scope": "Pinned ArkLib lean-toolchain and lake manifest; KZG.correctness (algebraic theorem), not the whole library.",
+      "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed."
+    },
+    {
+      "id": "compare-ffg-state",
+      "kind": "manual-comparison",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "viewId": "beacon",
+      "componentInstanceId": "b-state",
+      "claimId": "ffg-structural-safety",
+      "sources": [{"artifactId":"consensus","locationId":"finality"},{"artifactId":"consensus","locationId":"ffg"},{"artifactId":"gasper-model","locationId":"definitions"}],
+      "result": "related",
+      "details": "Related abstract FFG model: the inherited Beacon transition processes justification/finalization, but its epoch, balance and fork rules are not proved equivalent to this model. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+    },
+    {
+      "id": "compare-ffg-detail",
+      "kind": "manual-comparison",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "viewId": "beacon",
+      "componentInstanceId": "b-finality",
+      "claimId": "ffg-structural-safety",
+      "sources": [{"artifactId":"consensus","locationId":"finality"},{"artifactId":"consensus","locationId":"ffg"},{"artifactId":"gasper-model","locationId":"definitions"}],
+      "result": "related",
+      "details": "Related abstract FFG model, not a theorem about the Fulu implementation. Structural quorum reasoning does not certify production slashing amounts. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+    },
+    {
+      "id": "compare-kzg",
+      "kind": "manual-comparison",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "viewId": "beacon",
+      "componentInstanceId": "b-kzg",
+      "claimId": "kzg-correctness",
+      "sources": [{"artifactId":"consensus","locationId":"kzg"},{"artifactId":"ark-model","locationId":"definitions"}],
+      "result": "related",
+      "details": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+    },
+    {
+      "id": "compare-lstar-state",
+      "kind": "manual-comparison",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "viewId": "lean",
+      "componentInstanceId": "l-state",
+      "claimId": "checkpoint-forward",
+      "sources": [{"artifactId":"leanspec","locationId":"guards"},{"artifactId":"leanspec","locationId":"checkpoints"},{"artifactId":"lstar-model","locationId":"transition"}],
+      "result": "related",
+      "details": "Related Lean transition model. Both recorded sources use strict slot guards, but no machine-checked refinement to this leanSpec snapshot is claimed. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+    },
+    {
+      "id": "compare-lstar-detail",
+      "kind": "manual-comparison",
+      "checkedAt": "2026-11-06T06:12:14Z",
+      "viewId": "lean",
+      "componentInstanceId": "l-finality",
+      "claimId": "checkpoint-forward",
+      "sources": [{"artifactId":"leanspec","locationId":"guards"},{"artifactId":"leanspec","locationId":"checkpoints"},{"artifactId":"lstar-model","locationId":"transition"}],
+      "result": "related",
+      "details": "Related model of checkpoint replacement. The genesis exception and absence of a root-ancestry result remain explicit. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+    }
+  ],
+  "architectureViews": [
+    {
+      "id": "beacon",
+      "label": "Beacon Spec (Current)",
+      "fork": "Fulu / Osaka (Fusaka; BPO2)",
+      "experimental": false,
+      "description": "Mainnet fork checked on 2026-11-06: Fulu epoch 411392; blob schedule through epoch 419072. Gloas and Heze are disabled in the pinned mainnet configuration. This is a sourced overview, not an exhaustive specification call graph.",
+      "sources": [{"artifactId":"consensus","locationId":"mainnet"},{"artifactId":"consensus","locationId":"fulu"},{"artifactId":"execution","locationId":"transition"},{"artifactId":"devp2p","locationId":"eth"},{"artifactId":"solidity","locationId":"compiler"}],
+      "inheritance": ["Phase0 -> Altair -> Bellatrix -> Capella -> Deneb -> Electra -> Fulu; inherited definitions remain in force unless superseded.","Justification uses Altair's balances and Phase0's weighing logic. Fulu process_epoch still calls it.","Execution is independently pinned to Osaka; networking and solc have their own source identities."],
+      "componentInstances": [{"instanceId":"b-head","componentId":"fork-choice","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"fulu-fork-choice"}],"position":{"x":310,"y":0},"parentInstanceId":null},{"instanceId":"b-state","componentId":"transition","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"fulu"}],"position":{"x":310,"y":190},"parentInstanceId":null},{"instanceId":"b-finality","componentId":"finality","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"finality"}],"position":{"x":535,"y":345},"parentInstanceId":"b-state"},{"instanceId":"b-da","componentId":"peerdas","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"peerdas"}],"position":{"x":-220,"y":190},"parentInstanceId":null},{"instanceId":"b-p2p","componentId":"consensus-network","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"p2p"}],"position":{"x":30,"y":465},"parentInstanceId":null},{"instanceId":"b-ssz","componentId":"ssz","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"phase0"}],"position":{"x":310,"y":610},"parentInstanceId":null},{"instanceId":"b-bls","componentId":"bls","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"phase0"}],"position":{"x":545,"y":610},"parentInstanceId":null},{"instanceId":"b-kzg","componentId":"kzg","subjectArtifactIds":["consensus"],"sources":[{"artifactId":"consensus","locationId":"kzg"}],"position":{"x":-220,"y":670},"parentInstanceId":null},{"instanceId":"b-execution","componentId":"execution","subjectArtifactIds":["execution"],"sources":[{"artifactId":"execution","locationId":"transition"}],"position":{"x":825,"y":190},"parentInstanceId":null},{"instanceId":"b-evm","componentId":"evm","subjectArtifactIds":["execution"],"sources":[{"artifactId":"execution","locationId":"evm"}],"position":{"x":825,"y":345},"parentInstanceId":null},{"instanceId":"b-trie","componentId":"trie","subjectArtifactIds":["execution"],"sources":[{"artifactId":"execution","locationId":"transition"}],"position":{"x":825,"y":610},"parentInstanceId":null},{"instanceId":"b-elp2p","componentId":"execution-network","subjectArtifactIds":["devp2p"],"sources":[{"artifactId":"devp2p","locationId":"eth"}],"position":{"x":1070,"y":610},"parentInstanceId":null},{"instanceId":"b-solc","componentId":"compiler","subjectArtifactIds":["solidity"],"sources":[{"artifactId":"solidity","locationId":"compiler"}],"position":{"x":1070,"y":400},"parentInstanceId":null}],
+      "claimBindings": [{"componentInstanceId":"b-state","claimId":"ffg-structural-safety","applicabilityKind":"related-model","explanation":"Related abstract FFG model: the inherited Beacon transition processes justification/finalization, but its epoch, balance and fork rules are not proved equivalent to this model.","sources":[{"artifactId":"consensus","locationId":"finality"},{"artifactId":"consensus","locationId":"ffg"},{"artifactId":"gasper-model","locationId":"definitions"}],"basis":{"kind":"manual-comparison","checkId":"compare-ffg-state"}},{"componentInstanceId":"b-finality","claimId":"ffg-structural-safety","applicabilityKind":"related-model","explanation":"Related abstract FFG model, not a theorem about the Fulu implementation. Structural quorum reasoning does not certify production slashing amounts.","sources":[{"artifactId":"consensus","locationId":"finality"},{"artifactId":"consensus","locationId":"ffg"},{"artifactId":"gasper-model","locationId":"definitions"}],"basis":{"kind":"manual-comparison","checkId":"compare-ffg-detail"}},{"componentInstanceId":"b-kzg","claimId":"kzg-correctness","applicabilityKind":"related-model","explanation":"Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.","sources":[{"artifactId":"consensus","locationId":"kzg"},{"artifactId":"ark-model","locationId":"definitions"}],"basis":{"kind":"manual-comparison","checkId":"compare-kzg"}}]
+    },
+    {
+      "id": "lean",
+      "label": "Lean Spec (Future)",
+      "fork": "Lstar (experimental)",
+      "experimental": true,
+      "description": "Independent leanSpec snapshot, not a promised mainnet upgrade. Execution and compiler connections are not established by this snapshot and are intentionally not copied from Beacon.",
+      "sources": [{"artifactId":"leanspec","locationId":"overview"}],
+      "inheritance": ["Lstar at a fixed revision; no semantic equivalence with Beacon is assumed.","Only relationships established in this leanSpec revision are shown. Future execution/compiler integration is unspecified."],
+      "componentInstances": [{"instanceId":"l-head","componentId":"fork-choice","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"fork-choice"}],"position":{"x":310,"y":0},"parentInstanceId":null},{"instanceId":"l-state","componentId":"transition","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"transition"}],"position":{"x":310,"y":190},"parentInstanceId":null},{"instanceId":"l-finality","componentId":"finality","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"checkpoints"}],"position":{"x":310,"y":370},"parentInstanceId":"l-state"},{"instanceId":"l-p2p","componentId":"consensus-network","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"network"}],"position":{"x":30,"y":465},"parentInstanceId":null},{"instanceId":"l-ssz","componentId":"ssz","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"ssz"}],"position":{"x":310,"y":610},"parentInstanceId":null},{"instanceId":"l-signatures","componentId":"signatures","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"signatures"}],"position":{"x":570,"y":310},"parentInstanceId":null},{"instanceId":"l-xmss","componentId":"xmss","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"xmss"}],"position":{"x":570,"y":610},"parentInstanceId":null},{"instanceId":"l-poseidon","componentId":"poseidon","subjectArtifactIds":["leanspec"],"sources":[{"artifactId":"leanspec","locationId":"merkle"}],"position":{"x":825,"y":760},"parentInstanceId":null}],
+      "claimBindings": [{"componentInstanceId":"l-state","claimId":"checkpoint-forward","applicabilityKind":"related-model","explanation":"Related Lean transition model. Both recorded sources use strict slot guards, but no machine-checked refinement to this leanSpec snapshot is claimed.","sources":[{"artifactId":"leanspec","locationId":"guards"},{"artifactId":"leanspec","locationId":"checkpoints"},{"artifactId":"lstar-model","locationId":"transition"}],"basis":{"kind":"manual-comparison","checkId":"compare-lstar-state"}},{"componentInstanceId":"l-finality","claimId":"checkpoint-forward","applicabilityKind":"related-model","explanation":"Related model of checkpoint replacement. The genesis exception and absence of a root-ancestry result remain explicit.","sources":[{"artifactId":"leanspec","locationId":"guards"},{"artifactId":"leanspec","locationId":"checkpoints"},{"artifactId":"lstar-model","locationId":"transition"}],"basis":{"kind":"manual-comparison","checkId":"compare-lstar-detail"}}]
+    }
+  ],
+  "architectureEdges": [
+    {
+      "id": "b-da-head",
+      "viewId": "beacon",
+      "source": "b-da",
+      "target": "b-head",
+      "kind": "dependency",
+      "label": "Data availability",
+      "explanation": "Fulu on_block requires is_data_available before accepting the block and its post-state.",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "fulu-fork-choice"
+        }
+      ]
+    },
+    {
+      "id": "b-state-head",
+      "viewId": "beacon",
+      "source": "b-state",
+      "target": "b-head",
+      "kind": "dependency",
+      "label": "State transition",
+      "sources": [{"artifactId":"consensus","locationId":"fulu-fork-choice"}],
+      "explanation": "on_block validates the block using the state transition before storing its post-state."
+    },
+    {
+      "id": "b-finality-state",
+      "viewId": "beacon",
+      "source": "b-finality",
+      "target": "b-state",
+      "kind": "dependency",
+      "label": "Epoch processing",
+      "sources": [{"artifactId":"consensus","locationId":"fulu"},{"artifactId":"consensus","locationId":"finality"}],
+      "explanation": "Fulu process_epoch invokes inherited justification and finalization."
+    },
+    {
+      "id": "b-ssz-state",
+      "viewId": "beacon",
+      "source": "b-ssz",
+      "target": "b-state",
+      "kind": "dependency",
+      "label": "Hash-tree roots",
+      "sources": [{"artifactId":"consensus","locationId":"phase0"}],
+      "explanation": "State transition checks the block's state root using hash_tree_root."
+    },
+    {
+      "id": "b-bls-state",
+      "viewId": "beacon",
+      "source": "b-bls",
+      "target": "b-state",
+      "kind": "dependency",
+      "label": "Signatures",
+      "sources": [{"artifactId":"consensus","locationId":"phase0"}],
+      "explanation": "Signature validation and RANDAO processing call BLS verification."
+    },
+    {
+      "id": "b-p2p-head",
+      "viewId": "beacon",
+      "source": "b-p2p",
+      "target": "b-head",
+      "kind": "interface",
+      "label": "Block delivery",
+      "sources": [{"artifactId":"consensus","locationId":"fulu-fork-choice"},{"artifactId":"consensus","locationId":"p2p"}],
+      "explanation": "Consensus block reception feeds on_block. An interface arrow points from the sender to the receiving role."
+    },
+    {
+      "id": "b-ssz-p2p",
+      "viewId": "beacon",
+      "source": "b-ssz",
+      "target": "b-p2p",
+      "kind": "dependency",
+      "label": "SSZ-Snappy",
+      "sources": [{"artifactId":"consensus","locationId":"p2p"}],
+      "explanation": "Consensus messages use SSZ-Snappy encoding."
+    },
+    {
+      "id": "b-kzg-da",
+      "viewId": "beacon",
+      "source": "b-kzg",
+      "target": "b-da",
+      "kind": "dependency",
+      "label": "Cell proof checks",
+      "sources": [{"artifactId":"consensus","locationId":"kzg"}],
+      "explanation": "Data column validation calls verify_cell_kzg_proof_batch."
+    },
+    {
+      "id": "b-p2p-da",
+      "viewId": "beacon",
+      "source": "b-p2p",
+      "target": "b-da",
+      "kind": "interface",
+      "label": "Data columns",
+      "sources": [{"artifactId":"consensus","locationId":"peerdas"}],
+      "explanation": "Gossip and Req/Resp deliver data-column sidecars to availability processing."
+    },
+    {
+      "id": "b-execution-state",
+      "viewId": "beacon",
+      "source": "b-execution",
+      "target": "b-state",
+      "kind": "interface",
+      "label": "Engine result",
+      "sources": [{"artifactId":"consensus","locationId":"engine"}],
+      "explanation": "The consensus transition uses the execution engine's payload validity result. This is an interface, not proof composition."
+    },
+    {
+      "id": "b-evm-execution",
+      "viewId": "beacon",
+      "source": "b-evm",
+      "target": "b-execution",
+      "kind": "dependency",
+      "label": "Execute transactions",
+      "sources": [{"artifactId":"execution","locationId":"transition"},{"artifactId":"execution","locationId":"evm"}],
+      "explanation": "Osaka apply_body and process_transaction execute bytecode via the interpreter."
+    },
+    {
+      "id": "b-trie-execution",
+      "viewId": "beacon",
+      "source": "b-trie",
+      "target": "b-execution",
+      "kind": "dependency",
+      "label": "State / receipt roots",
+      "sources": [{"artifactId":"execution","locationId":"transition"}],
+      "explanation": "Block validation compares computed state, transaction and receipt roots."
+    },
+    {
+      "id": "b-network-execution",
+      "viewId": "beacon",
+      "source": "b-elp2p",
+      "target": "b-execution",
+      "kind": "interface",
+      "label": "Chain synchronization",
+      "sources": [{"artifactId":"devp2p","locationId":"eth"}],
+      "explanation": "ETH retrieves execution headers and bodies for execution; it does not choose consensus finality."
+    },
+    {
+      "id": "b-solc-evm",
+      "viewId": "beacon",
+      "source": "b-solc",
+      "target": "b-evm",
+      "kind": "generated-code",
+      "label": "EVM bytecode",
+      "sources": [{"artifactId":"solidity","locationId":"compiler"}],
+      "explanation": "Compiler to target: solc emits bytecode during development. Execution does not invoke the compiler."
+    },
+    {
+      "id": "l-state-head",
+      "viewId": "lean",
+      "source": "l-state",
+      "target": "l-head",
+      "kind": "dependency",
+      "label": "Post-state",
+      "sources": [{"artifactId":"leanspec","locationId":"fork-choice"}],
+      "explanation": "Lstar on_block runs state_transition and advances its checkpoint store from the post-state."
+    },
+    {
+      "id": "l-checkpoint-state",
+      "viewId": "lean",
+      "source": "l-finality",
+      "target": "l-state",
+      "kind": "dependency",
+      "label": "Checkpoint updates",
+      "sources": [{"artifactId":"leanspec","locationId":"guards"}],
+      "explanation": "Attestation processing updates checkpoint values under strict slot guards."
+    },
+    {
+      "id": "l-ssz-state",
+      "viewId": "lean",
+      "source": "l-ssz",
+      "target": "l-state",
+      "kind": "dependency",
+      "label": "Hash-tree roots",
+      "sources": [{"artifactId":"leanspec","locationId":"transition"}],
+      "explanation": "State and block-header processing use SSZ hash_tree_root."
+    },
+    {
+      "id": "l-sig-head",
+      "viewId": "lean",
+      "source": "l-signatures",
+      "target": "l-head",
+      "kind": "dependency",
+      "label": "Block signatures",
+      "sources": [{"artifactId":"leanspec","locationId":"fork-choice"}],
+      "explanation": "Lstar on_block verifies signatures before the state transition."
+    },
+    {
+      "id": "l-xmss-signatures",
+      "viewId": "lean",
+      "source": "l-xmss",
+      "target": "l-signatures",
+      "kind": "dependency",
+      "label": "Public keys",
+      "sources": [{"artifactId":"leanspec","locationId":"signatures"}],
+      "explanation": "Signature verification reconstructs XMSS public keys and message bindings for the aggregate."
+    },
+    {
+      "id": "l-ssz-signatures",
+      "viewId": "lean",
+      "source": "l-ssz",
+      "target": "l-signatures",
+      "kind": "dependency",
+      "label": "Message roots",
+      "sources": [{"artifactId":"leanspec","locationId":"signatures"}],
+      "explanation": "SSZ roots of attestation data and blocks bind the aggregate proof to its messages."
+    },
+    {
+      "id": "l-poseidon-xmss",
+      "viewId": "lean",
+      "source": "l-poseidon",
+      "target": "l-xmss",
+      "kind": "dependency",
+      "label": "Tree hashing",
+      "sources": [{"artifactId":"leanspec","locationId":"merkle"}],
+      "explanation": "The XMSS Merkle tree uses PoseidonXmss to hash tree layers."
+    },
+    {
+      "id": "l-p2p-head",
+      "viewId": "lean",
+      "source": "l-p2p",
+      "target": "l-head",
+      "kind": "interface",
+      "label": "Block delivery",
+      "sources": [{"artifactId":"leanspec","locationId":"sync"}],
+      "explanation": "The sync service routes gossip blocks to head sync and calls the fork's on_block."
+    },
+    {
+      "id": "l-ssz-p2p",
+      "viewId": "lean",
+      "source": "l-ssz",
+      "target": "l-p2p",
+      "kind": "dependency",
+      "label": "SSZ-Snappy",
+      "sources": [{"artifactId":"leanspec","locationId":"network"}],
+      "explanation": "The pinned Lstar networking topics name SSZ-Snappy payload encoding."
+    }
+  ]
+}

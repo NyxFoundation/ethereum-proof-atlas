@@ -1,0 +1,47 @@
+import { useEffect, useState, type KeyboardEvent } from 'react';
+import type { AtlasBundle } from '../domain/schema';
+import { loadAtlas } from './api';
+import { Atlas } from './Atlas';
+
+type LoadState = { kind: 'loading' } | { kind: 'ready'; bundle: AtlasBundle } | { kind: 'error'; message: string };
+const tabs = [{ id: 'beacon', label: 'Beacon Spec (Current)' }, { id: 'lean', label: 'Lean Spec (Future)' }] as const;
+export function App() {
+  const [viewId, setView] = useState<'beacon' | 'lean'>('beacon');
+  const [attempt, setAttempt] = useState(0);
+  const [state, setState] = useState<LoadState>({ kind: 'loading' });
+  useEffect(() => {
+    const controller = new AbortController();
+    setState({ kind: 'loading' });
+    loadAtlas(viewId, controller.signal).then(bundle => {
+      if (!controller.signal.aborted) setState({ kind: 'ready', bundle });
+    }).catch((error: Error) => {
+      if (!controller.signal.aborted) setState({ kind: 'error', message: error.message });
+    });
+    return () => controller.abort();
+  }, [viewId, attempt]);
+  const switchTab = (id: typeof viewId) => {
+    if (id === viewId) return;
+    setState({ kind: 'loading' }); setView(id);
+  };
+  const tabKey = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === 'Home' ? 'beacon' : event.key === 'End' ? 'lean' : viewId === 'beacon' ? 'lean' : 'beacon';
+    switchTab(next);
+    document.getElementById('tab-' + next)?.focus();
+  };
+  return <><header><a className="brand" href="/">EPA <span>Ethereum Proof Atlas</span></a><p>Claims, not certifications.</p></header>
+    <main><div className="intro"><p className="eyebrow">A source-pinned evidence map</p><h1>What has been proved?</h1>
+      <p>Explore the architecture. Inspect the subject, assumptions and limits behind each claim.</p></div>
+      <div className="view-bar"><div role="tablist" aria-label="Architecture view">{tabs.map(tab =>
+        <button id={'tab-' + tab.id} key={tab.id} role="tab" aria-selected={viewId === tab.id} aria-controls="atlas-view"
+          tabIndex={viewId === tab.id ? 0 : -1} onKeyDown={tabKey} onClick={() => { if (viewId !== tab.id) switchTab(tab.id); }}>{tab.label}</button>)}</div>
+        <span>Ethereum L1 and supporting infrastructure</span></div>
+      <div id="atlas-view" role="tabpanel" aria-labelledby={'tab-' + viewId}>
+        {state.kind === 'loading' && <p className="loading" role="status">Loading the selected architecture…</p>}
+        {state.kind === 'error' && <div className="error" role="alert"><h2>Unable to display the atlas</h2><p>{state.message}</p>
+          <button onClick={() => setAttempt(n => n + 1)}>Try again</button><button onClick={() => window.location.reload()}>Reload page</button></div>}
+        {state.kind === 'ready' && <Atlas key={viewId} bundle={state.bundle} view={state.bundle.architectureViews.find(v => v.id === viewId)!} />}
+      </div>
+    </main></>;
+}
