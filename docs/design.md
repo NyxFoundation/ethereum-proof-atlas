@@ -11,9 +11,9 @@ tags:
 
 ## Status and purpose
 
-This document records the agreed product and technical design. The application
-has not been implemented; the technology choices below are not existing project
-commands or infrastructure.
+This document records the agreed product and technical design. The local
+implementation now follows this contract; actual project commands and verification
+procedures are documented in the repository README and implementation notes.
 
 The atlas helps developers and auditors determine **what has been proved, about
 which subject, under which assumptions, and with which limitations**. It overlays
@@ -414,7 +414,7 @@ These are application contracts, not a new record-update or hosting service:
 
 ## Verification and acceptance
 
-The future implementation should test behavior, not just schema shapes or type
+The implementation tests behavior, not just schema shapes or type
 checking. Target at least 80% application code coverage and cover these flows:
 
 - Switching tabs changes the snapshot, relationships, and applicable claims
@@ -447,8 +447,8 @@ Use synthetic records only as test fixtures, never as apparent public proof
 entries. Testing the atlas application is distinct from replaying the external
 proof corpus.
 
-There are no repository-declared application test, build, or development commands
-yet. Add and document real commands when the implementation is introduced.
+The repository README documents the implemented test, build, development and
+production-like local preview commands. `npm run verify` runs the acceptance gate.
 
 ## Deferred decisions and remaining research
 
@@ -459,7 +459,8 @@ Explicitly deferred:
 - Production domain, deployment credentials, and release operations, including
   platform traffic limits, abuse controls, and monitoring configuration.
 
-Research still required before publishing initial data:
+Research required for each published dataset revision (the initial investigation
+is recorded in [Research and intake notes](research.md)):
 
 - The exact active Beacon fork and all pinned architecture source revisions.
 - Detailed node/edge inventories and evidence for each relationship.
@@ -468,8 +469,8 @@ Research still required before publishing initial data:
 - Final spacing, typography, and expansion behavior against real diagram density,
   while retaining the agreed light, layered-map direction.
 
-This documentation change does not implement the application, provision
-Cloudflare resources, deploy a site, or run any third-party proof code.
+The local implementation does not provision Cloudflare resources, deploy a site,
+or run third-party proof code. Application testing is not proof-corpus replay.
 
 ## Primary references
 

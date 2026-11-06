@@ -1,101 +1,94 @@
 # Ethereum Proof Atlas
 
-**Ethereum Proof Atlas (EPA)** is a public map of formal verification across the Ethereum ecosystem.
+A read-only, source-pinned map of formal claims across **Ethereum L1 and supporting
+infrastructure**. Claims describe specific subjects, assumptions and limits, not
+whole-project safety. The approved scope is in [docs/design.md](docs/design.md).
 
-EPA aims to show what has been specified, formalized, proved, or left unproved—from cryptographic primitives and protocol rules to L2 systems and applications. Every assessment should be traceable to concrete evidence such as a theorem, source file, specification, repository, and commit.
+## Run locally
 
-> [!NOTE]
-> EPA is in its initial design phase. The taxonomy and evidence model will evolve as verified data is added.
+Use Node.js **24.15+ (24.x LTS)** and npm. No Cloudflare account,
+credentials, database or proof-assistant installation is needed.
 
-## Why EPA?
+```sh
+npm ci
+npm run build
+npm run preview
+```
 
-Formal verification work is distributed across many repositories, proof assistants, research papers, and audit reports. Existing lists make these projects discoverable, but they do not provide a shared map of:
+Open **http://127.0.0.1:4173**. This runs the packaged Worker and browser assets
+in Cloudflare's local workerd runtime, with the production-build application
+headers (including CSP). This checks the application policy locally, not an
+undeployed production environment or Cloudflare's platform-level controls.
+Stop with Ctrl-C. Initial dependency/browser installation requires network access;
+the running application does not retrieve third-party proof sources.
 
-- which claims about Ethereum should be proved;
-- which claims have machine-checked proofs;
-- which assumptions those proofs depend on;
-- which specification and implementation versions they cover;
-- where important gaps remain.
+For development with HMR, run `npm run dev` and open **http://127.0.0.1:5173**.
+The development server is not the production security test target.
 
-EPA is intended to make that information understandable, reviewable, and open to contribution.
+## Verify
 
-## Scope
+```sh
+npx playwright install chromium
+npm run verify
+```
 
-EPA covers the full Ethereum ecosystem rather than a single proof assistant or implementation:
+After verification, run `npm run preview` to inspect the verified build interactively.
 
-- cryptography;
-- serialization;
-- networking;
-- execution and the EVM;
-- consensus;
-- data availability;
-- L2 systems and bridges;
-- applications and smart contracts;
-- developer and verification infrastructure.
+On a supported Linux distribution, missing browser system libraries can be
+installed with `npx playwright install --with-deps chromium` (may require sudo).
 
-The initial atlas will contain the complete high-level structure while only making detailed assessments where evidence has been reviewed.
-
-## Assessment model
-
-EPA does not reduce formal verification to a single “proved” badge or a percentage score. Each subject is assessed across independent dimensions:
-
-| Dimension | Question |
+| Command | Checks |
 | --- | --- |
-| Specification | Is the intended behavior stated precisely? |
-| Formalization | Is the relevant specification represented in a formal system? |
-| Conformance | Is the formal definition connected to its source specification or implementation? |
-| Correctness | Are functional correctness properties proved? |
-| Security | Are security properties proved under explicit adversarial models? |
-| Completeness | Do the proofs cover the full subject or only selected components? |
-| Review | Has the evidence received independent review or audit? |
+| `npm run data:validate` | Schema, canonical SHA-256 revision, source identities and cross-references |
+| `npm test` | Domain, HTTP boundary, API-response and React component behavior |
+| `npm run test:coverage` | At least 80% statements, branches, functions and lines |
+| `npm run build` | Type checking and mandatory dataset validation, then Vite/Cloudflare packaging |
+| `npm run test:e2e` | Built Worker + browser navigation, read-only interactions, production CSP and raw HTTP requests |
+| `npm run verify` | All of the above in dependency order |
 
-An assessment can be **not started**, **in progress**, **proved**, **proved with assumptions**, or **under review**. The detailed page must explain what the status means instead of relying on color alone.
+Build before running E2E alone. E2E starts and stops its own local server on port
+4173; leave that port free. Tests use Chromium. Synthetic records exist only in
+tests. These commands test the atlas, **not external proof replay**.
 
-## Evidence
+## Read the map
 
-Each assessed claim should identify, where applicable:
+- **Beacon Spec (Current)**: mainnet Fulu / Osaka (Fusaka, BPO2), checked
+  2026-11-06; inherited specification definitions remain explicit.
+- **Lean Spec (Future)**: an independent, pinned Lstar experiment, not a promised
+  deployment. Unsupported future execution/compiler connections are omitted.
+- Select a node, then a claim in the adjacent panel. Expand state transition for
+  checkpoint detail. Use Tab/Enter, the component selector and viewport controls
+  for keyboard navigation; arrow keys switch tabs.
+- Dependency arrows point from provider to consumer. Dashed lines are interface
+  interactions; dotted lines are generated code. Relationships have source links.
+- “No catalogued claims” is not “unsafe.” Counts deduplicate claims within a view.
+  Source availability, correspondence review and replay are separate observations.
 
-- the claim being evaluated;
-- its source specification;
-- the proof system and theorem name;
-- the repository, file, and pinned commit;
-- hypotheses, axioms, trusted components, and idealized models;
-- the covered version or fork;
-- known limitations and missing links;
-- review provenance.
+The initial bundle contains three individually scoped claims from gasper-lean4,
+formal-leanSpec and ArkLib. [Research notes](docs/research.md) record intake
+evidence and candidate decisions. None has been replayed by the atlas.
 
-The atlas records evidence; it does not treat the existence of a repository, paper, test, or audit as proof by itself.
+## Data and API
 
-## Initial sources
+`data/atlas.json` is packaged with the Worker. There is no editing API or mutable
+runtime store. The build rejects invalid bundles even when `vite build` is called
+directly. Source text is escaped and URLs must be pinned, credential-free HTTPS.
 
-EPA will begin with reviewed information from:
+`GET /api/atlas` returns the complete bundle and a validated selection envelope.
+Optional selectors are `view`, `component` (a view-local instance ID), and
+`claim`. A component or claim requires a view; selections must be associated
+in that view. For example:
 
-- [EthLib](https://github.com/ethereum/EthLib), for Ethereum primitives, protocol definitions, proofs, and documented soundness assumptions;
-- [ArkLib](https://github.com/Verified-zkEVM/ArkLib), for formally verified arguments of knowledge and proof-system components;
-- [Awesome Ethereum Formal Verification](https://github.com/NyxFoundation/formal-eth), as an index of existing Ethereum formal-verification work;
-- [L2BEAT](https://l2beat.com/), as inspiration for evidence-based categorization and transparent assessment methodology.
+```text
+/api/atlas?view=beacon&component=b-state&claim=ffg-structural-safety
+```
 
-Repository references will be pinned to reviewed commits and updated manually in the first version. Automated update jobs are intentionally outside the initial scope.
+Only GET/HEAD are accepted. Duplicate/unknown/malformed selectors return 400,
+unknown or inapplicable records 404, queries over 2,048 encoded bytes 414, and
+other methods 405 with `Allow: GET, HEAD`. Bodies are rejected without parsing.
+Responses are same-origin only; evidence links are ordinary external navigation.
 
-## Initial website
-
-The first release will be a read-only website providing:
-
-- an ecosystem taxonomy;
-- status and evidence filters;
-- subject and claim detail pages;
-- links to source specifications and proof artifacts;
-- explicit assumptions, limitations, and unassessed areas;
-- counts by assessment status, without a misleading global proof percentage.
-
-Authentication, in-browser editing, automatic source ingestion, custom scoring, and complex graph visualization are not part of the initial release.
-
-## Contributing
-
-EPA will use repository-managed declarative data so that additions and corrections can be reviewed through GitHub pull requests. The schema and contribution guide will be added with the first implementation.
-
-Until then, please use GitHub issues to propose taxonomy changes, proof sources, or assessment criteria.
-
-## Name
-
-**Ethereum Proof Atlas** reflects the goal of mapping both established proofs and unexplored territory across Ethereum. The project abbreviation is **EPA**.
+See [implementation notes](docs/implementation.md) for module boundaries,
+data invariants, local-runtime caveats and the acceptance matrix. Accounts,
+authoring workflows, crawlers, automatic checks, production deployment and release
+operations remain outside this implementation.
