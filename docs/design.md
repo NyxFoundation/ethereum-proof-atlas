@@ -163,14 +163,15 @@ second map, a dashboard, or a coverage report.
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells
 are selectable and open the neutral "No catalogued claims" panel state.
-- Columns are the five catalogued groups: Consensus, Execution, Cryptography,
-Serialization, and Development. A component instance appears in the column of
-its `component.area`; networking instances resolve their side (and column)
+- Rows are the five catalogued groups: Consensus, Execution, Cryptography,
+Serialization, and Development. A component instance appears in the row of
+its `component.area`; networking instances resolve their side (and row)
 from the recorded architecture edges of that instance in the selected view,
 so consensus-side and execution-side networking never share one cell.
-- Rows preserve the stored overview layout: the table derives row bands from
-the instances' deliberate positions, with foundations at the bottom and their
-consumers above. A row is a band of positions; it has no semantic name.
+- Columns preserve the stored overview layout: the table derives column
+bands from the instances' deliberate positions, with foundations on the
+left and their consumers to the right. A column is a band of positions; it
+has no semantic name and carries no header label.
 - Every populated cell shows the exact number of catalogued claims bound in
 this view (for example `Claims: 2` or `0 claims`), plus a neutral fill tint
 banded over that count. The exact count is always visible: color is never the
@@ -183,6 +184,10 @@ and no per-column or whole-table rollup; only the count-band legend explains
 the fill. The legend replaces the relationship legend while Index is shown.
 - Row bands, columns, and counts derive from the same view-specific
 `componentInstances` and `claimBindings` as the map. There is no separate
+inventory dataset to keep in sync.
+- The map-bar carries only the display-mode toggle and the active legend;
+  components are reached directly in the map (keyboard-operable nodes) and in
+  the index (cells). There is no global component select control. There is no separate
 inventory dataset to keep in sync.
 
 ### Evidence presentation

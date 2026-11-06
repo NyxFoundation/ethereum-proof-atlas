@@ -143,8 +143,10 @@ describe('map interaction', () => {
   it('should preserve map context while selecting hidden children and navigating evidence', async () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     expect(screen.getByRole('heading', {name: 'Select a component'})).toBeTruthy();
-    fireEvent.change(screen.getByRole('combobox'), {target: {value: 'b-finality'}});
+    expect(screen.queryByRole('combobox')).toBeNull();
+    fireEvent.click(await screen.findByRole('button', {name: 'Expand State transition'}));
     await waitFor(() => expect(screen.getByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', {name: 'Select Justification / finalization'}));
     const panel = within(screen.getByRole('complementary'));
     fireEvent.click(panel.getByRole('button', {name: claim.title}));
     expect(panel.getByText('Property')).toBeTruthy();
@@ -169,7 +171,7 @@ describe('index presentation', () => {
     render(<Harness />);
     fireEvent.click(screen.getByRole('button', {name: 'Index'}));
     const table = screen.getByRole('table');
-    expect(within(table).getAllByRole('columnheader').map(header => header.textContent))
+    expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
       .toEqual(['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']);
     fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
     const panel = within(screen.getByRole('complementary'));
@@ -179,6 +181,7 @@ describe('index presentation', () => {
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
     expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThan(5);
+    expect(within(table).getByRole('rowheader', {name: 'Development'})).toBeTruthy();
     expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
     expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
     expect(screen.queryByRole('list', {name: 'Relationship legend'})).toBeNull();

@@ -84,8 +84,8 @@ test('should expand and pan with keyboard without permitting graph mutation', as
   await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
   await expect(viewport).not.toHaveAttribute('style', panned!);
   await page.getByRole('button', { name: 'Fit map', exact: true }).click();
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-solc');
-  await page.getByRole('button', {name: 'EVM bytecode · generated-code', exact: true}).click();
+  await page.getByRole('button', { name: 'Select Solidity / solc', exact: true }).click();
+  await page.getByRole('button', { name: 'EVM bytecode · generated-code', exact: true }).click();
   await expect(page.getByRole('complementary').getByText(/Execution does not invoke the compiler/)).toBeVisible();
   await page.getByRole('tab', { name: 'Beacon Spec' }).focus();
   await page.keyboard.press('Home');
@@ -97,7 +97,8 @@ test('should expand and pan with keyboard without permitting graph mutation', as
 test('should keep graph-to-evidence navigation usable on narrow screens', async ({ page }) => {
   await page.setViewportSize({width: 390,height: 844});
   await page.goto('/');
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-finality');
+  await page.getByRole('button', {name: 'Expand State transition', exact: true}).click();
+  await page.getByRole('button', {name: 'Select Justification / finalization', exact: true}).click();
   await page.getByRole('button', {name: 'Conflicting finality implies a slashed quorum intersection'}).click();
   await expect(page.getByRole('article', {name: 'Claim details'})).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
@@ -161,7 +162,7 @@ test('should reject invalid methods, selectors and bodies on the actual Worker',
 test('should retain stored source details when external navigation is unavailable', async ({ page, context }) => {
   await context.route('https://github.com/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-state');
+  await page.getByRole('button', {name: 'Select State transition', exact: true}).click();
   await page.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
   const popup = context.waitForEvent('page');
   await page.getByRole('link', {name: 'GasperBeaconChain.Core.accountable_safety'}).click();
@@ -175,8 +176,8 @@ test('should inventory catalogued claims in the index table across views', async
   await page.goto('/');
   await page.getByRole('button', { name: 'Index', exact: true }).click();
   const table = page.getByRole('table');
-  for (const column of ['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']) {
-    await expect(table.getByRole('columnheader', { name: column, exact: true })).toBeVisible();
+  for (const group of ['Consensus', 'Execution', 'Cryptography', 'Serialization', 'Development']) {
+    await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
   }
   await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });

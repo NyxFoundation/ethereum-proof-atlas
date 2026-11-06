@@ -40,9 +40,6 @@ export function Atlas({ bundle, view, mode, onMode }: { bundle: AtlasBundle; vie
     <div className="map-bar"><div role="group" aria-label="Display mode" className="mode-toggle">
       {(['map', 'index'] as const).map(value =>
         <button key={value} type="button" aria-pressed={mode === value} onClick={() => onMode(value)}>{value === 'map' ? 'Map' : 'Index'}</button>)}</div>
-      <select aria-label="Component" value={instanceId ?? ''} onChange={e => select(e.target.value)}>
-      <option value="" disabled>Select</option>{view.componentInstances.map(i =>
-        <option key={i.instanceId} value={i.instanceId}>{bundle.components.find(c => c.id === i.componentId)!.name}</option>)}</select>
       <ul className="legend" aria-label="Relationship legend" hidden={mode !== 'map'}>
         <li className="legend-dependency"><span>Dependency</span><span className="legend-detail">: provider → consumer</span></li>
         <li className="legend-interface"><span>Interface</span><span className="legend-detail">: sender → receiver</span></li>
