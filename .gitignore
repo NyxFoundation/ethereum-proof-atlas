@@ -6,3 +6,6 @@ test-results/
 .wrangler/
 .dev.vars*
 .env*
+data/atlas.json.lock/
+data/atlas.json.tmp-*
+updates/*.tmp-*

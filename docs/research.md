@@ -110,5 +110,9 @@ corpus does not require an entry in each view.
   protocol claims are excluded. ArkLib's shared cryptographic model is included
   without implying that every algorithm in that library is used by Ethereum.
 
-There is no periodic availability job, crawler or authoring workflow in this
-implementation. The application consumes these observations as supplied data.
+The browser and Worker consume these observations as supplied data. The later
+[proof update workflow](proof-updates.md) checks the three published repositories'
+`main` heads hourly and proposes fixed-commit updates for human review. It does
+not discover new claims, replay proofs, or recheck unchanged source links.
+The initial intake observations above remain historical observations, not checks
+of any later upstream revision.
