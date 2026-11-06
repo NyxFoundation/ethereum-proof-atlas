@@ -19,6 +19,7 @@ main { max-width: 1920px; margin: auto; padding: 0 28px 16px; }
 [role="tab"][aria-selected="true"] { border-bottom-color: #344f7d; color: #263f64; }
 .snapshot { font-size: 12px; padding: 13px 0; }
 .snapshot > div { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.snapshot-revision { font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
 .snapshot > p { max-width: 1100px; margin: 6px 0; color: #586370; }
 code { font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
 summary { cursor: pointer; color: #304f7d; }

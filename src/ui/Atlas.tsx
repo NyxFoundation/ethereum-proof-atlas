@@ -5,6 +5,7 @@ import { Graph } from './Graph';
 import { IndexTable } from './IndexTable';
 import { Details } from './Details';
 import { Sources } from './Sources';
+import { revisionHref } from './links';
 
 type Repository = { repository: string; slug: string };
 function repositoryLinks(bundle: AtlasBundle): Repository[] {
@@ -37,9 +38,12 @@ export function Atlas({ bundle, view, mode, onMode }: { bundle: AtlasBundle; vie
   };
   const chooseEdge = (id: string) => { setEdge(id); setClaim(null); };
   const primary = bundle.artifacts.find(a => a.id === view.sources[0].artifactId)!;
+  const primaryHref = revisionHref(primary);
   return <>
     <section className="snapshot" aria-label="Selected snapshot"><div><strong>{view.fork}</strong>
-      <code title={primary.revision}>{primary.revision.slice(0, 12)}</code></div>
+      {primaryHref ? <a className="snapshot-revision" href={primaryHref} target="_blank" rel="noopener noreferrer"
+        title={`Browse this snapshot at ${primary.revision}`} aria-label={`Browse ${primary.title} revision ${primary.revision.slice(0, 12)}`}>{primary.revision.slice(0, 12)}</a>
+        : <code title={primary.revision}>{primary.revision.slice(0, 12)}</code>}</div>
       <details><summary>Sources</summary>
         <p>{view.description}</p>
         <ul>{view.inheritance.map(note => <li key={note}>{note}</li>)}</ul><Sources bundle={bundle} sources={view.sources} /></details>

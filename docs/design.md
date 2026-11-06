@@ -83,6 +83,10 @@ a filter over one assumed common specification.
   "Future" does not mean a finalized commitment to deploy that specification.
 - Evidence links resolve to fixed commits or other content-addressed artifacts.
   A moving branch name or release label alone is not a reproducible identity.
+- Displayed revisions are links, not bare text: a git-commit revision opens
+  the repository state at that commit; a sha256 digest stays plain text
+  because it addresses artifact content, not a repository state. The bundle
+  digest is not a location and is never rendered as a link.
 - Protocol, implementation, formal-model, and proof-artifact versions are
   separate identities.
 

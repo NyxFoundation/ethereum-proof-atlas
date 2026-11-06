@@ -82,6 +82,29 @@ describe('evidence presentation', () => {
     expect(screen.getByText(/does not establish that the property is false/)).toBeTruthy();
     expect(screen.queryByText('Unbounded theorem statement')).toBeNull();
   });
+  it('should link displayed revisions to the repository state at that commit', () => {
+    render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
+    const snapshot = screen.getByRole('link', { name: /Browse .*revision 204fb4a19774/ });
+    expect(snapshot.getAttribute('href'))
+      .toBe('https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
+    expect(snapshot.getAttribute('rel')).toBe('noopener noreferrer');
+    render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
+    const subjects = screen.getAllByRole('link', { name: /7650709170327c5f10c8b5da99b10941e208ef5d/ });
+    for (const subject of subjects) {
+      expect(subject.getAttribute('href'))
+        .toBe('https://github.com/NyxFoundation/gasper-lean4/tree/7650709170327c5f10c8b5da99b10941e208ef5d');
+    }
+    expect(subjects.length).toBeGreaterThan(0);
+  });
+  it('should keep sha256 digests plain because they are not repository states', () => {
+    const digest = { id: 'digest-artifact', kind: 'proof' as const, title: 'Digest fixture',
+      repository: 'https://github.com/ethereum/devp2p', revisionKind: 'sha256' as const,
+      revision: 'a'.repeat(64), version: 'Fixture v1',
+      locations: [{ id: 'digest-location', path: 'fixture', label: 'Fixture', url: 'https://example.org/fixture' }] };
+    render(<Sources bundle={{ ...bundle, artifacts: [...bundle.artifacts, digest] }}
+      sources={[{ artifactId: 'digest-artifact', locationId: 'digest-location' }]} />);
+    expect(screen.getByText('a'.repeat(64)).closest('a')).toBeNull();
+  });
   it('should retain source identities when a stored observation says unavailable', () => {
     const fixture = structuredClone(bundle);
     fixture.checkRecords = fixture.checkRecords.map(c => c.kind === 'availability' ? {...c, result: 'unavailable'} :

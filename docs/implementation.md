@@ -139,13 +139,15 @@ cells), and the view itself is already selected through the tab and dataset
 selectors at the HTTP boundary.
 
 Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
-`npm run verify`: 167 unit/component/package-gate cases and 13 workerd browser
+`npm run verify`: 169 unit/component/package-gate cases and 13 workerd browser
 cases passed, including the index layout suite (one row per
- component in the recorded order with the recorded `area` label) and the
-footer's deduplicated repository discovery links,
+ component in the recorded order with the recorded `area` label), the
+footer's deduplicated repository discovery links, and the revision-to-commit
+link suite (snapshot bar, subject identities, source identities; sha256
+digests stay plain text),
 mode-toggle/tab-persistence
 tests and two Index browser journeys with direct node interaction. Coverage
-was 99.83% lines, 99% statements, 96.41% branches and 98.71% functions;
+was 99.83% lines, 99.01% statements, 96% branches and 98.71% functions;
 `indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
 confirmed the caption, component rows, count chips and legend before release.
 These results remain observations of this application revision.
