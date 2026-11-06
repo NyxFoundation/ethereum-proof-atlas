@@ -174,6 +174,22 @@ test('should retain stored source details when external navigation is unavailabl
   await expect(page.getByText('Not performed', {exact: true})).toBeVisible();
 });
 
+test('should list referenced repositories as discovery links in the footer', async ({ page }) => {
+  const foreignRequests: string[] = [];
+  page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
+  await page.goto('/');
+  const links = page.locator('footer').getByRole('link');
+  await expect(links).toHaveCount(8);
+  await expect(links.filter({ hasText: 'ethereum/consensus-specs' }))
+    .toHaveAttribute('href', 'https://github.com/ethereum/consensus-specs');
+  for (const link of await links.all()) {
+    expect(await link.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(await link.getAttribute('target')).toBe('_blank');
+  }
+  await expect(links.filter({ hasText: 'Verified-zkEVM/ArkLib' })).toBeVisible();
+  expect(foreignRequests).toEqual([]);
+});
+
 test('should inventory catalogued claims in the index table across views', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Index', exact: true }).click();

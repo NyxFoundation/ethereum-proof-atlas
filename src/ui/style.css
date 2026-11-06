@@ -103,6 +103,10 @@ aside li { margin-bottom: 9px; }
 .relationships { list-style: none; padding: 0; }
 .relationships button { font-size: 11px; text-align: left; }
 .map-note, footer { font-size: 11px; color: #5c6874; margin: 10px 0 0; }
+.footer-repos { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 8px; }
+.footer-repos .eyebrow { color: #525e6a; }
+.footer-repos .footer-note { color: #77828d; }
+.footer-repos a { font-size: 11px; }
 footer details, footer summary { display: inline; }
 .loading, .error { padding: 60px 25px; }
 .error { border: 1px solid #b8c3cd; margin-top: 20px; }

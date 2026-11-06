@@ -6,6 +6,13 @@ import { IndexTable } from './IndexTable';
 import { Details } from './Details';
 import { Sources } from './Sources';
 
+type Repository = { repository: string; slug: string };
+function repositoryLinks(bundle: AtlasBundle): Repository[] {
+  const repositories = new Map(bundle.artifacts.map(artifact =>
+    [artifact.repository, new URL(artifact.repository).pathname.replace(/^\//, '')] as const));
+  return [...repositories.entries()].map(([repository, slug]) => ({ repository, slug }))
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
 export function Atlas({ bundle, view, mode, onMode }: { bundle: AtlasBundle; view: ArchitectureView;
   mode: 'map' | 'index'; onMode: (mode: 'map' | 'index') => void }) {
   const [instanceId, setInstance] = useState<string | null>(null);
@@ -58,6 +65,12 @@ export function Atlas({ bundle, view, mode, onMode }: { bundle: AtlasBundle; vie
       : <IndexTable bundle={bundle} view={view} selected={instanceId} onSelect={select} />}
       <Details bundle={bundle} view={view} instanceId={instanceId} claimId={claimId} edgeId={edgeId} onClaim={setClaim} onEdge={chooseEdge} /></div>
     <p className="map-note" aria-live="polite">{instanceId ? 'Component selected. Details are in the adjacent panel.' : 'Select a component to inspect claims.'}</p>
-    <footer><details><summary>Dataset</summary><code>{bundle.datasetRevision}</code> · Schema {bundle.schemaVersion}</details></footer>
+    <footer><details><summary>Dataset</summary><code>{bundle.datasetRevision}</code> · Schema {bundle.schemaVersion}</details>
+      <p className="footer-repos"><span className="eyebrow">Referenced repositories</span>
+        <span className="footer-note">Discovery links, not pinned evidence</span>
+        {repositoryLinks(bundle).map(repo =>
+          <a key={repo.repository} href={repo.repository} target="_blank" rel="noopener noreferrer">{repo.slug}</a>)}
+      </p>
+    </footer>
   </>;
 }

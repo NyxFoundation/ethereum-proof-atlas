@@ -161,6 +161,11 @@ The map is read-only. Selection, keyboard focus, expansion, and navigation remai
 available, but dragging nodes into new positions, connecting edges, and deleting
 graph elements are not reader actions.
 
+The footer lists every distinct artifact repository in the loaded bundle as
+plain discovery links (new tab, no referrer), labelled with the repository
+path. They are not pinned evidence links and never satisfy a claim's source
+requirement.
+
 ### Index table
 
 Each view tab also provides a **Map / Index** display-mode toggle so the same
