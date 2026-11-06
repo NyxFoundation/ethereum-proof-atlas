@@ -213,22 +213,21 @@ describe('index presentation', () => {
     expect(screen.getByRole('list', {name: 'Relationship legend'})).toBeTruthy();
     expect(panel.getByRole('heading', {name: 'Fork choice'})).toBeTruthy();
   });
-  it('should list every referenced repository once as a discovery link', () => {
+  it('should list the formal-verification repositories once as discovery links', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     const links = within(screen.getByRole('contentinfo')).getAllByRole('link');
     const hrefs = links.map(link => link.getAttribute('href'));
-    expect(hrefs).toHaveLength(8);
+    expect(hrefs).toHaveLength(3);
     expect(new Set(hrefs)).toEqual(new Set([
-      'https://github.com/ethereum/consensus-specs', 'https://github.com/ethereum/devp2p',
-      'https://github.com/ethereum/execution-specs', 'https://github.com/ethereum/solidity',
-      'https://github.com/leanEthereum/leanSpec', 'https://github.com/NyxFoundation/formal-leanSpec',
+      'https://github.com/NyxFoundation/formal-leanSpec',
       'https://github.com/NyxFoundation/gasper-lean4', 'https://github.com/Verified-zkEVM/ArkLib',
     ]));
     for (const link of links) {
       expect(link.getAttribute('rel')).toBe('noopener noreferrer');
       expect(link.getAttribute('target')).toBe('_blank');
     }
-    expect(screen.getByRole('link', {name: 'ethereum/consensus-specs'}).textContent).toBe('ethereum/consensus-specs');
+    expect(screen.queryByRole('link', {name: 'ethereum/consensus-specs'})).toBeNull();
+    expect(screen.getByRole('link', {name: 'NyxFoundation/gasper-lean4'}).textContent).toBe('NyxFoundation/gasper-lean4');
   });
   it('should switch modes inside a tab and keep the mode across view changes', async () => {
     vi.mocked(loadAtlas).mockResolvedValue(bundle);

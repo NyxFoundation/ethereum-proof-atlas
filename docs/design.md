@@ -165,9 +165,11 @@ The map is read-only. Selection, keyboard focus, expansion, and navigation remai
 available, but dragging nodes into new positions, connecting edges, and deleting
 graph elements are not reader actions.
 
-The footer lists every distinct artifact repository in the loaded bundle as
-plain discovery links (new tab, no referrer), labelled with the repository
-path. They are not pinned evidence links and never satisfy a claim's source
+The footer lists every distinct repository of the loaded bundle's formal-model
+and proof artifacts as plain discovery links (new tab, no referrer), labelled
+with the repository path; the section is titled "Formal-verification
+repositories" and excludes the architecture snapshot repositories. They are
+not pinned evidence links and never satisfy a claim's source
 requirement.
 
 ### Index table
