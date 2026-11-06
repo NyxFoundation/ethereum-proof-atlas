@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "datasetRevision": "4e05cc4da3f39f913556624bb048b13df352b46aa3507352aa87caedab5fa6da",
+ "datasetRevision": "62c8688e0205512243f4291a41c621d088682664c27550a0e9c53596c3e1be34",
  "components": [
   {
    "id": "fork-choice",
@@ -432,6 +432,52 @@
      "url": "https://github.com/Verified-zkEVM/ArkLib/blob/34613d617af325fd0c4f525533a123195868129e/ArkLib/Commitments/Functional/KZG/Correctness.lean#L58-L149"
     }
    ]
+  },
+  {
+   "id": "ots-golf-model",
+   "title": "leanEthereum ots.golf formal model",
+   "kind": "formal-model",
+   "repository": "https://github.com/leanEthereum/ots.golf-dev",
+   "revisionKind": "git-commit",
+   "revision": "8b140a99afa5b3e0bc785ab202c7b0a9c1f7fe7c",
+   "version": "OTS cost model and verifier; competition round checked 2026-11-06",
+   "locations": [
+    {
+     "id": "optimal-ots",
+     "path": "formal/OptimalOTS.lean",
+     "label": "OptimalOTS root model",
+     "url": "https://github.com/leanEthereum/ots.golf-dev/blob/8b140a99afa5b3e0bc785ab202c7b0a9c1f7fe7c/formal/OptimalOTS.lean"
+    },
+    {
+     "id": "ots-cost-model",
+     "path": "formal/OptimalOTS/Model.lean",
+     "label": "OTS cost model",
+     "url": "https://github.com/leanEthereum/ots.golf-dev/blob/8b140a99afa5b3e0bc785ab202c7b0a9c1f7fe7c/formal/OptimalOTS/Model.lean"
+    }
+   ]
+  },
+  {
+   "id": "ots-golf-proofs",
+   "title": "leanEthereum ots.golf Lean proof records",
+   "kind": "proof",
+   "repository": "https://github.com/leanEthereum/ots.golf-submissions",
+   "revisionKind": "git-commit",
+   "revision": "d817d9d84bedd681e5058fb10c0beff7d75ab3bd",
+   "version": "Checker-admitted Lean proof record roots; checked 2026-11-06",
+   "locations": [
+    {
+     "id": "upper-compressions",
+     "path": "formal/Submissions/UpperCompressions/ProofBundle00.lean",
+     "label": "UpperCompressions proof bundle",
+     "url": "https://github.com/leanEthereum/ots.golf-submissions/blob/d817d9d84bedd681e5058fb10c0beff7d75ab3bd/formal/Submissions/UpperCompressions/ProofBundle00.lean"
+    },
+    {
+     "id": "averaged-signing",
+     "path": "formal/Submissions/LowerGenerality1/AveragedSigning.lean",
+     "label": "LowerGenerality1 averaged signing proof",
+     "url": "https://github.com/leanEthereum/ots.golf-submissions/blob/d817d9d84bedd681e5058fb10c0beff7d75ab3bd/formal/Submissions/LowerGenerality1/AveragedSigning.lean"
+    }
+   ]
   }
  ],
  "claims": [
@@ -749,6 +795,50 @@
    ],
    "result": "related",
    "details": "Related model of checkpoint replacement. The genesis exception and absence of a root-ancestry result remain explicit. This is a source-level comparison only, not a theorem of equivalence, refinement or implementation correctness."
+  },
+  {
+   "id": "availability-ots-model-optimal-ots",
+   "kind": "availability",
+   "checkedAt": "2026-11-06T20:21:41Z",
+   "artifactId": "ots-golf-model",
+   "locationIds": [
+    "optimal-ots"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 46-byte Lean root module on this date during the leanEthereum organisation sweep. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ots-model-cost-model",
+   "kind": "availability",
+   "checkedAt": "2026-11-06T20:21:41Z",
+   "artifactId": "ots-golf-model",
+   "locationIds": [
+    "ots-cost-model"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 5,302-byte Lean cost model on this date during the leanEthereum organisation sweep. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ots-proofs-upper-compressions",
+   "kind": "availability",
+   "checkedAt": "2026-11-06T20:21:42Z",
+   "artifactId": "ots-golf-proofs",
+   "locationIds": [
+    "upper-compressions"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 63,273-byte Lean proof bundle on this date during the leanEthereum organisation sweep. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ots-proofs-averaged-signing",
+   "kind": "availability",
+   "checkedAt": "2026-11-06T20:21:42Z",
+   "artifactId": "ots-golf-proofs",
+   "locationIds": [
+    "averaged-signing"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 3,249-byte Lean proof file on this date during the leanEthereum organisation sweep. Intake observation, not a replay or promise of present reachability."
   }
  ],
  "architectureViews": [

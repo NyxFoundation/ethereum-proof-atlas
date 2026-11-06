@@ -128,6 +128,16 @@ dataset. No percentage, coverage vocabulary or whole-table rollup is
 rendered, and the legend replaces the relationship legend while Index is
 shown.
 
+The 2026-11-06 leanEthereum organisation sweep added two inspection-backed
+standalone artifacts pinned to their `main` heads —
+`ots-golf-model` (Lean cost model, `8b140a99…`) and
+`ots-golf-proofs` (checker-admitted Lean record bundles, `d817d9d8…`) —
+each with dated availability observations; they carry no claim or
+component associations, and the footer's formal-verification section now
+lists leanEthereum/ots.golf-dev and leanEthereum/ots.golf-submissions
+alongside the earlier three proof repositories. Rejected candidates are
+recorded in research.md.
+
 The consensus snapshots and the Execution snapshot are separate architecture
 views since 2026-11-08: the former execution, execution-networking and
 compiler instances moved out of the Beacon view into a dedicated `Execution

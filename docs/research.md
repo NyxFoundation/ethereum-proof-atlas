@@ -57,6 +57,33 @@ does not assert specification equivalence.
 
 ## Published claims
 
+### leanEthereum organisation sweep (2026-11-06)
+
+The full non-fork repository list of the
+[leanEthereum organisation](https://github.com/leanEthereum) was enumerated and
+each candidate was inspected for formal-verification artifacts.
+
+- **Added as inspection-backed artifacts (no claims, no associations):**
+  [ots.golf-dev](https://github.com/leanEthereum/ots.golf-dev) carries the Lean
+  `formal/OptimalOTS` cost model and machine model (`OptimalOTS.lean`,
+  `Model.lean`) and
+  [ots.golf-submissions](https://github.com/leanEthereum/ots.golf-submissions)
+  carries checker-admitted Lean proof record bundles (`ProofBundle00.lean`,
+  `AveragedSigning.lean`). Both are pinned to their `main` heads
+  (ots.golf-dev `8b140a99…`, submissions `d817d9d8…`), and four dated
+  Contents-API GET observations back their availability. No component or
+  claim association was drawn: the OTS competition's relation to the
+  protocol's XMSS or leanSig design is not evidenced in these repositories.
+- **Rejected, with reasons:** leanVM and leanvm-riscv are zkVMs — ZK proof
+  generation is outside the scope that treats it as formal verification;
+  leanSig, axiom, leanSnappy, leansig-test-keys, leanBench, leanMetrics and
+  pm are implementations, benchmarks or administration; leanSeal contains a
+  paper appendix without a machine-checked artifact, so the paper-only rule
+  excludes it; fiat-shamir and multilinear-toolkit are Rust proof-system
+  primitives without verification artifacts; sig.golf-submissions holds an
+  empty records registry (`records.json` has no records yet) and is worth
+  revisiting; leanSpec is already in this bundle.
+
 Public raw GitHub source GETs for all three supporting theorem files returned
 **HTTP 200 at 2026-11-06T06:12:14Z**. The files and theorem bodies were inspected.
 Those real observations are recorded as availability CheckRecords; they are
