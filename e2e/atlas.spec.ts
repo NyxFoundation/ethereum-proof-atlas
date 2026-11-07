@@ -28,6 +28,8 @@ test('should navigate independently sourced views and evidence in the Workers ru
   expect(response?.headers()['content-security-policy']).toContain("script-src 'self'");
   expect(response?.headers()['referrer-policy']).toBe('no-referrer');
   await expect(page.getByText('Fulu / Osaka (Fusaka; BPO2)', { exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: /204fb4a19774/ })).toHaveAttribute('href',
+    'https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
   await expect(page.getByRole('button', { name: 'Select BLS signatures', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select State transition', exact: true }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
@@ -84,8 +86,10 @@ test('should expand and pan with keyboard without permitting graph mutation', as
   await page.getByRole('button', { name: 'Zoom in', exact: true }).click();
   await expect(viewport).not.toHaveAttribute('style', panned!);
   await page.getByRole('button', { name: 'Fit map', exact: true }).click();
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-solc');
-  await page.getByRole('button', {name: 'EVM bytecode · generated-code', exact: true}).click();
+  await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Select Solidity / solc', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Select Solidity / solc', exact: true }).click();
+  await page.getByRole('button', { name: 'EVM bytecode · generated-code', exact: true }).click();
   await expect(page.getByRole('complementary').getByText(/Execution does not invoke the compiler/)).toBeVisible();
   await page.getByRole('tab', { name: 'Beacon Spec' }).focus();
   await page.keyboard.press('Home');
@@ -97,7 +101,8 @@ test('should expand and pan with keyboard without permitting graph mutation', as
 test('should keep graph-to-evidence navigation usable on narrow screens', async ({ page }) => {
   await page.setViewportSize({width: 390,height: 844});
   await page.goto('/');
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-finality');
+  await page.getByRole('button', {name: 'Expand State transition', exact: true}).click();
+  await page.getByRole('button', {name: 'Select Justification / finalization', exact: true}).click();
   await page.getByRole('button', {name: 'Conflicting finality implies a slashed quorum intersection'}).click();
   await expect(page.getByRole('article', {name: 'Claim details'})).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
@@ -161,12 +166,73 @@ test('should reject invalid methods, selectors and bodies on the actual Worker',
 test('should retain stored source details when external navigation is unavailable', async ({ page, context }) => {
   await context.route('https://github.com/**', route => route.abort());
   await page.goto('/');
-  await page.getByRole('combobox', {name: 'Component'}).selectOption('b-state');
+  await page.getByRole('button', {name: 'Select State transition', exact: true}).click();
   await page.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
   const popup = context.waitForEvent('page');
   await page.getByRole('link', {name: 'GasperBeaconChain.Core.accountable_safety'}).click();
   const external = await popup; await external.close();
   await expect(page.getByRole('article', {name: 'Claim details'})).toBeVisible();
-  await expect(page.getByText(/Available when last checked/)).toBeVisible();
-  await expect(page.getByText('Not performed', {exact: true})).toBeVisible();
+  const article = page.getByRole('article', { name: 'Claim details' });
+  await expect(article.getByText(/Available when last checked/).first()).toBeVisible();
+  await expect(article.getByText('Not performed', {exact: true})).toBeVisible();
+});
+
+test('should list referenced repositories as discovery links in the footer', async ({ page }) => {
+  const foreignRequests: string[] = [];
+  page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
+  await page.goto('/');
+  const links = page.locator('footer').getByRole('link');
+  await expect(links).toHaveCount(7);
+  await expect(links.filter({ hasText: 'NyxFoundation/gasper-lean4' }))
+    .toHaveAttribute('href', 'https://github.com/NyxFoundation/gasper-lean4');
+  await expect(links.filter({ hasText: 'ethereum/EthLib' }))
+    .toHaveAttribute('href', 'https://github.com/ethereum/EthLib');
+  await expect(links.filter({ hasText: 'ethereum/consensus-specs' })).toHaveCount(0);
+  for (const link of await links.all()) {
+    expect(await link.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(await link.getAttribute('target')).toBe('_blank');
+  }
+  await expect(links.filter({ hasText: 'Verified-zkEVM/ArkLib' })).toBeVisible();
+  expect(foreignRequests).toEqual([]);
+});
+
+test('should inventory catalogued claims in the index table across views', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Index', exact: true }).click();
+  const table = page.getByRole('table');
+  for (const group of ['Consensus', 'Cryptography', 'Serialization']) {
+    await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
+  }
+  await expect(table.getByRole('rowheader', { name: 'Development', exact: true })).toHaveCount(0);
+  await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
+  const panel = page.getByRole('complementary', { name: 'Details panel' });
+  await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
+  await expect(panel.getByText('Property')).toBeVisible();
+  await panel.getByRole('button', { name: 'Back' }).click();
+  await table.getByRole('button', { name: 'Fork choice: No catalogued claims' }).click();
+  await expect(panel.getByRole('heading', { name: '0 claims' })).toBeVisible();
+  await expect(page.getByText(/does not mean unproved or unsafe/)).toBeVisible();
+  await expect(table.getByRole('button', { name: 'Fork choice: No catalogued claims' })).toHaveAttribute(
+    'aria-pressed', 'true');
+  await page.getByRole('tab', { name: 'Lean Spec' }).click();
+  const leanTable = page.getByRole('table');
+  await leanTable.getByRole('button', { name: 'State transition: Claims: 1' }).click();
+  await expect(page.getByRole('button', { name: 'Post-genesis checkpoints stay unchanged or move strictly forward' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
+  const execTable = page.getByRole('table');
+  await expect(execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' })).toBeVisible();
+  expect(await execTable.getByRole('button').count()).toBe(5);
+  await expect(execTable.getByRole('button', { name: 'Fork choice: No catalogued claims' })).toHaveCount(0);
+  await execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' }).click();
+  await expect(page.getByRole('complementary', { name: 'Details panel' }).getByRole('heading', { name: '0 claims' })).toBeVisible();
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
+  await expect(page.locator('.react-flow')).toBeVisible();
+});
+
+test('should keep the index table inside its container at narrow widths', async ({ page }) => {
+  await page.setViewportSize({width: 320, height: 844});
+  await page.goto('/');
+  await page.getByRole('button', {name: 'Index', exact: true}).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  await expect(page.getByRole('button', {name: 'State transition: Claims: 1'})).toBeVisible();
 });

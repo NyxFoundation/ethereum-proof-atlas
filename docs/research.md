@@ -1,6 +1,6 @@
 ---
 title: Research and intake notes
-last_updated: 2026-11-06
+last_updated: 2026-11-08
 tags:
   - evidence
   - research
@@ -39,6 +39,11 @@ use full commits, not those moving discovery URLs.
   `d2acac1a0109f88224896e8e6e6d41a6a8e53673`, compiler output
   and EVM targets (Osaka is the documented default). The generated-code edge
   points to EVM, never a runtime call from an execution client to solc.
+- **Execution view assembly:** these three snapshots form the third tab as a
+  separate architecture view. Its four edges re-use the recorded primary
+  sources; the Engine-result interface to the consensus transition stays out
+  of both views because no consensus instance exists inside the Execution
+  view, and the consensus views borrow no execution instance.
 - **Future consensus:** leanSpec
   `0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8`, experimental Lstar.
   Its fork choice, transition, signature aggregation, XMSS, Poseidon,
@@ -51,6 +56,79 @@ functional overview, not an exhaustive call/import graph. Position similarity
 does not assert specification equivalence.
 
 ## Published claims
+
+### leanEthereum organisation sweep (2026-11-06)
+
+The full non-fork repository list of the
+[leanEthereum organisation](https://github.com/leanEthereum) was enumerated and
+each candidate was inspected for formal-verification artifacts.
+
+- **Added as inspection-backed artifacts (no claims, no associations):**
+  [ots.golf-dev](https://github.com/leanEthereum/ots.golf-dev) carries the Lean
+  `formal/OptimalOTS` cost model and machine model (`OptimalOTS.lean`,
+  `Model.lean`) and
+  [ots.golf-submissions](https://github.com/leanEthereum/ots.golf-submissions)
+  carries checker-admitted Lean proof record bundles (`ProofBundle00.lean`,
+  `AveragedSigning.lean`). Both are pinned to their `main` heads
+  (ots.golf-dev `8b140a99…`, submissions `d817d9d8…`), and four dated
+  Contents-API GET observations back their availability. No component or
+  claim association was drawn: the OTS competition's relation to the
+  protocol's XMSS or leanSig design is not evidenced in these repositories.
+- **Rejected, with reasons:** leanVM and leanvm-riscv are zkVMs — ZK proof
+  generation is outside the scope that treats it as formal verification;
+  leanSig, axiom, leanSnappy, leansig-test-keys, leanBench, leanMetrics and
+  pm are implementations, benchmarks or administration; leanSeal contains a
+  paper appendix without a machine-checked artifact, so the paper-only rule
+  excludes it; fiat-shamir and multilinear-toolkit are Rust proof-system
+  primitives without verification artifacts; sig.golf-submissions holds an
+  empty records registry (`records.json` has no records yet) and is worth
+  revisiting; leanSpec is already in this bundle.
+
+- **Rejected, with reasons:** leanVM and leanvm-riscv are zkVMs — ZK proof
+  generation is outside the scope that treats it as formal verification;
+  leanSig, axiom, leanSnappy, leansig-test-keys, leanBench, leanMetrics and
+  pm are implementations, benchmarks or administration; leanSeal contains a
+  paper appendix without a machine-checked artifact, so the paper-only rule
+  excludes it; fiat-shamir and multilinear-toolkit are Rust proof-system
+  primitives without verification artifacts; sig.golf-submissions holds an
+  empty records registry (`records.json` has no records yet) and is worth
+  revisiting; leanSpec is already in this bundle.
+
+### ssz-specs intake (2026-11-07)
+
+[ethereum/ssz-specs](https://github.com/ethereum/ssz-specs), the organisation's
+reference-implementation-as-official-specification repository, was inspected at
+its `main` head (`fcfb114f…`) and published as two artifacts:
+
+- `ssz-specs` (specification): the Python SSZ reference modules;
+  the SSZ component instances in both consensus views now carry it as an
+  additional versioned subject alongside their existing specification
+  sources.
+- `ssz-lean` (formal-model): the accompanying Lean conformance model
+  (`lean/`), which encodes SSZ over the shared EthLib consensus modules and
+  checks conformance vectors.
+
+Four dated Contents-API GET observations back their availability. The Beacon
+view's source list was also cleaned of the execution-layer snapshots left
+behind by the view split; those remain recorded only in the Execution view
+and in these notes. The repository appears in the footer's
+formal-verification section through `ssz-lean`.
+
+### EthLib intake (2026-11-07)
+
+The ssz-specs Lean build pins its SSZ dependency by revision, and its
+lakefile states that "the Lean specification of SSZ, and its proofs live in
+EthLib as `EthLib.Consensus.Ssz`". [ethereum/EthLib](https://github.com/ethereum/EthLib),
+"formally verified Ethereum primitives, written in Lean", was therefore
+inspected at that lakefile-pinned revision (`6b87b0d…`) and published as the
+`ethlib` formal-model artifact. Its recorded locations cover the SSZ
+specification and proof root (`EthLib/Consensus/Proofs/Ssz.lean`, whose
+Codec tree carries dozens of checker-checked theorem modules such as
+`Canonicality.lean`) and the consensus root module; two dated GET
+observations back their availability. Like the other lean-ecosystem
+artifacts it carries no claim or component-level associations beyond the
+SSZ component's versioned subject binding, and the footer's verification
+section now lists it as well.
 
 Public raw GitHub source GETs for all three supporting theorem files returned
 **HTTP 200 at 2026-11-06T06:12:14Z**. The files and theorem bodies were inspected.

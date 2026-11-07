@@ -21,7 +21,8 @@ export const contentSchema = z.strictObject({
   artifacts: bundleSchema.shape.artifacts.max(8),
   claims: bundleSchema.shape.claims.max(8),
   evidence: bundleSchema.shape.evidence.max(20),
-  bindings: z.array(z.strictObject({ viewId: z.enum(['beacon', 'lean']), binding: bindingSchema })).max(50),
+  bindings: z.array(z.strictObject({ viewId: bundleSchema.shape.architectureViews.element.shape.id,
+    binding: bindingSchema })).max(50),
 });
 export const observationSchema = z.strictObject({
   artifactId: z.string().max(128), locationId: z.string().max(128), revision: commitSchema,

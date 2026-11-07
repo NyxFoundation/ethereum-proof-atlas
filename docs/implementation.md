@@ -1,6 +1,6 @@
 ---
 title: Implementation and local acceptance
-last_updated: 2026-11-06
+last_updated: 2026-11-08
 tags:
   - implementation
   - testing
@@ -20,6 +20,7 @@ Use the root README for runnable setup and verification commands.
 | `src/domain/schema.ts` | Strict Zod contract, bounded geometry and safe source URLs |
 | `src/domain/validate.ts` | Cross-references, snapshot applicability, evidence/check scope and RFC 8785 digest |
 | `src/domain/selectors.ts` | Shared claim lists/counts, source availability and graph expansion |
+| `src/domain/indexLayout.ts` | Index-table row bands, column groups and count shading bands derived from the same view-specific instances and bindings |
 | `src/server/` | Hono read-only HTTP boundary, headers and structured failure logging |
 | `src/intake/`, `scripts/proof-updates.ts` | Bounded GitHub source reads, unpublished proposals, explicit review acceptance and package gates |
 | `.github/workflows/` | Hourly draft update proposals and application/review verification |
@@ -93,6 +94,7 @@ status as JSON; public errors never include the thrown value.
 | Historic source details survive external outage | Availability mutation test, panel fixture, failed external-navigation browser test |
 | English text, escaped imported content | ASCII English data contract, English UI tests, script-text escaping fixture |
 | Worker, assets, UI and source navigation exercised together | Playwright uses the packaged local Worker, not a mock API server |
+| Index mode shares selection, derives rows/columns from recorded data, keeps exact counts visible and zero cells neutral | Index layout suite, React mode-toggle and tab-persistence tests, Index browser journey and narrow-viewport containment test |
 
 `npm run test:coverage` enforces 80% across statements, branches, functions and
 lines. Only the two import/mount entrypoints are excluded; domain, server and UI
@@ -105,6 +107,75 @@ Local acceptance on 2026-11-06 used Node 24.21.0, a fresh `npm ci`, and
 cases passed. Coverage was 100% lines, 99.12% statements, 96.64% branches and
 98.34% functions. `npm audit` reported no known vulnerabilities. These results
 are observations of this application revision, not guarantees of future runs.
+
+## Index table presentation
+
+The Map / Index toggle is the approved inventory view from
+[design.md](design.md): each tab can render as a table that exposes where the
+catalogue is empty. `src/domain/indexLayout.ts` derives everything from the
+same validated bundle: rows hold the catalogued groups present in the view
+(networking instances resolve their side from the view's recorded edges),
+and each group row packs its components one per cell leftwards from the
+leftmost column, in foundations-first reading order over
+`band-0`…`band-3` claim-count shading. Cells are never stacked and the map's
+stored geometry only orders the cells, never spaces them.
+`src/ui/IndexTable.tsx` renders caption,
+group row headers, component cell names with count chips and
+neutral tint bands
+(`band-0`…`band-3` over 0 / 1–2 / 3–4 / 5+ claims); the mode toggle reuses the
+map's selection state and the details panel so both presentations stay one
+dataset. No percentage, coverage vocabulary or whole-table rollup is
+rendered, and the legend replaces the relationship legend while Index is
+shown.
+
+The 2026-11-06 leanEthereum organisation sweep added two inspection-backed
+standalone artifacts pinned to their `main` heads —
+`ots-golf-model` (Lean cost model, `8b140a99…`) and
+`ots-golf-proofs` (checker-admitted Lean record bundles, `d817d9d8…`) —
+each with dated availability observations; they carry no claim or
+component associations, and the footer's formal-verification section now
+lists leanEthereum/ots.golf-dev, leanEthereum/ots.golf-submissions and
+ethereum/ssz-specs (via its Lean model) alongside the earlier three proof
+repositories. The same sweep added `ssz-specs` (specification) and
+`ssz-lean` (formal-model) as additional versioned subjects of the SSZ
+component instances in both consensus views, with four dated availability
+observations, and removed the execution-layer snapshots the Beacon view
+source list had retained after the view split. The Lean build of
+ssz-specs pins EthLib at `6b87b0d…`, so `ethlib` — the formally verified
+Lean primitives library holding `EthLib.Consensus.Ssz` — was published as
+a formal-model artifact with two dated observations and added as a
+versioned subject of the SSZ component instances. The footer's
+formal-verification section now lists leanEthereum/ots.golf-dev,
+leanEthereum/ots.golf-submissions, ethereum/ssz-specs and
+ethereum/EthLib alongside the earlier three proof repositories. Rejected
+candidates are recorded in research.md.
+
+The consensus snapshots and the Execution snapshot are separate architecture
+views since 2026-11-08: the former execution, execution-networking and
+compiler instances moved out of the Beacon view into a dedicated `Execution
+Spec` tab with its own recorded edges, and the bundle digest was recomputed
+through the packaging validator. The Engine-result interface is recorded in
+the research notes rather than drawn as a cross-layer component.
+
+The snapshot bar carries only the display-mode toggle and the active legend.
+The former global component select was removed: both presentations reach any
+component instance directly (keyboard-operable map nodes; selectable index
+cells), and the view itself is already selected through the tab and dataset
+selectors at the HTTP boundary.
+
+Local acceptance on 2026-11-08 used the same Node 24.21.0 checkout and
+`npm run verify`: 171 unit/component/package-gate cases and 13 workerd browser
+cases passed, including the index layout suite (per-view group rows packed
+one component per cell leftwards, no stacking or leading gaps), the
+footer's deduplicated repository discovery links, and the revision-to-commit
+link suite (snapshot bar, subject identities, source identities; sha256
+digests stay plain text),
+mode-toggle/tab-persistence
+tests and two Index browser journeys with direct node interaction. Coverage
+was 99.84% lines, 99.06% statements, 95.83% branches and 98.76% functions;
+`indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
+confirmed the caption, component rows, count chips and legend before release.
+These results remain observations of this application revision.
 
 ## Automated update acceptance
 

@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { useState } from 'react';
 import { webcrypto } from 'node:crypto';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
@@ -81,6 +82,29 @@ describe('evidence presentation', () => {
     expect(screen.getByText(/does not establish that the property is false/)).toBeTruthy();
     expect(screen.queryByText('Unbounded theorem statement')).toBeNull();
   });
+  it('should link displayed revisions to the repository state at that commit', () => {
+    render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
+    const snapshot = screen.getByRole('link', { name: /Browse .*revision 204fb4a19774/ });
+    expect(snapshot.getAttribute('href'))
+      .toBe('https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
+    expect(snapshot.getAttribute('rel')).toBe('noopener noreferrer');
+    render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
+    const subjects = screen.getAllByRole('link', { name: /7650709170327c5f10c8b5da99b10941e208ef5d/ });
+    for (const subject of subjects) {
+      expect(subject.getAttribute('href'))
+        .toBe('https://github.com/NyxFoundation/gasper-lean4/tree/7650709170327c5f10c8b5da99b10941e208ef5d');
+    }
+    expect(subjects.length).toBeGreaterThan(0);
+  });
+  it('should keep sha256 digests plain because they are not repository states', () => {
+    const digest = { id: 'digest-artifact', kind: 'proof' as const, title: 'Digest fixture',
+      repository: 'https://github.com/ethereum/devp2p', revisionKind: 'sha256' as const,
+      revision: 'a'.repeat(64), version: 'Fixture v1',
+      locations: [{ id: 'digest-location', path: 'fixture', label: 'Fixture', url: 'https://example.org/fixture' }] };
+    render(<Sources bundle={{ ...bundle, artifacts: [...bundle.artifacts, digest] }}
+      sources={[{ artifactId: 'digest-artifact', locationId: 'digest-location' }]} />);
+    expect(screen.getByText('a'.repeat(64)).closest('a')).toBeNull();
+  });
   it('should retain source identities when a stored observation says unavailable', () => {
     const fixture = structuredClone(bundle);
     fixture.checkRecords = fixture.checkRecords.map(c => c.kind === 'availability' ? {...c, result: 'unavailable'} :
@@ -140,10 +164,12 @@ describe('map interaction', () => {
     expect(view.componentInstances[0].position).toEqual({x: 310,y: 0});
   });
   it('should preserve map context while selecting hidden children and navigating evidence', async () => {
-    render(<Atlas bundle={bundle} view={view} />);
+    render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     expect(screen.getByRole('heading', {name: 'Select a component'})).toBeTruthy();
-    fireEvent.change(screen.getByRole('combobox'), {target: {value: 'b-finality'}});
+    expect(screen.queryByRole('combobox')).toBeNull();
+    fireEvent.click(await screen.findByRole('button', {name: 'Expand State transition'}));
     await waitFor(() => expect(screen.getByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', {name: 'Select Justification / finalization'}));
     const panel = within(screen.getByRole('complementary'));
     fireEvent.click(panel.getByRole('button', {name: claim.title}));
     expect(panel.getByText('Property')).toBeTruthy();
@@ -156,6 +182,74 @@ describe('map interaction', () => {
     expect(await screen.findByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy();
     fireEvent.click(await screen.findByRole('button', {name: 'Select BLS signatures'}));
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+  });
+});
+
+describe('index presentation', () => {
+  const Harness = () => {
+    const [mode, setMode] = useState<'map' | 'index'>('map');
+    return <Atlas bundle={bundle} view={view} mode={mode} onMode={setMode} />;
+  };
+  it('should share selection with the map and treat zero cells as selectable inventory', () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
+    const table = screen.getByRole('table');
+    expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
+      .toEqual(['Consensus', 'Cryptography', 'Serialization']);
+    fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
+    const panel = within(screen.getByRole('complementary'));
+    expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
+    expect(panel.getByRole('button', {name: claim.title})).toBeTruthy();
+    fireEvent.click(within(table).getByRole('button', {name: 'Fork choice: No catalogued claims'}));
+    expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+    expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
+    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThanOrEqual(5);
+    expect(within(table).queryByRole('rowheader', {name: 'Solidity / solc'})).toBeNull();
+    expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
+    expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
+    expect(screen.queryByRole('list', {name: 'Relationship legend'})).toBeNull();
+    fireEvent.click(screen.getByRole('button', {name: 'Map'}));
+    expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.getByRole('list', {name: 'Relationship legend'})).toBeTruthy();
+    expect(panel.getByRole('heading', {name: 'Fork choice'})).toBeTruthy();
+  });
+  it('should list the formal-verification repositories once as discovery links', () => {
+    render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
+    const links = within(screen.getByRole('contentinfo')).getAllByRole('link');
+    const hrefs = links.map(link => link.getAttribute('href'));
+    expect(hrefs).toHaveLength(7);
+    expect(new Set(hrefs)).toEqual(new Set([
+      'https://github.com/ethereum/EthLib', 'https://github.com/ethereum/ssz-specs',
+      'https://github.com/leanEthereum/ots.golf-dev', 'https://github.com/leanEthereum/ots.golf-submissions',
+      'https://github.com/NyxFoundation/formal-leanSpec',
+      'https://github.com/NyxFoundation/gasper-lean4', 'https://github.com/Verified-zkEVM/ArkLib',
+    ]));
+    for (const link of links) {
+      expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+      expect(link.getAttribute('target')).toBe('_blank');
+    }
+    expect(screen.queryByRole('link', {name: 'ethereum/consensus-specs'})).toBeNull();
+    expect(screen.getByRole('link', {name: 'leanEthereum/ots.golf-submissions'}).textContent).toBe('leanEthereum/ots.golf-submissions');
+  });
+  it('should switch modes inside a tab and keep the mode across view changes', async () => {
+    vi.mocked(loadAtlas).mockResolvedValue(bundle);
+    render(<App />);
+    await screen.findByRole('heading', {name: 'Select a component'});
+    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'ArrowRight'});
+    await screen.findByText('Lstar (experimental)');
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    const table = screen.getByRole('table');
+    expect(within(table).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
+    expect(within(table).queryByRole('button', {name: /^Solidity \/ solc/})).toBeNull();
+    fireEvent.click(screen.getByRole('tab', {name: 'Execution Spec'}));
+    await screen.findByText('Osaka');
+    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
+    expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
+    expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(header => header.textContent))
+      .toEqual(['Execution', 'Development']);
   });
 });
 
@@ -186,12 +280,18 @@ describe('application lifecycle', () => {
     await screen.findByText('Lstar (experimental)');
     expect(screen.getByRole('tab', {name: 'Lean Spec'}).getAttribute('aria-selected')).toBe('true');
     expect(screen.queryByRole('button', {name: 'Select BLS signatures'})).toBeNull();
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'Home'});
-    await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
-    fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'End'});
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'ArrowRight'});
+    await screen.findByText('Osaka');
+    expect(screen.getByRole('tab', {name: 'Execution Spec'}).getAttribute('aria-selected')).toBe('true');
+    expect(screen.queryByRole('button', {name: 'Select BLS signatures'})).toBeNull();
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Execution Spec'}), {key: 'ArrowLeft'});
     await screen.findByText('Lstar (experimental)');
-    fireEvent.click(screen.getByRole('tab', {name: 'Beacon Spec'}));
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Lean Spec'}), {key: 'End'});
+    await screen.findByText('Osaka');
+    fireEvent.keyDown(screen.getByRole('tab', {name: 'Execution Spec'}), {key: 'Home'});
     await screen.findByText('Fulu / Osaka (Fusaka; BPO2)');
+    fireEvent.click(screen.getByRole('tab', {name: 'Lean Spec'}));
+    await screen.findByText('Lstar (experimental)');
   });
   it('should display an English error and recover when a request can be retried', async () => {
     vi.mocked(loadAtlas).mockRejectedValueOnce(new Error('Atlas data is unavailable. Try again.')).mockResolvedValue(bundle);
