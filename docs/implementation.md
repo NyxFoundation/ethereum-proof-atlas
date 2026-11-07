@@ -140,8 +140,15 @@ repositories. The same sweep added `ssz-specs` (specification) and
 `ssz-lean` (formal-model) as additional versioned subjects of the SSZ
 component instances in both consensus views, with four dated availability
 observations, and removed the execution-layer snapshots the Beacon view
-source list had retained after the view split. Rejected candidates are
-recorded in research.md.
+source list had retained after the view split. The Lean build of
+ssz-specs pins EthLib at `6b87b0d…`, so `ethlib` — the formally verified
+Lean primitives library holding `EthLib.Consensus.Ssz` — was published as
+a formal-model artifact with two dated observations and added as a
+versioned subject of the SSZ component instances. The footer's
+formal-verification section now lists leanEthereum/ots.golf-dev,
+leanEthereum/ots.golf-submissions, ethereum/ssz-specs and
+ethereum/EthLib alongside the earlier three proof repositories. Rejected
+candidates are recorded in research.md.
 
 The consensus snapshots and the Execution snapshot are separate architecture
 views since 2026-11-08: the former execution, execution-networking and
