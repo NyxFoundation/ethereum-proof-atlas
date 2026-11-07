@@ -84,6 +84,36 @@ each candidate was inspected for formal-verification artifacts.
   empty records registry (`records.json` has no records yet) and is worth
   revisiting; leanSpec is already in this bundle.
 
+- **Rejected, with reasons:** leanVM and leanvm-riscv are zkVMs — ZK proof
+  generation is outside the scope that treats it as formal verification;
+  leanSig, axiom, leanSnappy, leansig-test-keys, leanBench, leanMetrics and
+  pm are implementations, benchmarks or administration; leanSeal contains a
+  paper appendix without a machine-checked artifact, so the paper-only rule
+  excludes it; fiat-shamir and multilinear-toolkit are Rust proof-system
+  primitives without verification artifacts; sig.golf-submissions holds an
+  empty records registry (`records.json` has no records yet) and is worth
+  revisiting; leanSpec is already in this bundle.
+
+### ssz-specs intake (2026-11-07)
+
+[ethereum/ssz-specs](https://github.com/ethereum/ssz-specs), the organisation's
+reference-implementation-as-official-specification repository, was inspected at
+its `main` head (`fcfb114f…`) and published as two artifacts:
+
+- `ssz-specs` (specification): the Python SSZ reference modules;
+  the SSZ component instances in both consensus views now carry it as an
+  additional versioned subject alongside their existing specification
+  sources.
+- `ssz-lean` (formal-model): the accompanying Lean conformance model
+  (`lean/`), which encodes SSZ over the shared EthLib consensus modules and
+  checks conformance vectors.
+
+Four dated Contents-API GET observations back their availability. The Beacon
+view's source list was also cleaned of the execution-layer snapshots left
+behind by the view split; those remain recorded only in the Execution view
+and in these notes. The repository appears in the footer's
+formal-verification section through `ssz-lean`.
+
 Public raw GitHub source GETs for all three supporting theorem files returned
 **HTTP 200 at 2026-11-06T06:12:14Z**. The files and theorem bodies were inspected.
 Those real observations are recorded as availability CheckRecords; they are

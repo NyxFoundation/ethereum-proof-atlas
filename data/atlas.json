@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "datasetRevision": "62c8688e0205512243f4291a41c621d088682664c27550a0e9c53596c3e1be34",
+ "datasetRevision": "a00550a6657129c9392b43df7a74141209f2bf6a51d77ed8f5772decaede171c",
  "components": [
   {
    "id": "fork-choice",
@@ -478,6 +478,52 @@
      "url": "https://github.com/leanEthereum/ots.golf-submissions/blob/d817d9d84bedd681e5058fb10c0beff7d75ab3bd/formal/Submissions/LowerGenerality1/AveragedSigning.lean"
     }
    ]
+  },
+  {
+   "id": "ssz-specs",
+   "title": "Ethereum SSZ specifications (reference implementation)",
+   "kind": "specification",
+   "repository": "https://github.com/ethereum/ssz-specs",
+   "revisionKind": "git-commit",
+   "revision": "fcfb114f53768e08d74640e2b40b0d44d03ba099",
+   "version": "Official SSZ specification modules; checked 2026-11-07",
+   "locations": [
+    {
+     "id": "ssz-reference",
+     "path": "src/ssz/__init__.py",
+     "label": "SSZ reference specification modules",
+     "url": "https://github.com/ethereum/ssz-specs/blob/fcfb114f53768e08d74640e2b40b0d44d03ba099/src/ssz/__init__.py"
+    },
+    {
+     "id": "ssz-container",
+     "path": "src/ssz/container.py",
+     "label": "Container serialization and Merkleization",
+     "url": "https://github.com/ethereum/ssz-specs/blob/fcfb114f53768e08d74640e2b40b0d44d03ba099/src/ssz/container.py"
+    }
+   ]
+  },
+  {
+   "id": "ssz-lean",
+   "title": "SSZ Lean conformance model",
+   "kind": "formal-model",
+   "repository": "https://github.com/ethereum/ssz-specs",
+   "revisionKind": "git-commit",
+   "revision": "fcfb114f53768e08d74640e2b40b0d44d03ba099",
+   "version": "Lean conformance model for SSZ; checked 2026-11-07",
+   "locations": [
+    {
+     "id": "ssz-lean-entry",
+     "path": "lean/Main.lean",
+     "label": "Lean SSZ entry module",
+     "url": "https://github.com/ethereum/ssz-specs/blob/fcfb114f53768e08d74640e2b40b0d44d03ba099/lean/Main.lean"
+    },
+    {
+     "id": "ssz-lean-conformance",
+     "path": "lean/Conformance.lean",
+     "label": "Lean conformance vectors reader",
+     "url": "https://github.com/ethereum/ssz-specs/blob/fcfb114f53768e08d74640e2b40b0d44d03ba099/lean/Conformance.lean"
+    }
+   ]
   }
  ],
  "claims": [
@@ -839,6 +885,50 @@
    ],
    "result": "available",
    "details": "Contents API GET against the pinned commit returned the 3,249-byte Lean proof file on this date during the leanEthereum organisation sweep. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ssz-specs-reference",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:29:28Z",
+   "artifactId": "ssz-specs",
+   "locationIds": [
+    "ssz-reference"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 5,631-byte reference module on this date during the ssz-specs intake. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ssz-specs-container",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:29:28Z",
+   "artifactId": "ssz-specs",
+   "locationIds": [
+    "ssz-container"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 14,677-byte container module on this date during the ssz-specs intake. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ssz-lean-entry",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:29:28Z",
+   "artifactId": "ssz-lean",
+   "locationIds": [
+    "ssz-lean-entry"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the 1,892-byte Lean entry module on this date during the ssz-specs intake. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ssz-lean-conformance",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:29:28Z",
+   "artifactId": "ssz-lean",
+   "locationIds": [
+    "ssz-lean-conformance"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the pinned commit returned the Lean conformance reader on this date during the ssz-specs intake. Intake observation, not a replay or promise of present reachability."
   }
  ],
  "architectureViews": [
@@ -858,16 +948,12 @@
      "locationId": "fulu"
     },
     {
-     "artifactId": "execution",
-     "locationId": "transition"
+     "artifactId": "ssz-specs",
+     "locationId": "ssz-reference"
     },
     {
-     "artifactId": "devp2p",
-     "locationId": "eth"
-    },
-    {
-     "artifactId": "solidity",
-     "locationId": "compiler"
+     "artifactId": "ssz-lean",
+     "locationId": "ssz-lean-entry"
     }
    ],
    "inheritance": [
@@ -970,12 +1056,22 @@
      "instanceId": "b-ssz",
      "componentId": "ssz",
      "subjectArtifactIds": [
-      "consensus"
+      "consensus",
+      "ssz-specs",
+      "ssz-lean"
      ],
      "sources": [
       {
        "artifactId": "consensus",
        "locationId": "phase0"
+      },
+      {
+       "artifactId": "ssz-specs",
+       "locationId": "ssz-reference"
+      },
+      {
+       "artifactId": "ssz-lean",
+       "locationId": "ssz-lean-entry"
       }
      ],
      "position": {
@@ -1102,6 +1198,14 @@
     {
      "artifactId": "leanspec",
      "locationId": "overview"
+    },
+    {
+     "artifactId": "ssz-specs",
+     "locationId": "ssz-reference"
+    },
+    {
+     "artifactId": "ssz-lean",
+     "locationId": "ssz-lean-entry"
     }
    ],
    "inheritance": [
@@ -1185,12 +1289,22 @@
      "instanceId": "l-ssz",
      "componentId": "ssz",
      "subjectArtifactIds": [
-      "leanspec"
+      "leanspec",
+      "ssz-specs",
+      "ssz-lean"
      ],
      "sources": [
       {
        "artifactId": "leanspec",
        "locationId": "ssz"
+      },
+      {
+       "artifactId": "ssz-specs",
+       "locationId": "ssz-reference"
+      },
+      {
+       "artifactId": "ssz-lean",
+       "locationId": "ssz-lean-entry"
       }
      ],
      "position": {
@@ -1327,6 +1441,14 @@
     {
      "artifactId": "solidity",
      "locationId": "compiler"
+    },
+    {
+     "artifactId": "ssz-specs",
+     "locationId": "ssz-reference"
+    },
+    {
+     "artifactId": "ssz-lean",
+     "locationId": "ssz-lean-entry"
     }
    ],
    "inheritance": [

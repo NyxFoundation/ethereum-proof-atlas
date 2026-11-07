@@ -172,8 +172,9 @@ test('should retain stored source details when external navigation is unavailabl
   await page.getByRole('link', {name: 'GasperBeaconChain.Core.accountable_safety'}).click();
   const external = await popup; await external.close();
   await expect(page.getByRole('article', {name: 'Claim details'})).toBeVisible();
-  await expect(page.getByText(/Available when last checked/)).toBeVisible();
-  await expect(page.getByText('Not performed', {exact: true})).toBeVisible();
+  const article = page.getByRole('article', { name: 'Claim details' });
+  await expect(article.getByText(/Available when last checked/).first()).toBeVisible();
+  await expect(article.getByText('Not performed', {exact: true})).toBeVisible();
 });
 
 test('should list referenced repositories as discovery links in the footer', async ({ page }) => {
@@ -181,11 +182,11 @@ test('should list referenced repositories as discovery links in the footer', asy
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
   await page.goto('/');
   const links = page.locator('footer').getByRole('link');
-  await expect(links).toHaveCount(5);
+  await expect(links).toHaveCount(6);
   await expect(links.filter({ hasText: 'NyxFoundation/gasper-lean4' }))
     .toHaveAttribute('href', 'https://github.com/NyxFoundation/gasper-lean4');
-  await expect(links.filter({ hasText: 'leanEthereum/ots.golf-submissions' }))
-    .toHaveAttribute('href', 'https://github.com/leanEthereum/ots.golf-submissions');
+  await expect(links.filter({ hasText: 'ethereum/ssz-specs' }))
+    .toHaveAttribute('href', 'https://github.com/ethereum/ssz-specs');
   await expect(links.filter({ hasText: 'ethereum/consensus-specs' })).toHaveCount(0);
   for (const link of await links.all()) {
     expect(await link.getAttribute('rel')).toBe('noopener noreferrer');

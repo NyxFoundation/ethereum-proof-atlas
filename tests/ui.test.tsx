@@ -217,8 +217,9 @@ describe('index presentation', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     const links = within(screen.getByRole('contentinfo')).getAllByRole('link');
     const hrefs = links.map(link => link.getAttribute('href'));
-    expect(hrefs).toHaveLength(5);
+    expect(hrefs).toHaveLength(6);
     expect(new Set(hrefs)).toEqual(new Set([
+      'https://github.com/ethereum/ssz-specs',
       'https://github.com/leanEthereum/ots.golf-dev', 'https://github.com/leanEthereum/ots.golf-submissions',
       'https://github.com/NyxFoundation/formal-leanSpec',
       'https://github.com/NyxFoundation/gasper-lean4', 'https://github.com/Verified-zkEVM/ArkLib',

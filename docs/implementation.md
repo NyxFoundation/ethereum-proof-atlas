@@ -134,8 +134,13 @@ standalone artifacts pinned to their `main` heads —
 `ots-golf-proofs` (checker-admitted Lean record bundles, `d817d9d8…`) —
 each with dated availability observations; they carry no claim or
 component associations, and the footer's formal-verification section now
-lists leanEthereum/ots.golf-dev and leanEthereum/ots.golf-submissions
-alongside the earlier three proof repositories. Rejected candidates are
+lists leanEthereum/ots.golf-dev, leanEthereum/ots.golf-submissions and
+ethereum/ssz-specs (via its Lean model) alongside the earlier three proof
+repositories. The same sweep added `ssz-specs` (specification) and
+`ssz-lean` (formal-model) as additional versioned subjects of the SSZ
+component instances in both consensus views, with four dated availability
+observations, and removed the execution-layer snapshots the Beacon view
+source list had retained after the view split. Rejected candidates are
 recorded in research.md.
 
 The consensus snapshots and the Execution snapshot are separate architecture
