@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "target": "arklib",
+  "repository": "Verified-zkEVM/ArkLib",
+  "branch": "main",
+  "before": "34613d617af325fd0c4f525533a123195868129e",
+  "after": "e40faa7316afa275326dbe053105776bd2cb1313",
+  "baseFingerprint": "9bc0b9a24dabb7bfe42a8f12ca23128420deaeb77a3cc5d47fe7302b03117290",
+  "content": {
+    "artifacts": [
+      {
+        "id": "ark-model",
+        "title": "ArkLib KZG algebraic model",
+        "kind": "formal-model",
+        "repository": "https://github.com/Verified-zkEVM/ArkLib",
+        "revisionKind": "git-commit",
+        "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
+        "version": "Commit e40faa7316afa275326dbe053105776bd2cb1313; no Atlas proof replay.",
+        "locations": [
+          {
+            "id": "definitions",
+            "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
+            "label": "KZG commit, generateOpening and verifyOpening",
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e40faa7316afa275326dbe053105776bd2cb1313/ArkLib/Commitments/Functional/KZG/Basic.lean"
+          }
+        ]
+      },
+      {
+        "id": "ark-proof",
+        "title": "ArkLib KZG correctness proof",
+        "kind": "proof",
+        "repository": "https://github.com/Verified-zkEVM/ArkLib",
+        "revisionKind": "git-commit",
+        "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
+        "version": "Commit e40faa7316afa275326dbe053105776bd2cb1313; no Atlas proof replay.",
+        "locations": [
+          {
+            "id": "theorem",
+            "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
+            "label": "KZG.correctness",
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e40faa7316afa275326dbe053105776bd2cb1313/ArkLib/Commitments/Functional/KZG/Correctness.lean"
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "kzg-correctness",
+        "title": "Honestly generated KZG openings satisfy the pairing equation",
+        "statement": "For a coefficient vector, a generated power SRS and an evaluation point, KZG.correctness shows that the model's generated opening verifies for the polynomial's evaluation.",
+        "subjectArtifactIds": [
+          "ark-model"
+        ],
+        "assumptions": {
+          "status": "unknown",
+          "details": [
+            "Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; Nat.card G1 = p.",
+            "A bilinear pairing, generators, degree parameter n, SRS secret a, coefficient vector and evaluation point z, under the recorded Lean definitions."
+          ]
+        },
+        "dependencies": {
+          "status": "unknown",
+          "details": [
+            "Transitive dependencies and axioms have not been audited for this revision."
+          ]
+        },
+        "limitations": [
+          "Algebraic correctness is not binding, knowledge soundness, ceremony security or zero knowledge.",
+          "Generic single-point coefficient-form opening, not Ethereum's batched cell verifier, blob encoding, BLS12-381 implementation or a deployed prover."
+        ],
+        "relation": null
+      }
+    ],
+    "evidence": [
+      {
+        "id": "kzg-theorem",
+        "claimId": "kzg-correctness",
+        "artifactId": "ark-proof",
+        "locationId": "theorem",
+        "method": "theorem-proving",
+        "scope": {
+          "kind": "unbounded",
+          "statement": "Parametric algebraic correctness for degree parameter n; n is not a finite model-checking search bound.",
+          "abstractions": [
+            "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
+          ],
+          "configuration": "Pinned Verified-zkEVM/ArkLib@e40faa7316afa275326dbe053105776bd2cb1313; kzg-theorem; no Atlas replay."
+        }
+      }
+    ],
+    "bindings": [
+      {
+        "viewId": "beacon",
+        "binding": {
+          "componentInstanceId": "b-kzg",
+          "claimId": "kzg-correctness",
+          "applicabilityKind": "related-model",
+          "explanation": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "kzg"
+            },
+            {
+              "artifactId": "ark-model",
+              "locationId": "definitions"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "update-arklib-e40faa7316af-beacon-b-kzg"
+          }
+        }
+      }
+    ]
+  },
+  "observations": [
+    {
+      "artifactId": "ark-model",
+      "locationId": "definitions",
+      "revision": "34613d617af325fd0c4f525533a123195868129e",
+      "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
+      "checkedAt": "2026-11-07T10:27:52.568Z",
+      "sha256": "3540399f8425e495798f581663cc7a3bbe4e4f701db1af7f9a949b8eeebd1439"
+    },
+    {
+      "artifactId": "ark-proof",
+      "locationId": "theorem",
+      "revision": "34613d617af325fd0c4f525533a123195868129e",
+      "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
+      "checkedAt": "2026-11-07T10:27:52.568Z",
+      "sha256": "bceef241f8967382f08deba7bb2df6292a89c5a3f88cfc9a1fd60f41521014c4"
+    },
+    {
+      "artifactId": "ark-model",
+      "locationId": "definitions",
+      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
+      "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
+      "checkedAt": "2026-11-07T10:27:52.568Z",
+      "sha256": "3540399f8425e495798f581663cc7a3bbe4e4f701db1af7f9a949b8eeebd1439"
+    },
+    {
+      "artifactId": "ark-proof",
+      "locationId": "theorem",
+      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
+      "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
+      "checkedAt": "2026-11-07T10:27:52.568Z",
+      "sha256": "bceef241f8967382f08deba7bb2df6292a89c5a3f88cfc9a1fd60f41521014c4"
+    }
+  ],
+  "review": null
+}
