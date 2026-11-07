@@ -182,11 +182,11 @@ test('should list referenced repositories as discovery links in the footer', asy
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
   await page.goto('/');
   const links = page.locator('footer').getByRole('link');
-  await expect(links).toHaveCount(6);
+  await expect(links).toHaveCount(7);
   await expect(links.filter({ hasText: 'NyxFoundation/gasper-lean4' }))
     .toHaveAttribute('href', 'https://github.com/NyxFoundation/gasper-lean4');
-  await expect(links.filter({ hasText: 'ethereum/ssz-specs' }))
-    .toHaveAttribute('href', 'https://github.com/ethereum/ssz-specs');
+  await expect(links.filter({ hasText: 'ethereum/EthLib' }))
+    .toHaveAttribute('href', 'https://github.com/ethereum/EthLib');
   await expect(links.filter({ hasText: 'ethereum/consensus-specs' })).toHaveCount(0);
   for (const link of await links.all()) {
     expect(await link.getAttribute('rel')).toBe('noopener noreferrer');

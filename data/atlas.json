@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "datasetRevision": "a00550a6657129c9392b43df7a74141209f2bf6a51d77ed8f5772decaede171c",
+ "datasetRevision": "f898a553623a9aca7cb11b63b8aa3d4af57c602830ab658c2b184ba9de1b2f0e",
  "components": [
   {
    "id": "fork-choice",
@@ -524,6 +524,29 @@
      "url": "https://github.com/ethereum/ssz-specs/blob/fcfb114f53768e08d74640e2b40b0d44d03ba099/lean/Conformance.lean"
     }
    ]
+  },
+  {
+   "id": "ethlib",
+   "title": "EthLib, formally verified Ethereum primitives",
+   "kind": "formal-model",
+   "repository": "https://github.com/ethereum/EthLib",
+   "revisionKind": "git-commit",
+   "revision": "6b87b0d4951766864af432455c44344fd12b5cdc",
+   "version": "Lean primitives library as pinned by the ssz-specs Lean build",
+   "locations": [
+    {
+     "id": "ssz-spec-proofs",
+     "path": "EthLib/Consensus/Proofs/Ssz.lean",
+     "label": "SSZ Lean specification and proofs",
+     "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus/Proofs/Ssz.lean"
+    },
+    {
+     "id": "consensus-root",
+     "path": "EthLib/Consensus.lean",
+     "label": "Consensus primitives root",
+     "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus.lean"
+    }
+   ]
   }
  ],
  "claims": [
@@ -929,6 +952,28 @@
    ],
    "result": "available",
    "details": "Contents API GET against the pinned commit returned the Lean conformance reader on this date during the ssz-specs intake. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ethlib-ssz-proofs",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:32:37Z",
+   "artifactId": "ethlib",
+   "locationIds": [
+    "ssz-spec-proofs"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the lakefile-pinned revision returned the 5,453-byte SSZ specification and proof root on this date. Intake observation, not a replay or promise of present reachability."
+  },
+  {
+   "id": "availability-ethlib-consensus-root",
+   "kind": "availability",
+   "checkedAt": "2026-11-07T04:32:37Z",
+   "artifactId": "ethlib",
+   "locationIds": [
+    "consensus-root"
+   ],
+   "result": "available",
+   "details": "Contents API GET against the lakefile-pinned revision returned the 207-byte consensus root module on this date. Intake observation, not a replay or promise of present reachability."
   }
  ],
  "architectureViews": [
@@ -954,6 +999,10 @@
     {
      "artifactId": "ssz-lean",
      "locationId": "ssz-lean-entry"
+    },
+    {
+     "artifactId": "ethlib",
+     "locationId": "ssz-spec-proofs"
     }
    ],
    "inheritance": [
@@ -1058,7 +1107,8 @@
      "subjectArtifactIds": [
       "consensus",
       "ssz-specs",
-      "ssz-lean"
+      "ssz-lean",
+      "ethlib"
      ],
      "sources": [
       {
@@ -1072,6 +1122,10 @@
       {
        "artifactId": "ssz-lean",
        "locationId": "ssz-lean-entry"
+      },
+      {
+       "artifactId": "ethlib",
+       "locationId": "ssz-spec-proofs"
       }
      ],
      "position": {
@@ -1206,6 +1260,10 @@
     {
      "artifactId": "ssz-lean",
      "locationId": "ssz-lean-entry"
+    },
+    {
+     "artifactId": "ethlib",
+     "locationId": "ssz-spec-proofs"
     }
    ],
    "inheritance": [
@@ -1291,7 +1349,8 @@
      "subjectArtifactIds": [
       "leanspec",
       "ssz-specs",
-      "ssz-lean"
+      "ssz-lean",
+      "ethlib"
      ],
      "sources": [
       {
@@ -1305,6 +1364,10 @@
       {
        "artifactId": "ssz-lean",
        "locationId": "ssz-lean-entry"
+      },
+      {
+       "artifactId": "ethlib",
+       "locationId": "ssz-spec-proofs"
       }
      ],
      "position": {

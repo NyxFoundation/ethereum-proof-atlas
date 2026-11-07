@@ -114,6 +114,22 @@ behind by the view split; those remain recorded only in the Execution view
 and in these notes. The repository appears in the footer's
 formal-verification section through `ssz-lean`.
 
+### EthLib intake (2026-11-07)
+
+The ssz-specs Lean build pins its SSZ dependency by revision, and its
+lakefile states that "the Lean specification of SSZ, and its proofs live in
+EthLib as `EthLib.Consensus.Ssz`". [ethereum/EthLib](https://github.com/ethereum/EthLib),
+"formally verified Ethereum primitives, written in Lean", was therefore
+inspected at that lakefile-pinned revision (`6b87b0d…`) and published as the
+`ethlib` formal-model artifact. Its recorded locations cover the SSZ
+specification and proof root (`EthLib/Consensus/Proofs/Ssz.lean`, whose
+Codec tree carries dozens of checker-checked theorem modules such as
+`Canonicality.lean`) and the consensus root module; two dated GET
+observations back their availability. Like the other lean-ecosystem
+artifacts it carries no claim or component-level associations beyond the
+SSZ component's versioned subject binding, and the footer's verification
+section now lists it as well.
+
 Public raw GitHub source GETs for all three supporting theorem files returned
 **HTTP 200 at 2026-11-06T06:12:14Z**. The files and theorem bodies were inspected.
 Those real observations are recorded as availability CheckRecords; they are
