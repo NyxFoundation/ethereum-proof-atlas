@@ -54,7 +54,7 @@
         "assumptions": {
           "status": "unknown",
           "details": [
-            "Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; Nat.card G1 = p.",
+            "Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; the group order (Nat.card G1 = p) is carried by the PrimeOrderWith class instances, not an explicit theorem hypothesis after upstream #1468.",
             "A bilinear pairing, generators, degree parameter n, SRS secret a, coefficient vector and evaluation point z, under the recorded Lean definitions."
           ]
         },
@@ -136,7 +136,7 @@
       "locationId": "definitions",
       "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
       "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-08T15:22:55.476Z",
+      "checkedAt": "2026-11-08T17:48:07.305Z",
       "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
     },
     {
@@ -144,9 +144,13 @@
       "locationId": "theorem",
       "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
       "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-08T15:22:55.476Z",
+      "checkedAt": "2026-11-08T17:48:07.305Z",
       "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
     }
   ],
-  "review": null
+  "review": {
+    "reviewer": "adust09",
+    "notes": "Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
+    "checkedAt": "2026-11-08T17:48:07.305Z"
+  }
 }
