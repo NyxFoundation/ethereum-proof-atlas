@@ -8,7 +8,7 @@ const tabs = [{ id: 'beacon', label: 'Beacon Spec' }, { id: 'lean', label: 'Lean
   { id: 'execution', label: 'Execution Spec' }] as const;
 export function App() {
   const [viewId, setView] = useState<'beacon' | 'lean' | 'execution'>('beacon');
-  const [mode, setMode] = useState<'map' | 'index'>('map');
+  const [mode, setMode] = useState<'map' | 'index'>('index');
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<LoadState>({ kind: 'loading' });
   useEffect(() => {

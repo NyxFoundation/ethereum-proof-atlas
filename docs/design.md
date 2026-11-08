@@ -175,9 +175,10 @@ requirement.
 ### Index table
 
 Each view tab also provides a **Map / Index** display-mode toggle so the same
-snapshot can be read as an inventory. Index renders the selected view as a
-table whose purpose is exposing where the catalogue is empty; it is not a
-second map, a dashboard, or a coverage report.
+snapshot can be read as an inventory, and opens on the Index table with the
+map one toggle away. Index renders the selected view as a table whose purpose
+is exposing where the catalogue is empty; it is not a second map, a dashboard,
+or a coverage report.
 
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells
@@ -191,9 +192,10 @@ instance in the selected view, so consensus-side and execution-side
 networking never share one cell.
 - The table is independent of the map's deliberate geometry: no column is a
 layer. Each group row packs its components one per cell, left to right, in
-foundations-first reading order; empty positions occur only to the right of
-a row that has fewer components than the widest row. No cell holds more than
-one component.
+foundations-first reading order. A row with fewer components than the widest
+row widens its cells across the table width (each cell spans multiple table
+columns) instead of leaving empty positions. No cell holds more than one
+component.
 - Every populated cell shows the component, its exact catalogued-claim count
 (for example `Claims: 2` or `0 claims`) and a neutral fill tint banded over
 that count. The exact count is always visible: color is never the only
@@ -489,10 +491,12 @@ checking. Target at least 80% application code coverage and cover these flows:
 - Bounded results and unbounded theorems cannot be confused in the display.
 - Components with no records say "0 claims", not "Unproved".
 - The Map / Index toggle reuses the same selection state and details panel;
-  switching tabs keeps the mode while isolating claim lists per view; Index
-  cells render exact counts with tint bands, zero cells read "No catalogued
-  claims", the legend explains bands, and the layout introduces no page-level
-  horizontal scrolling at supported widths.
+  switching tabs keeps the mode while isolating claim lists per view; the
+  atlas opens in Index mode; group rows with fewer components stretch their
+  cells across the table width without empty cells; Index cells render exact
+  counts with tint bands, zero cells read "No catalogued claims", the legend
+  explains bands, and the layout introduces no page-level horizontal scrolling
+  at supported widths.
 - Invalid dataset references and unsafe evidence links fail build-time validation;
   invalid request selections fail at the HTTP boundary without fallback data.
 - Unsupported bundle schema versions fail before rendering, including when a

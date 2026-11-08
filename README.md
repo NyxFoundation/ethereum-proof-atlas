@@ -64,9 +64,9 @@ npm run deploy
 This runs the full acceptance gate (`npm run verify`) and then packages and
 uploads the passed build as one Worker release (the validated bundle ships
 inside the same release). If verification fails, nothing is uploaded.
-Automated deployment from CI additionally requires the repository secrets
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` and is triggered manually
-from the `Deploy` workflow.
+Automated deployment from CI additionally requires the repository secret
+`CLOUDFLARE_API_TOKEN` and runs on every push to `main` (and manually from the
+`Deploy` workflow).
 
 ## Read the map
 

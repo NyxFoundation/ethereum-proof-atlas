@@ -20,7 +20,7 @@ Use the root README for runnable setup and verification commands.
 | `src/domain/schema.ts` | Strict Zod contract, bounded geometry and safe source URLs |
 | `src/domain/validate.ts` | Cross-references, snapshot applicability, evidence/check scope and RFC 8785 digest |
 | `src/domain/selectors.ts` | Shared claim lists/counts, source availability and graph expansion |
-| `src/domain/indexLayout.ts` | Index-table row bands, column groups and count shading bands derived from the same view-specific instances and bindings |
+| `src/domain/indexLayout.ts` | Index-table row bands, column groups, stretch spans and count shading bands derived from the same view-specific instances and bindings |
 | `src/server/` | Hono read-only HTTP boundary, headers and structured failure logging |
 | `src/intake/`, `scripts/proof-updates.ts` | Bounded GitHub source reads, unpublished proposals, explicit review acceptance and package gates |
 | `.github/workflows/` | Hourly draft update proposals and application/review verification |
@@ -111,14 +111,21 @@ are observations of this application revision, not guarantees of future runs.
 ## Index table presentation
 
 The Map / Index toggle is the approved inventory view from
-[design.md](design.md): each tab can render as a table that exposes where the
-catalogue is empty. `src/domain/indexLayout.ts` derives everything from the
+[design.md](design.md): each tab opens on the table that exposes where the
+catalogue is empty, with the map one toggle away.
+`src/domain/indexLayout.ts` derives everything from the
 same validated bundle: rows hold the catalogued groups present in the view
 (networking instances resolve their side from the view's recorded edges),
 and each group row packs its components one per cell leftwards from the
 leftmost column, in foundations-first reading order over
-`band-0`…`band-3` claim-count shading. Cells are never stacked and the map's
-stored geometry only orders the cells, never spaces them.
+`band-0`…`band-3` claim-count shading. A row shorter than the widest row
+stretches its cells across the full table width instead of leaving empty
+positions: `cellSpans` distributes the widest row's column count as evenly as
+integer table columns allow (the first cells absorb the remainder), and the
+auto-layout `width: 100%` table renders each row across the full width with
+an equal `colSpan` sum, so no empty cell is ever rendered. Cells are never
+stacked and the map's stored geometry only orders the cells, never spaces
+them.
 `src/ui/IndexTable.tsx` renders caption,
 group row headers, component cell names with count chips and
 neutral tint bands
@@ -176,6 +183,18 @@ was 99.84% lines, 99.06% statements, 95.83% branches and 98.76% functions;
 `indexLayout.ts` itself was 100% lines. A rendered desktop screenshot
 confirmed the caption, component rows, count chips and legend before release.
 These results remain observations of this application revision.
+
+The same day, the index presentation changed per the recorded design: every
+tab now opens on the Index table, and short group rows stretch their cells
+across the table width (`cellSpans` colSpan sum equality over the auto-layout
+full-width table) so no row leaves empty cells. Local acceptance on 2026-11-08 with
+the same Node 24.21.0 checkout: 172 unit/component/package-gate cases passed
+(coverage 99.84% lines, 99.06% statements, 95.89% branches, 98.77% functions;
+`indexLayout.ts` 100% lines) and 13 workerd browser cases passed, including
+the initial-Index viewport trio at 1280/390/320 px, the stretch assertions
+over rendered `colSpan` sums and the absence of empty index cells, and a
+2× desktop screenshot of the Beacon and Lean tables confirming equal
+full-width rows without gaps.
 
 ## Automated update acceptance
 
