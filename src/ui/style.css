@@ -19,11 +19,10 @@ main { max-width: 1920px; margin: auto; padding: 0 28px 16px; }
 [role="tab"][aria-selected="true"] { border-bottom-color: #344f7d; color: #263f64; }
 .snapshot { font-size: 12px; padding: 13px 0; }
 .snapshot > div { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-.snapshot-revision { font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
 .snapshot > p { max-width: 1100px; margin: 6px 0; color: #586370; }
 code { font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
 summary { cursor: pointer; color: #304f7d; }
-.snapshot details[open], footer details[open], aside details[open] { max-width: 1100px; padding: 12px; background: #fff; border: 1px solid #d9dddf; margin-top: 10px; }
+.snapshot details[open], aside details[open] { max-width: 1100px; padding: 12px; background: #fff; border: 1px solid #d9dddf; margin-top: 10px; }
 .map-bar { display: flex; align-items: center; gap: 14px; justify-content: space-between; padding: 10px 0; font-size: 12px; }
 .legend { display: flex; gap: 18px; flex-wrap: wrap; color: #515d69; font-size: 11px; list-style: none; padding: 0; margin: 0; }
 .legend li::before { content: ''; display: inline-block; width: 25px; margin-right: 6px; vertical-align: middle; border-top: 2px solid #667485; }
@@ -95,7 +94,6 @@ aside li { margin-bottom: 9px; }
 .sources { list-style: none; padding-left: 0; }
 .sources li { border-left: 2px solid #d5dce2; padding-left: 10px; margin: 12px 0; }
 .sources .source-identity { display: block; color: #5c6874; font-size: 11px; }
-.sources code { display: block; margin: 4px 0; }
 .evidence-record { border-top: 1px solid #d1d9df; margin-top: 18px; }
 .availability { font-weight: 600; }
 .relationships { list-style: none; padding: 0; }
@@ -105,7 +103,6 @@ aside li { margin-bottom: 9px; }
 .footer-repos .eyebrow { color: #525e6a; }
 .footer-repos .footer-note { color: #77828d; }
 .footer-repos a { font-size: 11px; }
-footer details, footer summary { display: inline; }
 .loading, .error { padding: 60px 25px; }
 .error { border: 1px solid #b8c3cd; margin-top: 20px; }
 .error button { margin-right: 10px; }

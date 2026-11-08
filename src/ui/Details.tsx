@@ -2,7 +2,6 @@ import type { AtlasBundle, ArchitectureView, Claim, ClaimBinding } from '../doma
 import { claimsFor } from '../domain/selectors';
 import { Sources } from './Sources';
 import { Evidence } from './Evidence';
-import { revisionHref } from './links';
 
 export function SubjectTypes({ bundle, claim }: { bundle: AtlasBundle; claim: Claim }) {
   const labels = { 'formal-model': 'Formal model', implementation: 'Implementation', specification: 'Specification', proof: 'Proof artifact' };
@@ -22,10 +21,7 @@ export function ClaimDetails({ bundle, claim, binding }: { bundle: AtlasBundle; 
     <h4>Subject identities</h4>
     {claim.subjectArtifactIds.map(id => {
       const artifact = bundle.artifacts.find(a => a.id === id)!;
-      const href = revisionHref(artifact);
-      return <div key={id}><p>{artifact.title} · {artifact.kind}</p><p>{artifact.version}</p>
-        <code>{href ? <a href={href} target="_blank" rel="noopener noreferrer"
-          title={`Browse revision ${artifact.revision}`}>{artifact.revision}</a> : artifact.revision}</code></div>;
+      return <div key={id}><p>{artifact.title} · {artifact.kind}</p></div>;
     })}
     <h4>Applicability to this view</h4><p>{binding.explanation}</p>
     <p>Basis: {binding.basis.kind}{comparison && <> · {comparison.checkedAt.slice(0, 10)}</>}</p>

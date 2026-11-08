@@ -82,28 +82,28 @@ describe('evidence presentation', () => {
     expect(screen.getByText(/does not establish that the property is false/)).toBeTruthy();
     expect(screen.queryByText('Unbounded theorem statement')).toBeNull();
   });
-  it('should link displayed revisions to the repository state at that commit', () => {
+  it('should render identities free of hash notation while sources stay pinned', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
-    const snapshot = screen.getByRole('link', { name: /Browse .*revision 204fb4a19774/ });
-    expect(snapshot.getAttribute('href'))
-      .toBe('https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
-    expect(snapshot.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(document.body.textContent).not.toMatch(/[0-9a-f]{8,64}/);
+    expect(screen.queryByRole('link', { name: /204fb4a19774/ })).toBeNull();
+    expect(within(screen.getByRole('contentinfo')).getByText(/Dataset schema 1/)).toBeTruthy();
     render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
-    const subjects = screen.getAllByRole('link', { name: /7650709170327c5f10c8b5da99b10941e208ef5d/ });
-    for (const subject of subjects) {
-      expect(subject.getAttribute('href'))
-        .toBe('https://github.com/NyxFoundation/gasper-lean4/tree/7650709170327c5f10c8b5da99b10941e208ef5d');
-    }
-    expect(subjects.length).toBeGreaterThan(0);
+    expect(screen.getByText(/Conflicting finality/)).toBeTruthy();
+    expect(screen.queryByText(/^[0-9a-f]{12,}$/)).toBeNull();
+    const pinned = screen.getAllByRole('link', { name: 'GasperBeaconChain.Core.accountable_safety' });
+    expect(pinned[0].getAttribute('href')).toContain('7650709170327c5f10c8b5da99b10941e208ef5d');
+    expect(pinned[0].getAttribute('rel')).toBe('noopener noreferrer');
   });
-  it('should keep sha256 digests plain because they are not repository states', () => {
+  it('should never display the dataset digest, artifact revisions or versions in the interface', () => {
     const digest = { id: 'digest-artifact', kind: 'proof' as const, title: 'Digest fixture',
       repository: 'https://github.com/ethereum/devp2p', revisionKind: 'sha256' as const,
       revision: 'a'.repeat(64), version: 'Fixture v1',
       locations: [{ id: 'digest-location', path: 'fixture', label: 'Fixture', url: 'https://example.org/fixture' }] };
     render(<Sources bundle={{ ...bundle, artifacts: [...bundle.artifacts, digest] }}
       sources={[{ artifactId: 'digest-artifact', locationId: 'digest-location' }]} />);
-    expect(screen.getByText('a'.repeat(64)).closest('a')).toBeNull();
+    expect(screen.getByText('Fixture')).toBeTruthy();
+    expect(document.body.textContent).not.toContain('a'.repeat(64));
+    expect(document.body.textContent).not.toContain('Fixture v1');
   });
   it('should retain source identities when a stored observation says unavailable', () => {
     const fixture = structuredClone(bundle);
@@ -237,6 +237,9 @@ describe('index presentation', () => {
     const beaconTable = await screen.findByRole('table');
     expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
     expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('false');
+    const toggleOrder = screen.getAllByRole('button', { name: /^(Index|Map)$/ })
+      .map(button => button.textContent);
+    expect(toggleOrder).toEqual(['Index', 'Map']);
     expect(within(beaconTable).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
     fireEvent.click(screen.getByRole('button', {name: 'Map'}));
     expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('true');
