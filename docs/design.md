@@ -83,12 +83,12 @@ a filter over one assumed common specification.
   "Future" does not mean a finalized commitment to deploy that specification.
 - Evidence links resolve to fixed commits or other content-addressed artifacts.
   A moving branch name or release label alone is not a reproducible identity.
-- Displayed revisions are links, not bare text: a git-commit revision opens
-  the repository state at that commit; a sha256 digest stays plain text
-  because it addresses artifact content, not a repository state. The bundle
-  digest is not a location and is never rendered as a link.
+- Commit digests and revision hashes are never displayed as text. Artifacts
+  are identified by title and kind, and pinned locations keep the fixed
+  commits inside their link targets. The bundle digest is recorded in the
+  dataset and never rendered on the page.
 - Protocol, implementation, formal-model, and proof-artifact versions are
-  separate identities.
+  separate identities; they are recorded in the bundle, not shown as hashes.
 
 No single repository is a sufficient source for an entire architecture view.
 Execution and compiler components need their own primary sources and, per the
@@ -144,7 +144,7 @@ propagate a guarantee to a consumer.
 
 ### Map and detail panel
 
-1. Open the selected architecture view, with its fork and source revision visible.
+1. Open the selected architecture view, with its fork visible.
 2. Pan or zoom the map and expand a component when more detail is needed.
 3. Select a component to open its associated claim list in a right-hand panel.
 4. Select a claim to read its subject, property, assumptions, limits, evidence,
@@ -170,15 +170,16 @@ and proof artifacts as plain discovery links (new tab, no referrer), labelled
 with the repository path; the section is titled "Formal-verification
 repositories" and excludes the architecture snapshot repositories. They are
 not pinned evidence links and never satisfy a claim's source
-requirement.
+requirement. The dataset schema version appears in the same parallel row as a
+labelled item; the footer displays no dataset digest.
 
 ### Index table
 
-Each view tab also provides a **Map / Index** display-mode toggle so the same
-snapshot can be read as an inventory, and opens on the Index table with the
-map one toggle away. Index renders the selected view as a table whose purpose
-is exposing where the catalogue is empty; it is not a second map, a dashboard,
-or a coverage report.
+Each view tab also provides a **Map / Index** display-mode toggle that leads
+with Index so the same snapshot can be read as an inventory, and opens on the
+Index table with the map one toggle away. Index renders the selected view as a
+table whose purpose is exposing where the catalogue is empty; it is not a
+second map, a dashboard, or a coverage report.
 
 - Modes share one selection state and the right-hand details panel. Selecting a
 cell selects that component instance in both presentations; zero-claim cells

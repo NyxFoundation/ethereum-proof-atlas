@@ -33,8 +33,6 @@ test('should navigate independently sourced views and evidence in the Workers ru
   expect(response?.headers()['content-security-policy']).toContain("script-src 'self'");
   expect(response?.headers()['referrer-policy']).toBe('no-referrer');
   await expect(page.getByText('Fulu / Osaka (Fusaka; BPO2)', { exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: /204fb4a19774/ })).toHaveAttribute('href',
-    'https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
   await page.getByRole('button', { name: 'Map', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Select BLS signatures', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select State transition', exact: true }).click();
