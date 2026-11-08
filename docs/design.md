@@ -148,7 +148,14 @@ propagate a guarantee to a consumer.
 2. Pan or zoom the map and expand a component when more detail is needed.
 3. Select a component to open its associated claim list in a right-hand panel.
 4. Select a claim to read its subject, property, assumptions, limits, evidence,
-   and recorded checks without losing the map context.
+   and recorded checks without losing the map context. Applicability, method,
+   scope, and recorded checks use a neutral icon plus a short English token.
+   Hover and keyboard focus reveal the full phrase, and the same phrase remains
+   in a closed disclosure. Dependency audit, applicability basis, bounds,
+   configuration, observation dates, and replay notes stay closed until opened.
+   A refinement or equivalence direction is one open line only when that claim
+   records one. Map arrows are architecture relationships and do not show that
+   direction.
 5. Follow a source link to the specific theorem, verification model, or source
    location at the recorded revision.
 
@@ -245,9 +252,14 @@ External link availability is an observation, not a permanent property of a
 commit-pinned reference. An availability check records its date and outcome in a
 `CheckRecord`, independently of source review or proof replay.
 
-- Show **Available when last checked**, **Unavailable when last checked**, or
-  **Not checked**, with the observation date when one exists. These labels do not
-  promise current reachability.
+- Outside an open claim, show **Available when last checked**, **Unavailable
+  when last checked**, or **Not checked**, with the observation date when one
+  exists.
+- In an open claim, show **Located**, **Unavailable**, or **Unchecked** as a
+  status token. Binding-source tokens sit beside their links. An evidence
+  source token sits in that record's status row. The full label and date appear
+  on hover, keyboard focus, and in the closed disclosure. None of these labels
+  promise current reachability or proof replay.
 - If a previously published source becomes unavailable, preserve the claim,
   artifact identity, commit or digest, and source location. Display the recorded
   availability warning; do not silently substitute a moving branch or treat the
@@ -487,7 +499,9 @@ checking. Target at least 80% application code coverage and cover these flows:
   together and remain usable by keyboard.
 - Read-only interactions cannot move, delete, or reconnect components.
 - The details panel shows subject type, revisions, assumptions, limits, evidence,
-  and check state without converting unknowns into guarantees.
+  and check state without converting unknowns into guarantees. Secondary check
+  detail is closed by default. Status tokens name the record, not safety, and
+  their full phrases remain available on hover, focus, and in the disclosure.
 - Counts deduplicate claims; multiple evidence records do not inflate them.
 - Bounded results and unbounded theorems cannot be confused in the display.
 - Components with no records say "0 claims", not "Unproved".
