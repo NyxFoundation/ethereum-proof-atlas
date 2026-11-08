@@ -120,7 +120,7 @@ function validateBinding(c: Context, view: ArchitectureView, binding: ClaimBindi
     s.locationId === ref.locationId)), 'comparison source scope');
 }
 function validateView(c: Context, view: ArchitectureView) {
-  requireValid(view.label === (view.id === 'beacon' ? 'Beacon Spec' : 'Lean Spec'), 'tab identity');
+  requireValid(view.label === ({beacon: 'Beacon Spec', lean: 'Lean Spec', execution: 'Execution Spec'})[view.id], 'tab identity');
   requireValid(view.experimental === (view.id === 'lean'), 'experimental status');
   references(c, view.sources);
   unique(view.componentInstances.map(i => i.instanceId), 'instance ID');
@@ -155,7 +155,7 @@ function validateEdges(c: Context) {
 export function validateStructure(input: unknown): AtlasBundle {
   const bundle = bundleSchema.parse(input);
   const c = context(bundle);
-  requireValid(c.views.has('beacon') && c.views.has('lean'), 'both architecture views required');
+  requireValid(c.views.has('beacon') && c.views.has('lean') && c.views.has('execution'), 'all architecture views required');
   c.components.forEach(component => unique(component.childComponentIds, 'child component'));
   acyclic(new Map(bundle.components.map(component => [component.id, component.childComponentIds])));
   validateArtifacts(c);

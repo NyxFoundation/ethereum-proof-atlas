@@ -65,7 +65,7 @@ const binding = z.strictObject({
   ]),
 });
 const architectureView = z.strictObject({
-  id: z.enum(['beacon', 'lean']), label: z.enum(['Beacon Spec', 'Lean Spec']),
+  id: z.enum(['beacon', 'lean', 'execution']), label: z.enum(['Beacon Spec', 'Lean Spec', 'Execution Spec']),
   fork: text, experimental: z.boolean(), description: text, sources, inheritance: texts.min(1),
   componentInstances: z.array(z.strictObject({ instanceId: idSchema, componentId: idSchema,
     subjectArtifactIds: ids.min(1), sources, position, parentInstanceId: idSchema.nullable() })).min(1).max(200),
@@ -80,9 +80,10 @@ export const bundleSchema = z.strictObject({
   components: z.array(component).max(2000), artifacts: z.array(artifact).max(2000),
   claims: z.array(claim).max(5000), evidence: z.array(evidence).max(10000),
   checkRecords: z.array(checkRecord).max(20000),
-  architectureViews: z.array(architectureView).length(2), architectureEdges: z.array(architectureEdge).max(2000),
+  architectureViews: z.array(architectureView).length(3), architectureEdges: z.array(architectureEdge).max(2000),
 });
 export type AtlasBundle = z.infer<typeof bundleSchema>;
+export type Component = AtlasBundle['components'][number];
 export type ArchitectureView = AtlasBundle['architectureViews'][number];
 export type ComponentInstance = ArchitectureView['componentInstances'][number];
 export type ClaimBinding = ArchitectureView['claimBindings'][number];

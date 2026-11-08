@@ -1,6 +1,6 @@
 ---
 title: Ethereum Proof Atlas Design
-last_updated: 2026-11-07
+last_updated: 2026-11-08
 tags:
   - architecture
   - formal-verification
@@ -55,14 +55,17 @@ be presented as established claims.
 
 ## Architecture views
 
-Provide two tabs with these exact English labels:
+Provide three tabs with these exact English labels:
 
 - **Beacon Spec**
 - **Lean Spec**
+- **Execution Spec**
 
-Do not show a scope caption beside the tabs. The tab names identify the
-consensus design family, not a restriction to consensus-only content. Execution and compiler areas remain explicitly labeled
-within each diagram wherever their specification relationships are established.
+Do not show a scope caption beside the tabs. The consensus tabs identify the
+consensus design family; the Execution tab identifies the execution design
+family. No tab borrows another tab's snapshot: consensus views carry no
+execution, compiler, or execution-networking instances, and the Execution view
+carries none of the consensus instances.
 
 Each tab selects an independently sourced architecture view, including its
 components, relationships, and applicable claims. This is not a label change or
@@ -80,13 +83,22 @@ a filter over one assumed common specification.
   "Future" does not mean a finalized commitment to deploy that specification.
 - Evidence links resolve to fixed commits or other content-addressed artifacts.
   A moving branch name or release label alone is not a reproducible identity.
+- Displayed revisions are links, not bare text: a git-commit revision opens
+  the repository state at that commit; a sha256 digest stays plain text
+  because it addresses artifact content, not a repository state. The bundle
+  digest is not a location and is never rendered as a link.
 - Protocol, implementation, formal-model, and proof-artifact versions are
   separate identities.
 
-The consensus repositories are not sufficient sources for the entire Ethereum
-architecture. Execution and compiler components need their own primary sources.
-Do not invent future execution-layer connections because they exist in the
-Beacon view.
+No single repository is a sufficient source for an entire architecture view.
+Execution and compiler components need their own primary sources and, per the
+recorded split, live in their own tab. The Engine API payload boundary between
+execution and consensus is therefore not drawn as a cross-layer component;
+each tab shows where its record ends. Do not invent execution-layer
+connections in a consensus view, and do not copy consensus-side connections
+into the Execution view. The consensus views keep the blob availability
+checks that the consensus spec itself performs, without introducing execution
+components for them.
 
 ### Structure and placement
 
@@ -153,6 +165,50 @@ The map is read-only. Selection, keyboard focus, expansion, and navigation remai
 available, but dragging nodes into new positions, connecting edges, and deleting
 graph elements are not reader actions.
 
+The footer lists every distinct repository of the loaded bundle's formal-model
+and proof artifacts as plain discovery links (new tab, no referrer), labelled
+with the repository path; the section is titled "Formal-verification
+repositories" and excludes the architecture snapshot repositories. They are
+not pinned evidence links and never satisfy a claim's source
+requirement.
+
+### Index table
+
+Each view tab also provides a **Map / Index** display-mode toggle so the same
+snapshot can be read as an inventory. Index renders the selected view as a
+table whose purpose is exposing where the catalogue is empty; it is not a
+second map, a dashboard, or a coverage report.
+
+- Modes share one selection state and the right-hand details panel. Selecting a
+cell selects that component instance in both presentations; zero-claim cells
+are selectable and open the neutral "No catalogued claims" panel state.
+- Rows are the catalogued groups present in the selected view, always in the
+fixed order: Consensus, Execution, Cryptography, Serialization, Development.
+A group with no instance in the view renders no row instead of an empty row.
+A component instance appears in the row of its `component.area`; networking
+instances resolve their side from the recorded architecture edges of that
+instance in the selected view, so consensus-side and execution-side
+networking never share one cell.
+- The table is independent of the map's deliberate geometry: no column is a
+layer. Each group row packs its components one per cell, left to right, in
+foundations-first reading order; empty positions occur only to the right of
+a row that has fewer components than the widest row. No cell holds more than
+one component.
+- Every populated cell shows the component, its exact catalogued-claim count
+(for example `Claims: 2` or `0 claims`) and a neutral fill tint banded over
+that count. The exact count is always visible: color is never the only
+channel, and bands are restrained tints, not traffic-light colors, and do
+not resemble certification or safety ordering. A zero cell means **No
+catalogued claims**, not "Unproved" or "Unsafe". The table shows no
+percentages, no "proved" wording, and no per-column or whole-table rollup;
+only the count-band legend explains the fill. The legend replaces the
+relationship legend while Index is shown.
+- Counts derive from the same view-specific
+`componentInstances` and `claimBindings` as the map; the table keeps no
+separate inventory dataset.
+- The map-bar carries only the display-mode toggle and the active legend;
+  components are reached directly in the map (keyboard-operable nodes) and in
+  the index (cells). There is no global component select control.
 ### Evidence presentation
 
 A claim's subject type must be visible before a reader opens its source:
@@ -421,7 +477,9 @@ The implementation tests behavior, not just schema shapes or type
 checking. Target at least 80% application code coverage and cover these flows:
 
 - Switching tabs changes the snapshot, relationships, and applicable claims
-  without leaking a claim or check result from the other view.
+  without leaking a claim or check result from the other view; the Execution
+  snapshot renders its own map and an index table whose populated cells are
+  execution- and development-only with zero catalogued claims.
 - Component selection, expansion, pan/zoom, and claim detail navigation work
   together and remain usable by keyboard.
 - Read-only interactions cannot move, delete, or reconnect components.
@@ -430,6 +488,11 @@ checking. Target at least 80% application code coverage and cover these flows:
 - Counts deduplicate claims; multiple evidence records do not inflate them.
 - Bounded results and unbounded theorems cannot be confused in the display.
 - Components with no records say "0 claims", not "Unproved".
+- The Map / Index toggle reuses the same selection state and details panel;
+  switching tabs keeps the mode while isolating claim lists per view; Index
+  cells render exact counts with tint bands, zero cells read "No catalogued
+  claims", the legend explains bands, and the layout introduces no page-level
+  horizontal scrolling at supported widths.
 - Invalid dataset references and unsafe evidence links fail build-time validation;
   invalid request selections fail at the HTTP boundary without fallback data.
 - Unsupported bundle schema versions fail before rendering, including when a
