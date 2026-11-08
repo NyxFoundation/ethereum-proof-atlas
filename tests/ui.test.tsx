@@ -231,15 +231,19 @@ describe('index presentation', () => {
     expect(screen.queryByRole('link', {name: 'ethereum/consensus-specs'})).toBeNull();
     expect(screen.getByRole('link', {name: 'leanEthereum/ots.golf-submissions'}).textContent).toBe('leanEthereum/ots.golf-submissions');
   });
-  it('should switch modes inside a tab and keep the mode across view changes', async () => {
+  it('should open the index table first and keep the mode across view changes', async () => {
     vi.mocked(loadAtlas).mockResolvedValue(bundle);
     render(<App />);
-    await screen.findByRole('heading', {name: 'Select a component'});
-    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
+    const beaconTable = await screen.findByRole('table');
     expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('false');
+    expect(within(beaconTable).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', {name: 'Map'}));
+    expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('true');
     fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'ArrowRight'});
     await screen.findByText('Lstar (experimental)');
-    expect(screen.getByRole('button', {name: 'Index'}).getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(screen.getByRole('button', {name: 'Index'}));
     const table = screen.getByRole('table');
     expect(within(table).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
     expect(within(table).queryByRole('button', {name: /^Solidity \/ solc/})).toBeNull();

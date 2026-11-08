@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { request as httpRequest } from 'node:http';
 
 for (const width of [1280, 390, 320]) {
-  test(`should keep the introduction compact and the map in view at ${width}px`, async ({ page }) => {
+  test(`should keep the introduction compact and open the index at ${width}px`, async ({ page }) => {
     await page.setViewportSize({width, height: 844});
     await page.goto('/');
     const header = page.getByRole('banner');
@@ -13,6 +13,11 @@ for (const width of [1280, 390, 320]) {
       Number.parseFloat(getComputedStyle(element).lineHeight) + 1)).toBe(true);
     expect((await header.boundingBox())!.height).toBeLessThanOrEqual(104);
     expect((await page.getByRole('tablist').boundingBox())!.y).toBeLessThanOrEqual(112);
+    await expect(page.getByRole('button', {name: 'Index', exact: true})).toHaveAttribute('aria-pressed', 'true');
+    const table = page.getByRole('table');
+    await expect(table).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+    await page.getByRole('button', {name: 'Map', exact: true}).click();
     await expect(page.getByRole('button', {name: 'Select State transition', exact: true})).toBeVisible();
     await expect(page.locator('.map')).toBeInViewport({ratio: 0.5});
     expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
@@ -30,6 +35,7 @@ test('should navigate independently sourced views and evidence in the Workers ru
   await expect(page.getByText('Fulu / Osaka (Fusaka; BPO2)', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /204fb4a19774/ })).toHaveAttribute('href',
     'https://github.com/ethereum/consensus-specs/tree/204fb4a19774eabb7a2e91505365deed6b8afef8');
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Select BLS signatures', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select State transition', exact: true }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
@@ -57,6 +63,7 @@ test('should navigate independently sourced views and evidence in the Workers ru
 
 test('should expand and pan with keyboard without permitting graph mutation', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
   const node = page.locator('.react-flow__node[data-id="b-state"]');
   await expect(node).toBeVisible();
   const position = await node.evaluate(element => (element as HTMLElement).style.transform);
@@ -101,6 +108,7 @@ test('should expand and pan with keyboard without permitting graph mutation', as
 test('should keep graph-to-evidence navigation usable on narrow screens', async ({ page }) => {
   await page.setViewportSize({width: 390,height: 844});
   await page.goto('/');
+  await page.getByRole('button', {name: 'Map', exact: true}).click();
   await page.getByRole('button', {name: 'Expand State transition', exact: true}).click();
   await page.getByRole('button', {name: 'Select Justification / finalization', exact: true}).click();
   await page.getByRole('button', {name: 'Conflicting finality implies a slashed quorum intersection'}).click();
@@ -110,6 +118,7 @@ test('should keep graph-to-evidence navigation usable on narrow screens', async 
 
 test('should fail explicitly when an open browser encounters a newer schema', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Map', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Select State transition', exact: true })).toBeVisible();
   await page.route('**/api/atlas?view=lean', route => route.fulfill({json: {schemaVersion: 2}}));
   await page.getByRole('tab', {name: 'Lean Spec'}).click();
@@ -123,6 +132,7 @@ test('should enforce the production CSP while normal diagram styles work', async
     document.addEventListener('securitypolicyviolation', event => (window as any).violations.push(event.violatedDirective));
   });
   await page.goto('/');
+  await page.getByRole('button', {name: 'Map', exact: true}).click();
   await expect(page.getByRole('button', {name: 'Select State transition', exact: true})).toBeVisible();
   expect(await page.evaluate(() => (window as any).violations)).toEqual([]);
   await page.evaluate(async () => {
@@ -166,6 +176,7 @@ test('should reject invalid methods, selectors and bodies on the actual Worker',
 test('should retain stored source details when external navigation is unavailable', async ({ page, context }) => {
   await context.route('https://github.com/**', route => route.abort());
   await page.goto('/');
+  await page.getByRole('button', {name: 'Map', exact: true}).click();
   await page.getByRole('button', {name: 'Select State transition', exact: true}).click();
   await page.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
   const popup = context.waitForEvent('page');
@@ -198,8 +209,16 @@ test('should list referenced repositories as discovery links in the footer', asy
 
 test('should inventory catalogued claims in the index table across views', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Index', exact: true }).click();
   const table = page.getByRole('table');
+  await expect(page.getByRole('button', { name: 'Index', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(table).toBeVisible();
+  expect(await table.locator('td:not(:has(button))').count()).toBe(0);
+  await expect.poll(() => table.evaluate(node => {
+    const sums = [...node.querySelectorAll('tbody tr')].map(row => [...row.children]
+      .filter(child => child.tagName === 'TD')
+      .reduce((sum, cell) => sum + Number((cell as HTMLTableCellElement).colSpan), 0));
+    return sums.every(sum => sum === sums[0]);
+  })).toBe(true);
   for (const group of ['Consensus', 'Cryptography', 'Serialization']) {
     await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
   }
@@ -232,7 +251,6 @@ test('should inventory catalogued claims in the index table across views', async
 test('should keep the index table inside its container at narrow widths', async ({ page }) => {
   await page.setViewportSize({width: 320, height: 844});
   await page.goto('/');
-  await page.getByRole('button', {name: 'Index', exact: true}).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await expect(page.getByRole('button', {name: 'State transition: Claims: 1'})).toBeVisible();
 });

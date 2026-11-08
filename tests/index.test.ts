@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import raw from '../data/atlas.json';
 import { validateStructure } from '../src/domain/validate';
-import { buildIndex, countBand } from '../src/domain/indexLayout';
+import { buildIndex, cellSpans, countBand } from '../src/domain/indexLayout';
 
 const bundle = validateStructure(raw);
 const beacon = bundle.architectureViews.find(v => v.id === 'beacon')!;
@@ -34,6 +34,27 @@ describe('index table layout', () => {
       ['Execution ETH / RLPx', 'EVM', 'State / Patricia trie', 'Execution transition']);
     expect(row(execution, 'development').cells.map(c => c.name)).toEqual(['Solidity / solc']);
     expect(table.rows.find(r => r.group === 'consensus')).toBeUndefined();
+  });
+  it('should stretch short group rows across the full table width without empty cells', () => {
+    const table = build(beacon);
+    expect(table.columns).toBe(5);
+    expect(cellSpans(table.columns, 5)).toEqual([1, 1, 1, 1, 1]);
+    expect(cellSpans(table.columns, 2)).toEqual([3, 2]);
+    expect(cellSpans(table.columns, 1)).toEqual([5]);
+    expect(cellSpans(table.columns, 0)).toEqual([]);
+    expect(cellSpans(0, 2)).toEqual([]);
+    expect(cellSpans(3, 5)).toEqual([]);
+    for (const view of [beacon, lean, execution]) {
+      const stretched = build(view);
+      expect(stretched.columns).toBeGreaterThan(0);
+      for (const row of stretched.rows) {
+        const spans = cellSpans(stretched.columns, row.cells.length);
+        expect(spans).toHaveLength(row.cells.length);
+        expect(spans.length).toBeGreaterThan(0);
+        expect(spans.reduce((sum, span) => sum + span, 0)).toBe(stretched.columns);
+        expect(Math.max(...spans) - Math.min(...spans)).toBeLessThanOrEqual(1);
+      }
+    }
   });
   it('should resolve networking rows from recorded edges of the selected view', () => {
     expect(row(execution, 'execution').cells.find(c => c.name === 'Execution ETH / RLPx')).toBeTruthy();
