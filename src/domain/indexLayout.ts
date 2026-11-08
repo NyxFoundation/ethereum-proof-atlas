@@ -30,6 +30,17 @@ export type IndexTable = { columns: number; rows: IndexRow[] };
 export function countBand(count: number): 0 | 1 | 2 | 3 {
   return count <= 0 ? 0 : count <= 2 ? 1 : count <= 4 ? 2 : 3;
 }
+// A row shorter than the widest row widens its cells across the table width
+// instead of leaving empty positions; the first cells absorb the remainder, so
+// widths differ by at most one column. Total and valid-plan-only: an empty
+// array means no cells, or a geometry where integer table columns cannot give
+// every cell at least one column.
+export function cellSpans(columns: number, count: number): number[] {
+  if (count <= 0 || columns <= 0 || count > columns) return [];
+  const base = Math.floor(columns / count);
+  const remainder = columns % count;
+  return Array.from({ length: count }, (_, index) => base + (index < remainder ? 1 : 0));
+}
 const byArea: Record<Component['area'], ColumnId> = {
   consensus: 'consensus',
   execution: 'execution',
