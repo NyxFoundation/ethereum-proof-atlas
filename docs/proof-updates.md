@@ -1,6 +1,6 @@
 ---
 title: Reviewing upstream proof updates
-last_updated: 2026-11-06
+last_updated: 2026-11-09
 tags:
   - automation
   - evidence
@@ -45,7 +45,8 @@ PR after the earlier one is closed or merged.
 
 ## Review and publish
 
-Use Node 24.15+ and `npm ci`, as in the root README. Check out the update PR's
+Use Node 24.15+ and `npm ci`, as in the
+[implementation notes](implementation.md). Check out the update PR's
 branch before editing or accepting it. Work on one candidate per PR.
 
 1. Follow the pinned theorem and model links and inspect the complete comparison,

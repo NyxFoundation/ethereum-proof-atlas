@@ -276,6 +276,16 @@ describe('application lifecycle', () => {
     expect(screen.queryByText('Ethereum L1 and supporting infrastructure')).toBeNull();
     await screen.findByRole('heading', {name: 'Select a component'});
   });
+  it('should link the source repository from the page header with the GitHub mark', async () => {
+    vi.mocked(loadAtlas).mockResolvedValue(bundle);
+    render(<App />);
+    const header = within(screen.getByRole('banner'));
+    const link = header.getByRole('link', {name: 'GitHub repository'});
+    expect(link.getAttribute('href')).toBe('https://github.com/NyxFoundation/ethereum-proof-atlas');
+    expect(link.getAttribute('target')).toBe('_blank');
+    expect(link.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(link.querySelector('svg')).toBeTruthy();
+  });
   it('should reset selected evidence and support tab keyboard navigation on view changes', async () => {
     vi.mocked(loadAtlas).mockResolvedValue(bundle);
     render(<App />);

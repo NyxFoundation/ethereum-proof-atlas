@@ -1,6 +1,6 @@
 ---
 title: Implementation and local acceptance
-last_updated: 2026-11-08
+last_updated: 2026-11-09
 tags:
   - implementation
   - testing
@@ -10,7 +10,47 @@ tags:
 # Implementation and local acceptance
 
 The local application implements the contract in [design.md](design.md).
-Use the root README for runnable setup and verification commands.
+The commands in this file are the authoritative runnable setup, verification
+and publishing entry points.
+
+## Local commands
+
+Use Node.js **24.15+ (24.x LTS)** and npm. No Cloudflare account, credentials,
+database or proof-assistant installation is needed. Dependency and browser
+installation requires network access; the running application does not retrieve
+third-party proof sources.
+
+```sh
+npm ci
+npm run build
+npm run preview
+```
+
+`npm run preview` serves the packaged Worker and browser assets on
+**http://127.0.0.1:4173** in Cloudflare's local workerd runtime, with the
+production-build application headers (including CSP). It checks the application
+policy locally, not an undeployed production environment or Cloudflare's
+platform-level controls; stop with Ctrl-C. For development with HMR, run
+`npm run dev` and open **http://127.0.0.1:5173**; the development server is not
+the production security test target. Install Chromium before the browser suite
+(`npx playwright install chromium`; missing system libraries on supported
+Linux distributions install with `npx playwright install --with-deps chromium`,
+which may require sudo).
+
+| Command | Checks |
+| --- | --- |
+| `npm run data:validate` | Schema, canonical SHA-256 revision, source identities, cross-references and update review receipts |
+| `npm run proofs:check` | Read-only comparison of the three tracked upstream `main` heads |
+| `npm test` | Domain, HTTP boundary, API-response and React component behavior |
+| `npm run test:coverage` | At least 80% statements, branches, functions and lines |
+| `npm run build` | Type checking and mandatory dataset validation, then Vite/Cloudflare packaging |
+| `npm run test:e2e` | Built Worker + browser navigation, read-only interactions, production CSP and raw HTTP requests |
+| `npm run verify` | All of the above in dependency order |
+
+Build before running E2E alone. E2E starts and stops its own local server on
+port 4173; leave that port free. Tests use Chromium. Synthetic records exist
+only in tests. These commands test the atlas, **not external proof replay**.
+Publishing runs the same gate first; see [Production deployment](#production-deployment).
 
 ## Boundaries
 
@@ -246,7 +286,9 @@ sizes and smoke-tested through the Vite development server.
 
 ## Production deployment
 
-The owner selected Cloudflare Workers hosting on 2026-11-08. `npm run deploy`
+The owner selected Cloudflare Workers hosting on 2026-11-08. A one-time
+Cloudflare login with `npx wrangler login` is required to publish; no database
+or other runtime resource is provisioned. `npm run deploy`
 runs the full acceptance gate (`npm run verify`) and then publishes the passed
 build with `wrangler deploy` against the emitted
 `dist/ethereum_proof_atlas/wrangler.json`; no database or other runtime resource

@@ -10,6 +10,10 @@ header { max-width: 1920px; margin: auto; padding: 20px 28px 12px; }
 header h1 { margin: 0; font-size: 22px; letter-spacing: -.03em; line-height: 1.25; }
 header p { margin: 4px 0 0; font-size: 13px; color: #525e6a; }
 .brand { text-decoration: none; font-weight: 750; color: #242a33; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.github-link { display: inline-flex; border-radius: 4px; margin-left: auto; color: #242a33; }
+.github-link:hover { color: #304f7d; }
+.github-link svg { display: block; }
 main { max-width: 1920px; margin: auto; padding: 0 28px 16px; }
 .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; font-weight: 650; }
 .view-bar { display: flex; align-items: center; justify-content: space-between; gap: 14px; border-bottom: 1px solid #c9cfd4; }
