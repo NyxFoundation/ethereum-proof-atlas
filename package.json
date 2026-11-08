@@ -10,6 +10,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "npm run typecheck && vite build",
     "preview": "wrangler dev --config dist/ethereum_proof_atlas/wrangler.json --local --ip 127.0.0.1 --port 4173",
+    "deploy": "npm run verify && wrangler deploy --config dist/ethereum_proof_atlas/wrangler.json",
     "typecheck": "tsc --noEmit",
     "data:validate": "tsx scripts/validate-data.ts",
     "proofs:check": "tsx scripts/proof-updates.ts check",

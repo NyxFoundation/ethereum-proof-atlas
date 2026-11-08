@@ -527,8 +527,10 @@ Explicitly deferred:
 - General record authoring, review ownership and submissions beyond the scoped
   three-repository update workflow.
 - New-claim discovery, architecture/specification synchronization and proof replay.
-- Production domain, deployment credentials, and release operations, including
-  platform traffic limits, abuse controls, and monitoring configuration.
+- Custom production domain, credential rotation and release operations beyond
+  publishing the Worker build, including platform traffic limits, abuse controls,
+  and monitoring configuration. The deploy target is decided: the owner publishes
+  the packaged Worker build with Wrangler; no other hosting runtime is supported.
 
 Research required for each published dataset revision (the initial investigation
 is recorded in [Research and intake notes](research.md)):
@@ -540,8 +542,10 @@ is recorded in [Research and intake notes](research.md)):
 - Final spacing, typography, and expansion behavior against real diagram density,
   while retaining the agreed light, layered-map direction.
 
-The local implementation does not provision Cloudflare resources, deploy a site,
-or run third-party proof code. Application testing is not proof-corpus replay.
+Application verification does not deploy to Cloudflare and does not run
+third-party proof code. Hosting is the owner-run `npm run deploy` release of the
+validated Worker build; the local implementation provisions no other Cloudflare
+resources. Application testing is not proof-corpus replay.
 
 ## Primary references
 
