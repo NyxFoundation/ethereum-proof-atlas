@@ -2,124 +2,80 @@
 
 A read-only, source-pinned map of formal claims across **Ethereum L1 and supporting
 infrastructure**. Claims describe specific subjects, assumptions and limits, not
-whole-project safety. The approved scope is in [docs/design.md](docs/design.md).
+whole-project safety. The atlas catalogues formal-verification work that already
+exists in public repositories: it does not derive claims from specifications, does
+not generate proofs, and does not promise to replay external proofs. The approved
+scope, data model and presentation contract are in
+[docs/design.md](docs/design.md).
 
-## Run locally
+## Terminology
 
-Use Node.js **24.15+ (24.x LTS)** and npm. No Cloudflare account,
-credentials, database or proof-assistant installation is needed.
-
-```sh
-npm ci
-npm run build
-npm run preview
-```
-
-Open **http://127.0.0.1:4173**. This runs the packaged Worker and browser assets
-in Cloudflare's local workerd runtime, with the production-build application
-headers (including CSP). This checks the application policy locally, not an
-undeployed production environment or Cloudflare's platform-level controls.
-Stop with Ctrl-C. Initial dependency/browser installation requires network access;
-the running application does not retrieve third-party proof sources.
-
-For development with HMR, run `npm run dev` and open **http://127.0.0.1:5173**.
-The development server is not the production security test target.
-
-## Verify
-
-```sh
-npx playwright install chromium
-npm run verify
-```
-
-After verification, run `npm run preview` to inspect the verified build interactively.
-
-On a supported Linux distribution, missing browser system libraries can be
-installed with `npx playwright install --with-deps chromium` (may require sudo).
-
-| Command | Checks |
+| Term | Meaning |
 | --- | --- |
-| `npm run data:validate` | Schema, canonical SHA-256 revision, source identities, cross-references and update review receipts |
-| `npm run proofs:check` | Read-only comparison of the three tracked upstream `main` heads |
-| `npm test` | Domain, HTTP boundary, API-response and React component behavior |
-| `npm run test:coverage` | At least 80% statements, branches, functions and lines |
-| `npm run build` | Type checking and mandatory dataset validation, then Vite/Cloudflare packaging |
-| `npm run test:e2e` | Built Worker + browser navigation, read-only interactions, production CSP and raw HTTP requests |
-| `npm run verify` | All of the above in dependency order |
+| **Atlas bundle** | The packaged, immutable `data/atlas.json`: schema and revision metadata plus the complete record collections for all views. Validated at build time; there is no editing API or mutable runtime store. `datasetRevision` is the canonical SHA-256 digest of the bundle with the field itself omitted — an integrity check, not a signature. |
+| **Architecture view** | A specification snapshot shown as a tab — **Beacon Spec**, **Lean Spec** and **Execution Spec** — with component instances, positions, relationships and claim bindings. A claim applies to a component only through the selected view's bindings; switching tabs never leaks claims or check results. |
+| **Component / instance** | A technical concept shown on the map (consensus, execution, cryptography, networking, serialization, development), and its per-view instance with a position, child components and a count of bound claims. |
+| **Artifact** | A versioned specification, formal model, implementation or proof artifact: a public HTTPS location, an immutable revision (Git commit or SHA-256 digest) and exact source locations. Neither a moving branch nor a release label is a revision. |
+| **Claim** | A coherent property about one or more subject artifacts, with assumptions, a dependency/axiom audit, applicability and limits. The primary information unit — not a project, paper or repository. One claim bound to several components is still one claim. |
+| **Evidence** | The artifact and exact theorem or verification location supporting a claim: method (theorem proving, SMT, model checking), scope (bounded or unbounded) and configuration. One evidence record supports one claim; a claim may have several. |
+| **Check record** | A dated availability, source-review or replay observation, with exact references, a result and supporting details. Availability, correspondence review and replay are separate observations; an older successful availability observation is retained when a later check fails. |
+| **Claim binding** | The view-scoped association of a claim with a component instance: `direct-subject` when the component is the claim's subject, `related-model` when only the claim's model is. Bindings are recorded data, never inferred from graph edges or similar names. |
+| **Architecture edge** | A relationship between component instances — provider → consumer dependency, sender → receiver interface, or compiler → target generated code — with a supporting primary-source location. Edges never propagate proof guarantees. |
 
-Build before running E2E alone. E2E starts and stops its own local server on port
-4173; leave that port free. Tests use Chromium. Synthetic records exist only in
-tests. These commands test the atlas, **not external proof replay**.
+A "0 claims" panel state is a neutral count, not "unproved" or "unsafe". Counts
+deduplicate claims within a view regardless of how many artifacts support them.
 
-## Deploy
+## How claims reach the map
 
-The deploy target is **Cloudflare Workers** (see [docs/design.md](docs/design.md)).
-A Cloudflare login is required once with `npx wrangler login`; no database or other
-resource provisioning is needed.
+Every claim exists because a machine-checkable artifact already does. Claims are
+catalogued from published proof work by human review; incomplete proof attempts
+are never presented as established claims.
 
-```sh
-npm run deploy
-```
-
-This runs the full acceptance gate (`npm run verify`) and then packages and
-uploads the passed build as one Worker release (the validated bundle ships
-inside the same release). If verification fails, nothing is uploaded.
-Automated deployment from CI additionally requires the repository secret
-`CLOUDFLARE_API_TOKEN` and runs on every push to `main` (and manually from the
-`Deploy` workflow).
-
-## Read the map
-
-- **Beacon Spec**: mainnet Fulu / Osaka (Fusaka, BPO2), checked
-  2026-11-06; inherited specification definitions remain explicit.
-- **Lean Spec**: an independent, pinned Lstar experiment, not a promised
-  deployment. Unsupported future execution/compiler connections are omitted.
-- Select a node, then a claim in the adjacent panel. Expand state transition for
-  checkpoint detail. Use Tab/Enter, the component selector and viewport controls
-  for keyboard navigation; arrow keys switch tabs.
-- Dependency arrows point from provider to consumer. Dashed lines are interface
-  interactions; dotted lines are generated code. Relationships have source links.
-- “0 claims” is not “unsafe.” Counts deduplicate claims within a view.
-  Source availability, correspondence review and replay are separate observations.
+1. **Discovery.** Curators identify public formal-verification artifacts (theorem
+   proving, SMT-based verification or model checking) whose subjects are in scope.
+   Ordinary tests, fuzzing runs, marketing claims and a paper's claim of
+   verification alone do not qualify; a formal specification or executable model
+   is not a proof merely because it exists.
+2. **Source pinning.** The inspected source is pinned to its exact Git commit or
+   SHA-256 digest, and the record points at the precise theorem or verification
+   location — never at a whole repository or a moving branch.
+3. **Claim recording.** For the inspected location the curator records one claim:
+   its subject artifact(s), a statement of the established property, assumptions
+   and a dependency/axiom audit (recording "unknown" where applicable), and
+   limitations. Refinement or equivalence relations between artifacts are part of
+   the claim when a separate, machine-checkable record supports them.
+4. **Map association.** The claim is manually bound to component instances in the
+   architecture views, as a direct subject or a related model. Association is
+   recorded correspondence, not something derived from the graph.
+5. **Dated observations.** Source availability, correspondence review and replay
+   availability are recorded separately as check records with dates and results.
+   Atlas-side replay is an observation about an entry, not a prerequisite the
+   atlas fulfils for every entry.
+6. **Packaging.** The bundle is validated at build time for schema,
+   cross-references, source identities and the canonical revision; an invalid
+   bundle cannot ship, even when the build is invoked directly.
 
 The initial bundle contains three individually scoped claims from gasper-lean4,
-formal-leanSpec and ArkLib. [Research notes](docs/research.md) record intake
-evidence and candidate decisions. None has been replayed by the atlas.
+formal-leanSpec and ArkLib.
+[Research notes](docs/research.md) record intake evidence and candidate
+decisions; none has been replayed by the atlas.
 
-## Data and API
+## Updating claims
 
-`data/atlas.json` is packaged with the Worker. There is no editing API or mutable
-runtime store. The build rejects invalid bundles even when `vite build` is called
-directly. Source text is escaped and URLs must be pinned, credential-free HTTPS.
+GitHub Actions watches the catalogued proof repositories' `main` branches hourly.
+A changed head produces a pinned, unpublished candidate in a draft PR; open PRs
+and human edits are never overwritten. A curator inspects and edits the candidate,
+records the review, commits the resulting bundle and receipt, and merges after
+review; pending updates fail the package gate. The exact commands, permissions
+and recovery steps are in [docs/proof-updates.md](docs/proof-updates.md).
 
-`GET /api/atlas` returns the complete bundle and a validated selection envelope.
-Optional selectors are `view`, `component` (a view-local instance ID), and
-`claim`. A component or claim requires a view; selections must be associated
-in that view. For example:
+## Documentation
 
-```text
-/api/atlas?view=beacon&component=b-state&claim=ffg-structural-safety
-```
-
-Only GET/HEAD are accepted. Duplicate/unknown/malformed selectors return 400,
-unknown or inapplicable records 404, queries over 2,048 encoded bytes 414, and
-other methods 405 with `Allow: GET, HEAD`. Bodies are rejected without parsing.
-Responses are same-origin only; evidence links are ordinary external navigation.
-
-## Upstream proof updates
-
-GitHub Actions checks the three catalogued proof repositories' `main` branches
-hourly and can be run manually. A changed head produces a pinned, unpublished
-candidate in a draft PR. Open PRs and human edits are never overwritten.
-
-A curator inspects and edits the candidate, records the review with
-`npm run proofs:accept`, commits the resulting bundle and receipt, then obtains
-review and merges. Old checks are not inherited by new commits. Pending updates
-fail the package gate. See [the review procedure](docs/proof-updates.md) for exact
-commands, permissions and recovery steps. The schedule starts after the workflow
-is merged into the default branch; merging data does not deploy a site.
-
-See [implementation notes](docs/implementation.md) for module boundaries,
-data invariants, local-runtime caveats and the acceptance matrix. Accounts,
-general submissions, new-claim discovery, external proof replay, production
-deployment and release operations remain outside this implementation.
+- [docs/design.md](docs/design.md) — approved scope, architecture views, evidence
+  boundaries, data model and presentation contract.
+- [docs/research.md](docs/research.md) — source research, intake evidence and
+  candidate decisions.
+- [docs/proof-updates.md](docs/proof-updates.md) — upstream update review
+  procedure.
+- [docs/implementation.md](docs/implementation.md) — module boundaries, data
+  invariants, local setup and verification commands, and the acceptance matrix.

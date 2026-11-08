@@ -1,6 +1,6 @@
 ---
 title: Ethereum Proof Atlas Design
-last_updated: 2026-11-08
+last_updated: 2026-11-09
 tags:
   - architecture
   - formal-verification
@@ -13,7 +13,7 @@ tags:
 
 This document records the agreed product and technical design. The local
 implementation now follows this contract; actual project commands and verification
-procedures are documented in the repository README and implementation notes.
+procedures are documented in the implementation notes.
 
 The atlas helps developers and auditors determine **what has been proved, about
 which subject, under which assumptions, and with which limitations**. It overlays
@@ -518,8 +518,9 @@ Use synthetic records only as test fixtures, never as apparent public proof
 entries. Testing the atlas application is distinct from replaying the external
 proof corpus.
 
-The repository README documents the implemented test, build, development and
-production-like local preview commands. `npm run verify` runs the acceptance gate.
+The implementation notes document the implemented setup, test, build, development
+and production-like local preview commands. `npm run verify` runs the acceptance
+gate.
 
 ## Deferred decisions and remaining research
 
