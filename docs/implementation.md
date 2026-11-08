@@ -200,9 +200,10 @@ The same day, the interface stopped displaying commit hashes entirely: the
 snapshot bar carries the fork only, subject identities render title and kind,
 source identity lines dropped the revision chip and artifact version line,
 the footer presents the dataset schema version as one parallel labelled item
-instead of a stacked digest line, and `src/ui/links.ts` (the revision-to-link
-helper) was deleted; pinned commits survive only inside the href targets of
-location links. The mode toggle now leads with Index. Local acceptance on
+instead of a stacked digest line, and the "Discovery links, not pinned
+evidence" qualifier chip was dropped from the footer; `src/ui/links.ts` (the
+revision-to-link helper) was deleted; pinned commits survive only inside the
+href targets of location links. The mode toggle now leads with Index. Local acceptance on
 2026-11-08 with the same checkout: 172 unit/component/package-gate cases and
 13 workerd browser cases passed, including hash-absence assertions over the
 rendered page and details panel, a hash-free sources fixture (sha256 artifact
