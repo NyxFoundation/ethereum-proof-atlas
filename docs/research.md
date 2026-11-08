@@ -167,6 +167,52 @@ bodies is not a complete transitive dependency/axiom audit. The dataset keeps
 that audit **unknown**, and every replay state **not performed**. The application
 does not run a proof assistant, CI job or third-party artifact.
 
+### EthLib SSZ claim intake (2026-11-08)
+
+A claim-oriented re-inspection of the already-catalogued `ethlib` artifact
+(`6b87b0d4951766864af432455c44344fd12b5cdc`, the revision the ssz-specs Lean
+build pins) enumerated the complete proof tree at that revision. The
+`EthLib/Consensus/Proofs/Ssz/` forest contains 651 `theorem` declarations across
+the Codec, Merkle, Type and Flat module families; a word-boundary scan found no
+`sorry` declarations. Raw source GETs at this date returned the recorded
+theorems' modules (HTTP 200): `Codec/Canonicality.lean` (4,906 bytes) and
+`Codec/ProofCorrectness.lean` (4,245 bytes), and two dated availability
+observations back the new `ethlib-proof` locations.
+
+Two claims were published from this inspection:
+
+- **SSZ canonical codec** (`ssz-canonical-codec`):
+  `Codec.Canonicality.serialize_of_deserialize` — every accepted encoding of a
+  well-formed declaration re-encodes to its own input. Bound direct-subject to
+  the `b-ssz` and `l-ssz` instances through the artifact's presence in their
+  versioned subject lists (`version-match`); no refinement to the Python codec
+  is claimed.
+- **SSZ branch correctness** (`ssz-branch-rebuilds-root`):
+  `Codec.ProofCorrectness.buildProof_rebuilds_value_root` — a constructed
+  branch for a readable gindex rebuilds the value's hash-tree root. Same
+  direct-subject binding. The `combine` parameter stays abstract, so the
+  result is structural and no hash-security property is recorded.
+
+Two corrections and one boundary from the same inspection:
+
+- The claim-oriented survey's description of EthLib covering a Merkle
+  Patricia trie (root, Merkle proofs, hex-prefix encoding) does not match this
+  revision: no Patricia/trie module exists at `6b87b0d…`, and "hex-prefix"
+  appears only as a JSON decoding error code. The execution view's
+  `State / Patricia trie` component gained no subject or claim from this
+  intake.
+- The library also carries `Proofs/` forests for BLS (group order, subgroup
+  validity, hash-to-curve validity, pairing, compression), KZG (Barycentric,
+  FFT, FK20, cells, recovery), XMSS (Correctness, Sign, Verify, KnownAnswer),
+  Keccak/SHA-256 specification equivalence, the Modexp precompile and a
+  networking Varint. None of that material was inspected for claim admission
+  in this intake; it remains uncatalogued beyond the artifact-level list
+  above, and the `ethlib` formal-model artifact's recorded locations are
+  unchanged.
+- Availability observations are GET observations, not replays; the
+  `datasetRevision` was recomputed through the packaging validator and the
+  two fixture-coupled component tests followed the recorded data.
+
 ## Other initial candidates
 
 All five approved candidates were investigated; inclusion in the research
