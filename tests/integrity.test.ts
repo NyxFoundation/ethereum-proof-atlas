@@ -48,8 +48,9 @@ describe('additional integrity boundaries', () => {
   it('should allow explicit cross-references and pin replay results to exact configurations', async () => {
     const value = await fixture(b => {
       b.checkRecords = b.checkRecords.filter((c: any) => c.kind !== 'manual-comparison');
-      for (const v of b.architectureViews) for (const binding of v.claimBindings)
-        binding.basis = {kind: 'source-cross-reference',explanation: 'Synthetic explicit cross-reference fixture.'};
+      for (const v of b.architectureViews)
+        for (const binding of v.claimBindings.filter((binding: any) => binding.applicabilityKind !== 'direct-subject'))
+          binding.basis = {kind: 'source-cross-reference',explanation: 'Synthetic explicit cross-reference fixture.'};
       const evidence = b.evidence[0];
       b.checkRecords.push({id: 'fixture-replay',kind: 'replay',checkedAt: '2026-11-06T00:00:00Z',
         artifactId: evidence.artifactId,evidenceId: evidence.id,subjectArtifactIds: b.claims[0].subjectArtifactIds,

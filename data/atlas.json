@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "30342168ce648faa9f7326970a450f6ffaec816775f2a1e927e4148f3b152493",
+  "datasetRevision": "31b57959840b7814dd8a7c818e36b595243b2cb5972c3446c21c8bb70527c0a3",
   "components": [
     {
       "id": "fork-choice",
@@ -547,6 +547,29 @@
           "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus.lean"
         }
       ]
+    },
+    {
+      "id": "ethlib-proof",
+      "title": "EthLib SSZ codec and branch proofs",
+      "kind": "proof",
+      "repository": "https://github.com/ethereum/EthLib",
+      "revisionKind": "git-commit",
+      "revision": "6b87b0d4951766864af432455c44344fd12b5cdc",
+      "version": "Lean 4.35.0; no atlas replay",
+      "locations": [
+        {
+          "id": "canonicality",
+          "path": "EthLib/Consensus/Proofs/Ssz/Codec/Canonicality.lean",
+          "label": "Codec.Canonicality.serialize_of_deserialize",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus/Proofs/Ssz/Codec/Canonicality.lean#L10-L83"
+        },
+        {
+          "id": "proof-correctness",
+          "path": "EthLib/Consensus/Proofs/Ssz/Codec/ProofCorrectness.lean",
+          "label": "Codec.ProofCorrectness.buildProof_rebuilds_value_root",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus/Proofs/Ssz/Codec/ProofCorrectness.lean#L11-L21"
+        }
+      ]
     }
   ],
   "claims": [
@@ -627,6 +650,60 @@
         "Generic single-point coefficient-form opening, not Ethereum's batched cell verifier, blob encoding, BLS12-381 implementation or a deployed prover."
       ],
       "relation": null
+    },
+    {
+      "id": "ssz-canonical-codec",
+      "title": "An accepted SSZ decode re-encodes to its own input",
+      "statement": "For every well-formed type declaration of the Lean SSZ model (booleans, unsigned integers, byte vectors, byte lists, bit vectors, bit lists, progressive bit lists, vectors, lists, progressive lists, fixed-height and progressive containers, and compatible unions), a successful decode re-encodes to its own input: serialize_of_deserialize proves serialize shape value = .ok data from deserialize shape data = .ok value and shape.wellFormed = .ok ().",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "The declaration shape is well formed (shape.wellFormed = .ok ()) and decoding succeeded for the input bytes.",
+          "Encoding and decoding are the model functions of EthLib.Consensus.Ssz; canonicality is stated inside that model and is not checked against external conformance vectors."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Transitive dependencies and axioms have not been completely audited by the atlas. The proof assistant, libraries and recorded model remain part of the trust boundary."
+        ]
+      },
+      "limitations": [
+        "Model-scoped: no correspondence theorem to the Python consensus-specs codec, the ssz-specs reference implementation or production client code; the recorded relationship is a manual comparison.",
+        "Covers decoded acceptance; it does not analyse network framing, persistence, partial reads or any client runtime beyond the pure byte-level model.",
+        "The atlas review compared the recorded top-level theorem and its local proof body; Lean has not been replayed and transitive dependencies and axioms are not audited. The converse directions (decoding a re-encoded value, and total rejection of non-canonical inputs) are stated by the same module family but are not separately evidenced by this intake."
+      ],
+      "relation": null
+    },
+    {
+      "id": "ssz-branch-rebuilds-root",
+      "title": "A constructed SSZ branch rebuilds the value's hash-tree root",
+      "statement": "For a successfully rooted value of the Lean SSZ model (hashTreeRoot shape value = .ok root), branch construction for any readable generalised index returns a branch that rebuilds the root: buildProof_rebuilds_value_root proves calculateMerkleRootUnchecked leaf branch index = .ok root from nodeRoot shape value index = .ok leaf and getBranchIndices index = .ok indices.",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "hashTreeRoot succeeds for the value and the target index names a readable node; branch indices derive via getBranchIndices.",
+          "The Merkle tree is the model's per-index node function with a MerkleTree predicate; the combine operation (the underlying hash) is an opaque parameter of the model."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Transitive dependencies and axioms have not been completely audited by the atlas. The proof assistant, libraries and recorded model remain part of the trust boundary."
+        ]
+      },
+      "limitations": [
+        "Model-scoped consensus Merkleization with generalised indexes; not an analysis of gossipsub delivery, light-client sync or the execution-layer Patricia trie.",
+        "No collision-resistance or hash-security statement: the combine parameter is abstract, so the result is structural.",
+        "The atlas review compared the recorded top-level theorem and its local proof body; Lean has not been replayed and transitive dependencies and axioms are not audited."
+      ],
+      "relation": null
     }
   ],
   "evidence": [
@@ -673,6 +750,36 @@
           "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
         ],
         "configuration": "Pinned Verified-zkEVM/ArkLib@31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; kzg-theorem; no Atlas replay."
+      }
+    },
+    {
+      "id": "ssz-canonicality-theorem",
+      "claimId": "ssz-canonical-codec",
+      "artifactId": "ethlib-proof",
+      "locationId": "canonicality",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universally quantified Lean theorem over the model's declaration universe; not a bounded state exploration.",
+        "abstractions": [
+          "Pure in-memory byte encoding and decoding; canonicality is stated inside the Lean model alone."
+        ],
+        "configuration": "Lean 4.35.0 (lean-toolchain); Mathlib @ v4.35.0 lakefile; git 6b87b0d4951766864af432455c44344fd12b5cdc; serialize_of_deserialize only."
+      }
+    },
+    {
+      "id": "ssz-branch-correctness-theorem",
+      "claimId": "ssz-branch-rebuilds-root",
+      "artifactId": "ethlib-proof",
+      "locationId": "proof-correctness",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal theorem with explicit hypotheses about constructed branches; no bounded state exploration.",
+        "abstractions": [
+          "Per-index node function with an opaque combine parameter bound by a MerkleTree predicate."
+        ],
+        "configuration": "Lean 4.35.0 (lean-toolchain); Mathlib @ v4.35.0 lakefile; git 6b87b0d4951766864af432455c44344fd12b5cdc; buildProof_rebuilds_value_root only."
       }
     }
   ],
@@ -974,6 +1081,54 @@
         }
       ],
       "result": "related"
+    },
+    {
+      "id": "availability-ethlib-proof-canonicality",
+      "checkedAt": "2026-11-08T17:17:12Z",
+      "details": "Raw GitHub source GET against the lakefile-pinned revision returned the 4,906-byte Canonicality module on this date. Intake observation, not a replay or promise of present reachability.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "canonicality"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-ethlib-proof-proof-correctness",
+      "checkedAt": "2026-11-08T17:17:12Z",
+      "details": "Raw GitHub source GET against the lakefile-pinned revision returned the 4,245-byte ProofCorrectness module on this date. Intake observation, not a replay or promise of present reachability.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "proof-correctness"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "review-ssz-canonicality-theorem",
+      "checkedAt": "2026-11-08T17:17:50Z",
+      "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed.",
+      "kind": "source-review",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ssz-canonicality-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; pinned ethereum/EthLib lakefile; serialize_of_deserialize only.",
+      "result": "reviewed"
+    },
+    {
+      "id": "review-ssz-branch-correctness-theorem",
+      "checkedAt": "2026-11-08T17:17:50Z",
+      "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed.",
+      "kind": "source-review",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ssz-branch-correctness-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; pinned ethereum/EthLib lakefile; buildProof_rebuilds_value_root only.",
+      "result": "reviewed"
     }
   ],
   "architectureViews": [
@@ -1239,6 +1394,52 @@
             "kind": "manual-comparison",
             "checkId": "update-arklib-31ff7ddf9bc2-beacon-b-kzg"
           }
+        },
+        {
+          "componentInstanceId": "b-ssz",
+          "claimId": "ssz-canonical-codec",
+          "applicabilityKind": "direct-subject",
+          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
+          "sources": [
+            {
+              "artifactId": "ethlib-proof",
+              "locationId": "canonicality"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-reference"
+            }
+          ],
+          "basis": {
+            "kind": "version-match"
+          }
+        },
+        {
+          "componentInstanceId": "b-ssz",
+          "claimId": "ssz-branch-rebuilds-root",
+          "applicabilityKind": "direct-subject",
+          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
+          "sources": [
+            {
+              "artifactId": "ethlib-proof",
+              "locationId": "proof-correctness"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-container"
+            }
+          ],
+          "basis": {
+            "kind": "version-match"
+          }
         }
       ]
     },
@@ -1478,6 +1679,52 @@
           "basis": {
             "kind": "manual-comparison",
             "checkId": "compare-lstar-detail"
+          }
+        },
+        {
+          "componentInstanceId": "l-ssz",
+          "claimId": "ssz-canonical-codec",
+          "applicabilityKind": "direct-subject",
+          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
+          "sources": [
+            {
+              "artifactId": "ethlib-proof",
+              "locationId": "canonicality"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-reference"
+            }
+          ],
+          "basis": {
+            "kind": "version-match"
+          }
+        },
+        {
+          "componentInstanceId": "l-ssz",
+          "claimId": "ssz-branch-rebuilds-root",
+          "applicabilityKind": "direct-subject",
+          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
+          "sources": [
+            {
+              "artifactId": "ethlib-proof",
+              "locationId": "proof-correctness"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-container"
+            }
+          ],
+          "basis": {
+            "kind": "version-match"
           }
         }
       ]
