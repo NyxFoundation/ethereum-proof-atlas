@@ -244,8 +244,10 @@ Referrer-Policy and X-Frame-Options headers present, the HTTP selection checks
 intact (unknown view and component selections rejected with 404, non-GET
 requests rejected with 405 and `Allow: GET, HEAD`), a browser session that
 rendered tabs, map and index with zero console errors, and a returned dataset
-revision equal to the packaged bundle digest. Deploy stays gated on a passing
-`npm run verify` and is owner-run; the manual `Deploy` workflow additionally
-supports CI publishing once the `CLOUDFLARE_API_TOKEN` and
-`CLOUDFLARE_ACCOUNT_ID` secrets exist. Custom production domain, credential
-rotation, traffic limits, abuse controls and monitoring remain deferred.
+revision equal to the packaged bundle digest. CI publishing stays gated on a
+passing `npm run deploy` gate inside the `Deploy` workflow and runs on every
+push to `main` as well as on demand; `CLOUDFLARE_API_TOKEN` is required, and
+the account id falls back to the published literal when `CLOUDFLARE_ACCOUNT_ID`
+is unset. Custom production domain, credential
+rotation, traffic limits, abuse controls and monitoring remain
+deferred.
