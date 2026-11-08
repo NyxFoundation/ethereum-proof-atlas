@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "4cc554894fecc47d467156b23dcbd531ab712f0208aea01f43a555cbf450413a",
+  "datasetRevision": "30342168ce648faa9f7326970a450f6ffaec816775f2a1e927e4148f3b152493",
   "components": [
     {
       "id": "fork-choice",
@@ -405,14 +405,14 @@
       "kind": "formal-model",
       "repository": "https://github.com/Verified-zkEVM/ArkLib",
       "revisionKind": "git-commit",
-      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
-      "version": "Commit e40faa7316afa275326dbe053105776bd2cb1313; no Atlas proof replay.",
+      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
+      "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
       "locations": [
         {
           "id": "definitions",
           "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
           "label": "KZG commit, generateOpening and verifyOpening",
-          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e40faa7316afa275326dbe053105776bd2cb1313/ArkLib/Commitments/Functional/KZG/Basic.lean"
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Basic.lean"
         }
       ]
     },
@@ -422,14 +422,14 @@
       "kind": "proof",
       "repository": "https://github.com/Verified-zkEVM/ArkLib",
       "revisionKind": "git-commit",
-      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
-      "version": "Commit e40faa7316afa275326dbe053105776bd2cb1313; no Atlas proof replay.",
+      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
+      "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
       "locations": [
         {
           "id": "theorem",
           "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
           "label": "KZG.correctness",
-          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e40faa7316afa275326dbe053105776bd2cb1313/ArkLib/Commitments/Functional/KZG/Correctness.lean"
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Correctness.lean"
         }
       ]
     },
@@ -612,7 +612,7 @@
       "assumptions": {
         "status": "unknown",
         "details": [
-          "Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; Nat.card G1 = p.",
+          "Prime p; prime-order groups G1, G2 and Gt with the module and equality structures in the theorem; the group order (Nat.card G1 = p) is carried by the PrimeOrderWith class instances, not an explicit theorem hypothesis after upstream #1468.",
           "A bilinear pairing, generators, degree parameter n, SRS secret a, coefficient vector and evaluation point z, under the recorded Lean definitions."
         ]
       },
@@ -672,7 +672,7 @@
         "abstractions": [
           "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
         ],
-        "configuration": "Pinned Verified-zkEVM/ArkLib@e40faa7316afa275326dbe053105776bd2cb1313; kzg-theorem; no Atlas replay."
+        "configuration": "Pinned Verified-zkEVM/ArkLib@31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; kzg-theorem; no Atlas replay."
       }
     }
   ],
@@ -932,9 +932,9 @@
       "result": "available"
     },
     {
-      "id": "update-ark-proof-e40faa7316af-available",
-      "checkedAt": "2026-11-08T13:15:53.439Z",
-      "details": "Pinned source GETs succeeded. SHA-256: theorem=bceef241f8967382f08deba7bb2df6292a89c5a3f88cfc9a1fd60f41521014c4",
+      "id": "update-ark-proof-31ff7ddf9bc2-available",
+      "checkedAt": "2026-11-08T17:48:07.305Z",
+      "details": "Pinned source GETs succeeded. SHA-256: theorem=3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195",
       "kind": "availability",
       "artifactId": "ark-proof",
       "locationIds": [
@@ -943,22 +943,22 @@
       "result": "available"
     },
     {
-      "id": "update-kzg-theorem-e40faa7316af-review",
-      "checkedAt": "2026-11-08T13:15:53.439Z",
-      "details": "Reviewed by adust09. In-session source and applicability review of the recorded proposal: pinned KZG Basic.lean and Correctness.lean are byte-identical across 34613d6 and e40faa7; the five upstream commits touch CodingTheory, documentation, CI and scripts, disjoint from the KZG dependency closure; lean-toolchain, lakefile and lake-manifest are unchanged; upstream check-runs show build success at e40faa7; statement, assumptions, limitations and view applicability need no edits. Attests source inspection only, not proof replay or an axiom audit.",
+      "id": "update-kzg-theorem-31ff7ddf9bc2-review",
+      "checkedAt": "2026-11-08T17:48:07.305Z",
+      "details": "Reviewed by adust09. Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
       "artifactId": "ark-proof",
       "evidenceId": "kzg-theorem",
       "subjectArtifactIds": [
         "ark-model"
       ],
-      "scope": "Source correspondence for kzg-theorem at e40faa7316afa275326dbe053105776bd2cb1313; not proof replay or a transitive axiom audit.",
+      "scope": "Source correspondence for kzg-theorem at 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; not proof replay or a transitive axiom audit.",
       "kind": "source-review",
       "result": "reviewed"
     },
     {
-      "id": "update-arklib-e40faa7316af-beacon-b-kzg",
-      "checkedAt": "2026-11-08T13:15:53.439Z",
-      "details": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.\nReviewed by adust09. In-session source and applicability review of the recorded proposal: pinned KZG Basic.lean and Correctness.lean are byte-identical across 34613d6 and e40faa7; the five upstream commits touch CodingTheory, documentation, CI and scripts, disjoint from the KZG dependency closure; lean-toolchain, lakefile and lake-manifest are unchanged; upstream check-runs show build success at e40faa7; statement, assumptions, limitations and view applicability need no edits. Attests source inspection only, not proof replay or an axiom audit.",
+      "id": "update-arklib-31ff7ddf9bc2-beacon-b-kzg",
+      "checkedAt": "2026-11-08T17:48:07.305Z",
+      "details": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.\nReviewed by adust09. Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
       "kind": "manual-comparison",
       "viewId": "beacon",
       "componentInstanceId": "b-kzg",
@@ -1237,7 +1237,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "update-arklib-e40faa7316af-beacon-b-kzg"
+            "checkId": "update-arklib-31ff7ddf9bc2-beacon-b-kzg"
           }
         }
       ]
