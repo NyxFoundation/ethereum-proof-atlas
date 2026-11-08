@@ -237,9 +237,11 @@ The owner selected Cloudflare Workers hosting on 2026-11-08. `npm run deploy`
 runs the full acceptance gate (`npm run verify`) and then publishes the passed
 build with `wrangler deploy` against the emitted
 `dist/ethereum_proof_atlas/wrangler.json`; no database or other runtime resource
-is provisioned. The first release is
-served at `https://ethereum-proof-atlas.naoto-iwase.workers.dev` (deployed
-2026-11-08, version 8ce6e8ea, published only after the full gate passed). Live checks that day found the production CSP,
+is provisioned. The first owner-run release is
+served at `https://ethereum-proof-atlas.shoukitsuda.workers.dev` (deployed
+2026-11-08, version 8ce6e8ea, published only after the full gate passed;
+the CI deploys recorded later that day published versions `2d800b2e` and
+`f227c808` to the same hostname. Live checks that day found the production CSP,
 Referrer-Policy and X-Frame-Options headers present, the HTTP selection checks
 intact (unknown view and component selections rejected with 404, non-GET
 requests rejected with 405 and `Allow: GET, HEAD`), a browser session that
