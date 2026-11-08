@@ -210,5 +210,23 @@ Live read-only checks on the same date found all three tracked `main` heads equa
 the published revisions; no synthetic update was proposed to GitHub.
 
 The initial implementation was also rendered at desktop and narrow viewport
-sizes and smoke-tested through the Vite development server. Runtime startup,
-source intake and application tests do not constitute production deployment.
+sizes and smoke-tested through the Vite development server.
+
+## Production deployment
+
+The owner selected Cloudflare Workers hosting on 2026-11-08. `npm run deploy`
+runs the full acceptance gate (`npm run verify`) and then publishes the passed
+build with `wrangler deploy` against the emitted
+`dist/ethereum_proof_atlas/wrangler.json`; no database or other runtime resource
+is provisioned. The first release is
+served at `https://ethereum-proof-atlas.naoto-iwase.workers.dev` (deployed
+2026-11-08, version 8ce6e8ea, published only after the full gate passed). Live checks that day found the production CSP,
+Referrer-Policy and X-Frame-Options headers present, the HTTP selection checks
+intact (unknown view and component selections rejected with 404, non-GET
+requests rejected with 405 and `Allow: GET, HEAD`), a browser session that
+rendered tabs, map and index with zero console errors, and a returned dataset
+revision equal to the packaged bundle digest. Deploy stays gated on a passing
+`npm run verify` and is owner-run; the manual `Deploy` workflow additionally
+supports CI publishing once the `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID` secrets exist. Custom production domain, credential
+rotation, traffic limits, abuse controls and monitoring remain deferred.

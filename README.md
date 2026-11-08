@@ -51,6 +51,23 @@ Build before running E2E alone. E2E starts and stops its own local server on por
 4173; leave that port free. Tests use Chromium. Synthetic records exist only in
 tests. These commands test the atlas, **not external proof replay**.
 
+## Deploy
+
+The deploy target is **Cloudflare Workers** (see [docs/design.md](docs/design.md)).
+A Cloudflare login is required once with `npx wrangler login`; no database or other
+resource provisioning is needed.
+
+```sh
+npm run deploy
+```
+
+This runs the full acceptance gate (`npm run verify`) and then packages and
+uploads the passed build as one Worker release (the validated bundle ships
+inside the same release). If verification fails, nothing is uploaded.
+Automated deployment from CI additionally requires the repository secrets
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` and is triggered manually
+from the `Deploy` workflow.
+
 ## Read the map
 
 - **Beacon Spec**: mainnet Fulu / Osaka (Fusaka, BPO2), checked
