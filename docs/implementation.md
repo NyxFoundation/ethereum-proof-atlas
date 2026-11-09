@@ -123,7 +123,7 @@ status as JSON; public errors never include the thrown value.
 | Independent tabs, topology, applicability; no inherited claim/check leakage | Domain selectors, React lifecycle tests, Workers browser journey |
 | Selection, expansion, claim navigation, keyboard tab/viewport controls | React interaction tests and browser keyboard journey |
 | No node dragging, deletion or reconnection | Controlled graph with connect/reconnect disabled; browser geometry invariance |
-| Subject types, revisions, unknown audit, assumptions, limits | Claim panel component tests and source-linked browser journey |
+| Subject types, revisions, unknown audit, assumptions, limits, closed check detail | Claim panel token and disclosure tests and source-linked browser journey |
 | Distinct counts despite multiple supporting artifacts | Domain test adds a second evidence record without increasing counts |
 | Bounded scope/configuration and replay result semantics | Synthetic bounded model-checking / timeout component fixture |
 | Empty components are neutral | Component tests and XMSS browser journey |
@@ -239,8 +239,7 @@ full-width rows without gaps.
 The same day, the interface stopped displaying commit hashes entirely: the
 snapshot bar carries the fork only, subject identities render title and kind,
 source identity lines dropped the revision chip and artifact version line,
-the footer presents the dataset schema version as one parallel labelled item
-instead of a stacked digest line, and the "Discovery links, not pinned
+the footer displays neither a dataset digest nor a schema version, and the "Discovery links, not pinned
 evidence" qualifier chip was dropped from the footer; `src/ui/links.ts` (the
 revision-to-link helper) was deleted; pinned commits survive only inside the
 href targets of location links. The mode toggle now leads with Index. Local acceptance on

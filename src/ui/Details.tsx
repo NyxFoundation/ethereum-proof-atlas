@@ -1,22 +1,52 @@
 import type { AtlasBundle, ArchitectureView, Claim, ClaimBinding } from '../domain/schema';
-import { claimsFor } from '../domain/selectors';
+import { availabilityFor, claimsFor } from '../domain/selectors';
 import { Sources } from './Sources';
 import { Evidence } from './Evidence';
+import { availabilityKind, statusCopy, StatusToken } from './status';
 
 export function SubjectTypes({ bundle, claim }: { bundle: AtlasBundle; claim: Claim }) {
   const labels = { 'formal-model': 'Formal model', implementation: 'Implementation', specification: 'Specification', proof: 'Proof artifact' };
   return <span>{[...new Set(claim.subjectArtifactIds.map(id => labels[bundle.artifacts.find(a => a.id === id)!.kind]))].join(' + ')}</span>;
 }
 function Knowledge({ title, value }: { title: string; value: Claim['assumptions'] }) {
-  return <section><h4>{title} {value.status === 'unknown' && <span className="tag">Unknown / not fully reviewed</span>}</h4>
-    <ul>{value.details.map(detail => <li key={detail}>{detail}</li>)}</ul></section>;
+  return <section><h4>{title} {value.status === 'unknown' && <StatusToken kind="unknown" />}</h4>
+    <ul>{value.details.map(detail => <li key={detail}>{detail}</li>)}</ul>
+    {value.status === 'unknown' && <details><summary>Assumption status</summary><p>{statusCopy.unknown.phrase}</p></details>}
+  </section>;
+}
+function DependencyAudit({ value }: { value: Claim['dependencies'] }) {
+  return <div className="disclosure-head">{value.status === 'unknown' && <StatusToken kind="unknown" />}
+    <details><summary>Dependency audit</summary>
+      {value.status === 'unknown' && <p>{statusCopy.unknown.phrase}</p>}
+      <ul>{value.details.map(detail => <li key={detail}>{detail}</li>)}</ul></details></div>;
+}
+function ApplicabilityBasis({ bundle, binding }: { bundle: AtlasBundle; binding: ClaimBinding }) {
+  const basis = binding.basis;
+  const comparison = basis.kind === 'manual-comparison'
+    ? bundle.checkRecords.find(record => record.id === basis.checkId && record.kind === 'manual-comparison') : undefined;
+  return <details><summary>Applicability basis</summary>
+    <p>{statusCopy[binding.applicabilityKind === 'related-model' ? 'related' : 'direct'].phrase}</p>
+    <p>Basis: {basis.kind}</p>
+    {comparison && <p><time dateTime={comparison.checkedAt}>{comparison.checkedAt.slice(0, 10)}</time></p>}
+    {comparison && <p>{comparison.details}</p>}
+    {binding.sources.map((ref, index) => {
+      const availability = availabilityFor(bundle, ref.artifactId, ref.locationId);
+      const kind = availabilityKind(bundle, ref.artifactId, ref.locationId);
+      return <p key={`${ref.artifactId}-${index}`}>{statusCopy[kind].phrase}
+        {availability && <> · <time dateTime={availability.checkedAt}>{availability.checkedAt.slice(0, 10)}</time> {availability.details}</>}</p>;
+    })}</details>;
+}
+function Relation({ bundle, claim }: { bundle: AtlasBundle; claim: Claim }) {
+  if (!claim.relation) return null;
+  const { kind, fromArtifactId, toArtifactId, direction } = claim.relation;
+  const title = (id: string) => bundle.artifacts.find(artifact => artifact.id === id)!.title;
+  return <section><h4>{kind} direction</h4><p>{title(fromArtifactId)} → {title(toArtifactId)}: {direction}</p></section>;
 }
 export function ClaimDetails({ bundle, claim, binding }: { bundle: AtlasBundle; claim: Claim; binding: ClaimBinding }) {
-  const basis = binding.basis;
-  const comparison = basis.kind === 'manual-comparison' ? bundle.checkRecords.find(c => c.id === basis.checkId) : undefined;
   return <article aria-label="Claim details">
     <h3>{claim.title}</h3>
-    <p className="tag"><SubjectTypes bundle={bundle} claim={claim} /> · {binding.applicabilityKind === 'related-model' ? 'Related model' : 'Direct subject'}</p>
+    <p className="token-row"><SubjectTypes bundle={bundle} claim={claim} />
+      <StatusToken kind={binding.applicabilityKind === 'related-model' ? 'related' : 'direct'} /></p>
     <h4>Property</h4><p>{claim.statement}</p>
     <h4>Subject identities</h4>
     {claim.subjectArtifactIds.map(id => {
@@ -24,16 +54,15 @@ export function ClaimDetails({ bundle, claim, binding }: { bundle: AtlasBundle; 
       return <div key={id}><p>{artifact.title} · {artifact.kind}</p></div>;
     })}
     <h4>Applicability to this view</h4><p>{binding.explanation}</p>
-    <p>Basis: {binding.basis.kind}{comparison && <> · {comparison.checkedAt.slice(0, 10)}</>}</p>
-    {comparison && <p>{comparison.details}</p>}
-    <Sources bundle={bundle} sources={binding.sources} />
     <Knowledge title="Assumptions" value={claim.assumptions} />
-    <Knowledge title="Dependency / axiom audit" value={claim.dependencies} />
     <h4>Limitations</h4><ul>{claim.limitations.map(limit => <li key={limit}>{limit}</li>)}</ul>
-    {claim.relation && <section><h4>{claim.relation.kind} direction</h4>
-      <p>{claim.relation.fromArtifactId} → {claim.relation.toArtifactId}: {claim.relation.direction}</p></section>}
+    <Relation bundle={bundle} claim={claim} />
+    <Sources bundle={bundle} sources={binding.sources} showAvailability={false} tokens />
+    <DependencyAudit value={claim.dependencies} />
+    <ApplicabilityBasis bundle={bundle} binding={binding} />
     <h4>Evidence</h4>
-    {bundle.evidence.filter(e => e.claimId === claim.id).map(e => <Evidence key={e.id} bundle={bundle} evidence={e} />)}
+    {bundle.evidence.filter(evidence => evidence.claimId === claim.id).map(evidence =>
+      <Evidence key={evidence.id} bundle={bundle} evidence={evidence} />)}
   </article>;
 }
 type Props = { bundle: AtlasBundle; view: ArchitectureView; instanceId: string | null; claimId: string | null;

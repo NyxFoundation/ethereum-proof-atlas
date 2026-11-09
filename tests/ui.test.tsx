@@ -54,14 +54,60 @@ describe('evidence presentation', () => {
   it('should keep subjects, assumptions, limits and checks distinct when a claim opens', () => {
     render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
     expect(screen.getByText('Formal model')).toBeTruthy();
-    expect(screen.getByText('Not performed')).toBeTruthy();
-    expect(screen.getByText(/Unknown \/ not fully reviewed/)).toBeTruthy();
-    expect(screen.getByText(/Available when last checked/)).toBeTruthy();
+    expect(screen.getAllByText('Not performed').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Unknown \/ not fully reviewed/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Available when last checked/).length).toBeGreaterThan(0);
     expect(screen.getByText(/Structural result only/)).toBeTruthy();
     for (const link of screen.getAllByRole('link')) {
       expect(link.getAttribute('href')).toMatch(/^https:\/\//);
       expect(link.getAttribute('rel')).toBe('noopener noreferrer');
     }
+  });
+  it('should open a claim on short status tokens and keep record detail closed', () => {
+    render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
+    const article = screen.getByRole('article', {name: 'Claim details'});
+    const related = within(article).getByRole('button', {name: 'Related'});
+    const describedBy = related.getAttribute('aria-describedby');
+    expect(describedBy).toEqual(expect.any(String));
+    const phrase = document.getElementById(describedBy ?? '');
+    expect(phrase?.textContent).toBe('Related model');
+    expect(phrase?.getAttribute('role')).toBe('tooltip');
+    for (const token of ['Theorem', 'Unbounded', 'Reviewed', 'No replay', 'Located', 'Unknown'])
+      expect(within(article).getByRole('button', {name: token})).toBeTruthy();
+    expect(within(article).queryByRole('heading', {name: /direction/})).toBeNull();
+    const audit = within(article).getByText('Dependency audit').closest('details');
+    expect(audit?.hasAttribute('open')).toBe(false);
+    expect(audit?.textContent).toContain('Unknown / not fully reviewed');
+    expect(audit?.textContent).toContain('Transitive dependencies and axioms');
+    const basis = within(article).getByText('Applicability basis').closest('details');
+    expect(basis?.hasAttribute('open')).toBe(false);
+    expect(basis?.textContent).toContain('Related model');
+    expect(basis?.textContent).toContain('2026-11-06');
+    expect(basis?.textContent).toContain('source-level comparison only');
+    const record = within(article).getByText('Evidence record').closest('details');
+    expect(record?.hasAttribute('open')).toBe(false);
+    expect(record?.textContent).toContain('Unbounded theorem statement');
+    expect(record?.textContent).toContain('Not performed');
+    expect(record?.textContent).toContain('Available when last checked');
+    expect(record?.textContent).toContain('Lean 4.31.0');
+    expect(record?.textContent).toContain('not proof replay');
+    expect(within(article).getByText(/Universally quantified Lean theorem/)).toBeTruthy();
+  });
+  it('should keep an unknown assumption phrase closed and date a checked binding source', () => {
+    const source = binding.sources[0];
+    const fixture = {...bundle, checkRecords: [...bundle.checkRecords, {
+      id: 'binding-availability', kind: 'availability' as const, artifactId: source.artifactId,
+      locationIds: [source.locationId], result: 'available' as const, checkedAt: '2026-11-07T00:00:00Z',
+      details: 'Binding source was located.',
+    }]};
+    render(<ClaimDetails bundle={fixture} claim={{...claim, assumptions: {...claim.assumptions, status: 'unknown'}}} binding={binding} />);
+    const status = screen.getByText('Assumption status').closest('details');
+    expect(status?.hasAttribute('open')).toBe(false);
+    expect(status?.textContent).toContain('Unknown / not fully reviewed');
+    const basis = screen.getByText('Applicability basis').closest('details');
+    expect(basis?.hasAttribute('open')).toBe(false);
+    expect(basis?.textContent).toContain('2026-11-07');
+    expect(basis?.textContent).toContain('Binding source was located.');
   });
   it('should distinguish bounded exploration and unsuccessful replay from unbounded theorems', () => {
     const evidence = { ...bundle.evidence[0], method: 'model-checking' as const, scope: {
@@ -74,19 +120,46 @@ describe('evidence presentation', () => {
       result: 'timeout' as const, checkedAt: '2026-11-06T00:00:00Z', details: 'Time limit reached.',
     }] };
     render(<Evidence bundle={fixture} evidence={evidence} />);
-    expect(screen.getByText('Bounded result')).toBeTruthy();
-    expect(screen.getByText('At most 4 validators, 8 steps.')).toBeTruthy();
-    expect(screen.getByText('Not checked')).toBeTruthy();
-    expect(screen.getByText('Not reviewed')).toBeTruthy();
-    expect(screen.getByText(/Attempt result: timeout/)).toBeTruthy();
-    expect(screen.getByText(/does not establish that the property is false/)).toBeTruthy();
+    const record = screen.getByText('Evidence record').closest('details');
+    expect(record?.hasAttribute('open')).toBe(false);
+    expect(screen.getByRole('button', {name: 'Bounded'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Checking'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Timeout'})).toBeTruthy();
+    expect(record?.textContent).toContain('Bounded result');
+    expect(record?.textContent).toContain('At most 4 validators, 8 steps.');
+    expect(record?.textContent).toContain('Not checked');
+    expect(record?.textContent).toContain('Not reviewed');
+    expect(record?.textContent).toContain('Replay timeout');
+    expect(record?.textContent).toContain('does not establish that the property is false');
     expect(screen.queryByText('Unbounded theorem statement')).toBeNull();
+    expect(screen.queryByText(/Attempt result/)).toBeNull();
+  });
+  it('should name passed, failed and error replays without treating them as a false property', () => {
+    const evidence = bundle.evidence[0];
+    for (const [result, token, phrase] of [
+      ['passed', 'Replayed', 'Replay passed'],
+      ['failed', 'Replay failed', 'Replay failed'],
+      ['error', 'Error', 'Replay error'],
+    ] as const) {
+      cleanup();
+      render(<Evidence bundle={{...bundle, checkRecords: [{
+        id: 'replay', kind: 'replay', evidenceId: evidence.id, artifactId: evidence.artifactId,
+        subjectArtifactIds: claim.subjectArtifactIds, scope: 'Recorded scope.', configuration: 'Recorded config.',
+        result, checkedAt: '2026-11-06T00:00:00Z', details: 'Recorded attempt.',
+      }]}} evidence={evidence} />);
+      expect(screen.getByRole('button', {name: token})).toBeTruthy();
+      const record = screen.getByText('Evidence record').closest('details');
+      expect(record?.hasAttribute('open')).toBe(false);
+      expect(record?.textContent).toContain(phrase);
+      expect(record?.textContent).toContain('does not remove assumptions');
+    }
   });
   it('should render identities free of hash notation while sources stay pinned', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     expect(document.body.textContent).not.toMatch(/[0-9a-f]{8,64}/);
     expect(screen.queryByRole('link', { name: /204fb4a19774/ })).toBeNull();
-    expect(within(screen.getByRole('contentinfo')).getByText(/Dataset schema 1/)).toBeTruthy();
+    expect(screen.queryByText('Select a component to inspect claims.')).toBeNull();
+    expect(within(screen.getByRole('contentinfo')).queryByText(/Dataset schema/)).toBeNull();
     render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
     expect(screen.getByText(/Conflicting finality/)).toBeTruthy();
     expect(screen.queryByText(/^[0-9a-f]{12,}$/)).toBeNull();
@@ -110,20 +183,27 @@ describe('evidence presentation', () => {
     fixture.checkRecords = fixture.checkRecords.map(c => c.kind === 'availability' ? {...c, result: 'unavailable'} :
       c.kind === 'source-review' ? {...c, result: 'inconclusive'} : c);
     render(<Evidence bundle={fixture} evidence={{...fixture.evidence[0],method: 'smt'}} />);
-    expect(screen.getByText('SMT verification')).toBeTruthy();
-    expect(screen.getByText(/Unavailable when last checked/)).toBeTruthy();
-    expect(screen.getByText(/Inconclusive/)).toBeTruthy();
-    expect(screen.getByText('Not performed')).toBeTruthy();
+    const record = screen.getByText('Evidence record').closest('details');
+    expect(screen.getByRole('button', {name: 'SMT'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Unavailable'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Inconclusive'})).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'No replay'})).toBeTruthy();
+    expect(record?.textContent).toContain('SMT verification');
+    expect(record?.textContent).toContain('Unavailable when last checked');
+    expect(record?.textContent).toContain('Inconclusive');
+    expect(record?.textContent).toContain('Not performed');
     expect(screen.getByRole('link', {name: 'GasperBeaconChain.Core.accountable_safety'})).toBeTruthy();
   });
   it('should escape imported source text instead of interpreting markup', () => {
     render(<ClaimDetails bundle={bundle} claim={{...claim,title: '<script>alert(1)</script>',
-      relation: {kind: 'refinement',fromArtifactId: 'a',toArtifactId: 'b',direction: 'Model to implementation.'}}}
+      relation: {kind: 'refinement',fromArtifactId: 'gasper-model',toArtifactId: 'consensus',direction: 'Model to implementation.'}}}
       binding={{...binding,applicabilityKind: 'direct-subject',basis: {kind: 'version-match'}}} />);
     expect(screen.getByText('<script>alert(1)</script>')).toBeTruthy();
     expect(document.querySelector('script')).toBeNull();
-    expect(screen.getByText(/Direct subject/)).toBeTruthy();
+    expect(screen.getByRole('button', {name: 'Direct'})).toBeTruthy();
+    expect(screen.getAllByText('Direct subject').length).toBeGreaterThan(0);
     expect(screen.getByText('refinement direction')).toBeTruthy();
+    expect(screen.getByText(/gasper-lean4 abstract FFG model → Ethereum consensus specifications: Model to implementation\./)).toBeTruthy();
   });
   it('should show neutral empty states and source-backed relationships when components change', () => {
     const props = {bundle,view,instanceId: 'b-bls',claimId: null,edgeId: null,onClaim: vi.fn(),onEdge: vi.fn()};

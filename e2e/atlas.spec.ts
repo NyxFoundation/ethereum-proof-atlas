@@ -39,8 +39,19 @@ test('should navigate independently sourced views and evidence in the Workers ru
   const panel = page.getByRole('complementary', { name: 'Details panel' });
   await expect(panel.getByText('Formal model · Related model')).toBeVisible();
   await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
-  await expect(panel.getByText('Not performed', { exact: true })).toBeVisible();
-  await expect(panel.getByText(/Available when last checked/)).toBeVisible();
+  const replay = panel.getByRole('button', { name: 'No replay', exact: true });
+  await page.mouse.move(0, 0);
+  await expect(replay).toBeVisible();
+  const replayPhrase = panel.getByRole('tooltip', { name: 'Not performed', includeHidden: true });
+  await expect(replayPhrase).toHaveCount(1);
+  await expect(replayPhrase).toBeHidden();
+  await replay.hover();
+  await expect(panel.getByRole('tooltip', { name: 'Not performed' })).toBeVisible();
+  await page.mouse.move(0, 0);
+  await replay.focus();
+  await expect(panel.getByRole('tooltip', { name: 'Not performed' })).toBeVisible();
+  await panel.getByRole('button', { name: 'Located', exact: true }).hover();
+  await expect(panel.getByRole('tooltip', { name: 'Available when last checked' })).toBeVisible();
   await expect(panel.getByText(/does not assert that the shared set is nonempty/)).toBeVisible();
   const theorem = panel.getByRole('link', { name: 'GasperBeaconChain.Core.accountable_safety' });
   await expect(theorem).toHaveAttribute('href', /7650709170327c5f10c8b5da99b10941e208ef5d/);
@@ -182,8 +193,10 @@ test('should retain stored source details when external navigation is unavailabl
   const external = await popup; await external.close();
   await expect(page.getByRole('article', {name: 'Claim details'})).toBeVisible();
   const article = page.getByRole('article', { name: 'Claim details' });
-  await expect(article.getByText(/Available when last checked/).first()).toBeVisible();
-  await expect(article.getByText('Not performed', {exact: true})).toBeVisible();
+  const record = article.locator('details').filter({ hasText: 'Evidence record' });
+  await record.locator('summary').click();
+  await expect(record.getByText('Available when last checked')).toBeVisible();
+  await expect(record.getByText('Not performed', {exact: true})).toBeVisible();
 });
 
 test('should list referenced repositories as discovery links in the footer', async ({ page }) => {

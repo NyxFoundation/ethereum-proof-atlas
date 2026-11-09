@@ -90,6 +90,14 @@ aside p { overflow-wrap: anywhere; }
 aside ul { padding-left: 18px; }
 aside li { margin-bottom: 9px; }
 .tag { display: inline-block; background: #edf0f3; color: #3b4959; padding: 2px 6px; border-radius: 3px; font-size: 11px; font-weight: 500; }
+.token-row, .disclosure-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.disclosure-head > details { flex: 1; min-width: 0; }
+.status-wrap { position: relative; display: inline-flex; max-width: 100%; }
+button.status-token { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 1px 7px 1px 4px; background: #f4f6f8; border-color: #c5ced6; color: #3b4959; font-size: 11px; font-weight: 650; line-height: 1.4; }
+button.status-token:hover, button.status-token:focus { background: #f4f6f8; }
+.token-explain { position: absolute; z-index: 3; left: 0; top: calc(100% + 6px); width: max-content; max-width: 220px; padding: 6px 8px; background: #242a33; color: #fff; border-radius: 4px; font-size: 11px; font-weight: 500; line-height: 1.4; visibility: hidden; pointer-events: none; }
+.status-wrap:hover .token-explain, .status-wrap:focus-within .token-explain { visibility: visible; }
+aside details summary { font-weight: 650; }
 .claim-list { list-style: none; padding: 0; }
 .claim-list li { padding: 12px 0; border-bottom: 1px solid #dce1e5; }
 .claim-list button { border: 0; padding: 0; text-align: left; color: #304f7d; font-weight: 600; }
@@ -103,9 +111,9 @@ aside li { margin-bottom: 9px; }
 .relationships { list-style: none; padding: 0; }
 .relationships button { font-size: 11px; text-align: left; }
 .map-note, footer { font-size: 11px; color: #5c6874; margin: 10px 0 0; }
+.map-note:empty { display: none; }
 .footer-repos { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 8px; }
 .footer-repos .eyebrow { color: #525e6a; }
-.footer-repos .footer-note { color: #77828d; }
 .footer-repos a { font-size: 11px; }
 .loading, .error { padding: 60px 25px; }
 .error { border: 1px solid #b8c3cd; margin-top: 20px; }
