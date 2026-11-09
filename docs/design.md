@@ -177,8 +177,8 @@ and proof artifacts as plain discovery links (new tab, no referrer), labelled
 with the repository path; the section is titled "Formal-verification
 repositories" and excludes the architecture snapshot repositories. They are
 not pinned evidence links and never satisfy a claim's source
-requirement. The dataset schema version appears in the same parallel row as a
-labelled item; the footer displays no dataset digest.
+requirement. The footer displays neither the dataset schema version nor the
+dataset digest.
 
 ### Index table
 

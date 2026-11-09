@@ -158,7 +158,8 @@ describe('evidence presentation', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     expect(document.body.textContent).not.toMatch(/[0-9a-f]{8,64}/);
     expect(screen.queryByRole('link', { name: /204fb4a19774/ })).toBeNull();
-    expect(within(screen.getByRole('contentinfo')).getByText(/Dataset schema 1/)).toBeTruthy();
+    expect(screen.queryByText('Select a component to inspect claims.')).toBeNull();
+    expect(within(screen.getByRole('contentinfo')).queryByText(/Dataset schema/)).toBeNull();
     render(<ClaimDetails bundle={bundle} claim={claim} binding={binding} />);
     expect(screen.getByText(/Conflicting finality/)).toBeTruthy();
     expect(screen.queryByText(/^[0-9a-f]{12,}$/)).toBeNull();
