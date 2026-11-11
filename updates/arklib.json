@@ -3,9 +3,9 @@
   "target": "arklib",
   "repository": "Verified-zkEVM/ArkLib",
   "branch": "main",
-  "before": "e40faa7316afa275326dbe053105776bd2cb1313",
-  "after": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-  "baseFingerprint": "ba8babc94ea374d93d5cccf866f95dbc83b88a06d16332b014aa72e51a5226a3",
+  "before": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
+  "after": "e272c34851e039e0e3b93a16c16000e464731961",
+  "baseFingerprint": "c3627e646d3ed7ae8acfdae36ca1a570166c7b250c5978124683d620634bf772",
   "content": {
     "artifacts": [
       {
@@ -14,14 +14,14 @@
         "kind": "formal-model",
         "repository": "https://github.com/Verified-zkEVM/ArkLib",
         "revisionKind": "git-commit",
-        "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-        "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
+        "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+        "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
         "locations": [
           {
             "id": "definitions",
             "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
             "label": "KZG commit, generateOpening and verifyOpening",
-            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Basic.lean"
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Basic.lean"
           }
         ]
       },
@@ -31,14 +31,14 @@
         "kind": "proof",
         "repository": "https://github.com/Verified-zkEVM/ArkLib",
         "revisionKind": "git-commit",
-        "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-        "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
+        "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+        "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
         "locations": [
           {
             "id": "theorem",
             "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
             "label": "KZG.correctness",
-            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Correctness.lean"
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Correctness.lean"
           }
         ]
       }
@@ -84,7 +84,7 @@
           "abstractions": [
             "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
           ],
-          "configuration": "Pinned Verified-zkEVM/ArkLib@31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; kzg-theorem; no Atlas replay."
+          "configuration": "Pinned Verified-zkEVM/ArkLib@e272c34851e039e0e3b93a16c16000e464731961; kzg-theorem; no Atlas replay."
         }
       }
     ],
@@ -108,7 +108,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "update-arklib-31ff7ddf9bc2-beacon-b-kzg"
+            "checkId": "update-arklib-e272c34851e0-beacon-b-kzg"
           }
         }
       }
@@ -118,25 +118,9 @@
     {
       "artifactId": "ark-model",
       "locationId": "definitions",
-      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
-      "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-08T15:22:55.476Z",
-      "sha256": "3540399f8425e495798f581663cc7a3bbe4e4f701db1af7f9a949b8eeebd1439"
-    },
-    {
-      "artifactId": "ark-proof",
-      "locationId": "theorem",
-      "revision": "e40faa7316afa275326dbe053105776bd2cb1313",
-      "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-08T15:22:55.476Z",
-      "sha256": "bceef241f8967382f08deba7bb2df6292a89c5a3f88cfc9a1fd60f41521014c4"
-    },
-    {
-      "artifactId": "ark-model",
-      "locationId": "definitions",
       "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
       "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-08T17:48:07.305Z",
+      "checkedAt": "2026-11-09T17:40:03.414Z",
       "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
     },
     {
@@ -144,13 +128,29 @@
       "locationId": "theorem",
       "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
       "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-08T17:48:07.305Z",
+      "checkedAt": "2026-11-09T17:40:03.414Z",
+      "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
+    },
+    {
+      "artifactId": "ark-model",
+      "locationId": "definitions",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
+    },
+    {
+      "artifactId": "ark-proof",
+      "locationId": "theorem",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
       "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
     }
   ],
   "review": {
     "reviewer": "adust09",
-    "notes": "Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
-    "checkedAt": "2026-11-08T17:48:07.305Z"
+    "notes": "Inspected Verified-zkEVM/ArkLib 31ff7ddf..e272c348 (fast-forward; #1473 #1474 #1480 #1479). Pinned KZG Basic.lean and Correctness.lean are byte-identical; Algebra.lean (Groups.PowerSrs.generate) is unchanged. KZG.correctness still states that generateOpening verifies via commit, divByMonic and verifyOpening. lean-toolchain stays v4.35.0; mathlib 56a00585 and CompPoly a1ac8925 are unmoved; CompPoly requires only mathlib. The only changed VCVio import in the closure is QueryImpl/Constructions/Core.lean: it drops a redundant LawfulMonad hypothesis from two simulateQ induct lemmas unused by those definitions or KZG.correctness. Inherited PolyFun moved with VCVio and is not imported by the algebraic statement. Changed ToCompPoly Arithmetic and Primitive modules are outside that closure. Claim text, assumptions, limitations and the beacon related-model binding need no edits. Source and applicability review only; no Lean replay or axiom audit. Upstream build succeeded; not an atlas replay.",
+    "checkedAt": "2026-11-11T10:01:30.358Z"
   }
 }
