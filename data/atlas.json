@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "31b57959840b7814dd8a7c818e36b595243b2cb5972c3446c21c8bb70527c0a3",
+  "datasetRevision": "4d5371440baee9caa4feb0bad16e5a5da582fe19d149f62fa2c7eabe2133f934",
   "components": [
     {
       "id": "fork-choice",
@@ -405,14 +405,14 @@
       "kind": "formal-model",
       "repository": "https://github.com/Verified-zkEVM/ArkLib",
       "revisionKind": "git-commit",
-      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-      "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
       "locations": [
         {
           "id": "definitions",
           "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
           "label": "KZG commit, generateOpening and verifyOpening",
-          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Basic.lean"
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Basic.lean"
         }
       ]
     },
@@ -422,14 +422,14 @@
       "kind": "proof",
       "repository": "https://github.com/Verified-zkEVM/ArkLib",
       "revisionKind": "git-commit",
-      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-      "version": "Commit 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; no Atlas proof replay.",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
       "locations": [
         {
           "id": "theorem",
           "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
           "label": "KZG.correctness",
-          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1/ArkLib/Commitments/Functional/KZG/Correctness.lean"
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Correctness.lean"
         }
       ]
     },
@@ -749,7 +749,7 @@
         "abstractions": [
           "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
         ],
-        "configuration": "Pinned Verified-zkEVM/ArkLib@31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; kzg-theorem; no Atlas replay."
+        "configuration": "Pinned Verified-zkEVM/ArkLib@e272c34851e039e0e3b93a16c16000e464731961; kzg-theorem; no Atlas replay."
       }
     },
     {
@@ -1039,50 +1039,6 @@
       "result": "available"
     },
     {
-      "id": "update-ark-proof-31ff7ddf9bc2-available",
-      "checkedAt": "2026-11-08T17:48:07.305Z",
-      "details": "Pinned source GETs succeeded. SHA-256: theorem=3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195",
-      "kind": "availability",
-      "artifactId": "ark-proof",
-      "locationIds": [
-        "theorem"
-      ],
-      "result": "available"
-    },
-    {
-      "id": "update-kzg-theorem-31ff7ddf9bc2-review",
-      "checkedAt": "2026-11-08T17:48:07.305Z",
-      "details": "Reviewed by adust09. Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
-      "artifactId": "ark-proof",
-      "evidenceId": "kzg-theorem",
-      "subjectArtifactIds": [
-        "ark-model"
-      ],
-      "scope": "Source correspondence for kzg-theorem at 31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1; not proof replay or a transitive axiom audit.",
-      "kind": "source-review",
-      "result": "reviewed"
-    },
-    {
-      "id": "update-arklib-31ff7ddf9bc2-beacon-b-kzg",
-      "checkedAt": "2026-11-08T17:48:07.305Z",
-      "details": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.\nReviewed by adust09. Inspected Verified-zkEVM/ArkLib e40faa7..31ff7ddf (three hypothesis-pruning upstream commits #1467-#1469, 161 files): the pinned KZG Basic.lean and Correctness.lean drop the explicit (hpG1 : Nat.card G1 = p) argument, which is now supplied by the PrimeOrderWith class field hCard; KZG.correctness statements and proof steps are otherwise unchanged; lean-toolchain, lakefile and the pinned modules' imports are unchanged. Claim meaning and limitations hold; the class-supplied group order is recorded in the assumptions. Source correspondence and view applicability inspected at the fixed commit; no Lean replay or dependency/axiom audit was performed.",
-      "kind": "manual-comparison",
-      "viewId": "beacon",
-      "componentInstanceId": "b-kzg",
-      "claimId": "kzg-correctness",
-      "sources": [
-        {
-          "artifactId": "consensus",
-          "locationId": "kzg"
-        },
-        {
-          "artifactId": "ark-model",
-          "locationId": "definitions"
-        }
-      ],
-      "result": "related"
-    },
-    {
       "id": "availability-ethlib-proof-canonicality",
       "checkedAt": "2026-11-08T17:17:12Z",
       "details": "Raw GitHub source GET against the lakefile-pinned revision returned the 4,906-byte Canonicality module on this date. Intake observation, not a replay or promise of present reachability.",
@@ -1108,27 +1064,71 @@
       "id": "review-ssz-canonicality-theorem",
       "checkedAt": "2026-11-08T17:17:50Z",
       "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed.",
-      "kind": "source-review",
       "artifactId": "ethlib-proof",
       "evidenceId": "ssz-canonicality-theorem",
       "subjectArtifactIds": [
         "ethlib"
       ],
       "scope": "Lean 4.35.0; pinned ethereum/EthLib lakefile; serialize_of_deserialize only.",
+      "kind": "source-review",
       "result": "reviewed"
     },
     {
       "id": "review-ssz-branch-correctness-theorem",
       "checkedAt": "2026-11-08T17:17:50Z",
       "details": "Statement and local proof body were compared to this claim. No proof replay or complete transitive axiom/dependency audit was performed.",
-      "kind": "source-review",
       "artifactId": "ethlib-proof",
       "evidenceId": "ssz-branch-correctness-theorem",
       "subjectArtifactIds": [
         "ethlib"
       ],
       "scope": "Lean 4.35.0; pinned ethereum/EthLib lakefile; buildProof_rebuilds_value_root only.",
+      "kind": "source-review",
       "result": "reviewed"
+    },
+    {
+      "id": "update-ark-proof-e272c34851e0-available",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "details": "Pinned source GETs succeeded. SHA-256: theorem=3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195",
+      "kind": "availability",
+      "artifactId": "ark-proof",
+      "locationIds": [
+        "theorem"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "update-kzg-theorem-e272c34851e0-review",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "details": "Reviewed by adust09. Inspected Verified-zkEVM/ArkLib 31ff7ddf..e272c348 (fast-forward; #1473 #1474 #1480 #1479). Pinned KZG Basic.lean and Correctness.lean are byte-identical; Algebra.lean (Groups.PowerSrs.generate) is unchanged. KZG.correctness still states that generateOpening verifies via commit, divByMonic and verifyOpening. lean-toolchain stays v4.35.0; mathlib 56a00585 and CompPoly a1ac8925 are unmoved; CompPoly requires only mathlib. The only changed VCVio import in the closure is QueryImpl/Constructions/Core.lean: it drops a redundant LawfulMonad hypothesis from two simulateQ induct lemmas unused by those definitions or KZG.correctness. Inherited PolyFun moved with VCVio and is not imported by the algebraic statement. Changed ToCompPoly Arithmetic and Primitive modules are outside that closure. Claim text, assumptions, limitations and the beacon related-model binding need no edits. Source and applicability review only; no Lean replay or axiom audit. Upstream build succeeded; not an atlas replay.",
+      "artifactId": "ark-proof",
+      "evidenceId": "kzg-theorem",
+      "subjectArtifactIds": [
+        "ark-model"
+      ],
+      "scope": "Source correspondence for kzg-theorem at e272c34851e039e0e3b93a16c16000e464731961; not proof replay or a transitive axiom audit.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "update-arklib-e272c34851e0-beacon-b-kzg",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "details": "Related algebraic KZG model. Fulu calls a batched cell-proof verifier; the cited ArkLib theorem only covers its own single-opening algebra and is not a conformance result.\nReviewed by adust09. Inspected Verified-zkEVM/ArkLib 31ff7ddf..e272c348 (fast-forward; #1473 #1474 #1480 #1479). Pinned KZG Basic.lean and Correctness.lean are byte-identical; Algebra.lean (Groups.PowerSrs.generate) is unchanged. KZG.correctness still states that generateOpening verifies via commit, divByMonic and verifyOpening. lean-toolchain stays v4.35.0; mathlib 56a00585 and CompPoly a1ac8925 are unmoved; CompPoly requires only mathlib. The only changed VCVio import in the closure is QueryImpl/Constructions/Core.lean: it drops a redundant LawfulMonad hypothesis from two simulateQ induct lemmas unused by those definitions or KZG.correctness. Inherited PolyFun moved with VCVio and is not imported by the algebraic statement. Changed ToCompPoly Arithmetic and Primitive modules are outside that closure. Claim text, assumptions, limitations and the beacon related-model binding need no edits. Source and applicability review only; no Lean replay or axiom audit. Upstream build succeeded; not an atlas replay.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-kzg",
+      "claimId": "kzg-correctness",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "kzg"
+        },
+        {
+          "artifactId": "ark-model",
+          "locationId": "definitions"
+        }
+      ],
+      "result": "related"
     }
   ],
   "architectureViews": [
@@ -1392,7 +1392,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "update-arklib-31ff7ddf9bc2-beacon-b-kzg"
+            "checkId": "update-arklib-e272c34851e0-beacon-b-kzg"
           }
         },
         {

@@ -136,7 +136,7 @@
       "locationId": "definitions",
       "revision": "e272c34851e039e0e3b93a16c16000e464731961",
       "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-09T17:40:03.414Z",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
       "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
     },
     {
@@ -144,9 +144,13 @@
       "locationId": "theorem",
       "revision": "e272c34851e039e0e3b93a16c16000e464731961",
       "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-09T17:40:03.414Z",
+      "checkedAt": "2026-11-11T10:01:30.358Z",
       "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
     }
   ],
-  "review": null
+  "review": {
+    "reviewer": "adust09",
+    "notes": "Inspected Verified-zkEVM/ArkLib 31ff7ddf..e272c348 (fast-forward; #1473 #1474 #1480 #1479). Pinned KZG Basic.lean and Correctness.lean are byte-identical; Algebra.lean (Groups.PowerSrs.generate) is unchanged. KZG.correctness still states that generateOpening verifies via commit, divByMonic and verifyOpening. lean-toolchain stays v4.35.0; mathlib 56a00585 and CompPoly a1ac8925 are unmoved; CompPoly requires only mathlib. The only changed VCVio import in the closure is QueryImpl/Constructions/Core.lean: it drops a redundant LawfulMonad hypothesis from two simulateQ induct lemmas unused by those definitions or KZG.correctness. Inherited PolyFun moved with VCVio and is not imported by the algebraic statement. Changed ToCompPoly Arithmetic and Primitive modules are outside that closure. Claim text, assumptions, limitations and the beacon related-model binding need no edits. Source and applicability review only; no Lean replay or axiom audit. Upstream build succeeded; not an atlas replay.",
+    "checkedAt": "2026-11-11T10:01:30.358Z"
+  }
 }
