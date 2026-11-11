@@ -3,9 +3,9 @@
   "target": "arklib",
   "repository": "Verified-zkEVM/ArkLib",
   "branch": "main",
-  "before": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
-  "after": "e272c34851e039e0e3b93a16c16000e464731961",
-  "baseFingerprint": "c3627e646d3ed7ae8acfdae36ca1a570166c7b250c5978124683d620634bf772",
+  "before": "e272c34851e039e0e3b93a16c16000e464731961",
+  "after": "9829e83cede2801337e39fb67adfbf03fca64718",
+  "baseFingerprint": "31dd4f0af53535551b17bb262b8d415dffed3e98a2cad36c2d6c098c6fe05dd2",
   "content": {
     "artifacts": [
       {
@@ -14,14 +14,14 @@
         "kind": "formal-model",
         "repository": "https://github.com/Verified-zkEVM/ArkLib",
         "revisionKind": "git-commit",
-        "revision": "e272c34851e039e0e3b93a16c16000e464731961",
-        "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
+        "revision": "9829e83cede2801337e39fb67adfbf03fca64718",
+        "version": "Commit 9829e83cede2801337e39fb67adfbf03fca64718; no Atlas proof replay.",
         "locations": [
           {
             "id": "definitions",
             "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
             "label": "KZG commit, generateOpening and verifyOpening",
-            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Basic.lean"
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/9829e83cede2801337e39fb67adfbf03fca64718/ArkLib/Commitments/Functional/KZG/Basic.lean"
           }
         ]
       },
@@ -31,14 +31,14 @@
         "kind": "proof",
         "repository": "https://github.com/Verified-zkEVM/ArkLib",
         "revisionKind": "git-commit",
-        "revision": "e272c34851e039e0e3b93a16c16000e464731961",
-        "version": "Commit e272c34851e039e0e3b93a16c16000e464731961; no Atlas proof replay.",
+        "revision": "9829e83cede2801337e39fb67adfbf03fca64718",
+        "version": "Commit 9829e83cede2801337e39fb67adfbf03fca64718; no Atlas proof replay.",
         "locations": [
           {
             "id": "theorem",
             "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
             "label": "KZG.correctness",
-            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Correctness.lean"
+            "url": "https://github.com/Verified-zkEVM/ArkLib/blob/9829e83cede2801337e39fb67adfbf03fca64718/ArkLib/Commitments/Functional/KZG/Correctness.lean"
           }
         ]
       }
@@ -84,7 +84,7 @@
           "abstractions": [
             "Prime-order groups and bilinear pairing; ideal generated power SRS; coefficient-form polynomials."
           ],
-          "configuration": "Pinned Verified-zkEVM/ArkLib@e272c34851e039e0e3b93a16c16000e464731961; kzg-theorem; no Atlas replay."
+          "configuration": "Pinned Verified-zkEVM/ArkLib@9829e83cede2801337e39fb67adfbf03fca64718; kzg-theorem; no Atlas replay."
         }
       }
     ],
@@ -108,7 +108,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "update-arklib-e272c34851e0-beacon-b-kzg"
+            "checkId": "update-arklib-9829e83cede2-beacon-b-kzg"
           }
         }
       }
@@ -118,39 +118,35 @@
     {
       "artifactId": "ark-model",
       "locationId": "definitions",
-      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
       "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-09T17:40:03.414Z",
+      "checkedAt": "2026-11-11T15:26:25.444Z",
       "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
     },
     {
       "artifactId": "ark-proof",
       "locationId": "theorem",
-      "revision": "31ff7ddf9bc209ffaeab516359cd17f47d9bd6f1",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
       "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-09T17:40:03.414Z",
+      "checkedAt": "2026-11-11T15:26:25.444Z",
       "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
     },
     {
       "artifactId": "ark-model",
       "locationId": "definitions",
-      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "revision": "9829e83cede2801337e39fb67adfbf03fca64718",
       "path": "ArkLib/Commitments/Functional/KZG/Basic.lean",
-      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "checkedAt": "2026-11-11T15:26:25.444Z",
       "sha256": "e97aee4567747e9ec75113421a2ae53ab71a700d6b9ae0fc72a20607940f8a3e"
     },
     {
       "artifactId": "ark-proof",
       "locationId": "theorem",
-      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "revision": "9829e83cede2801337e39fb67adfbf03fca64718",
       "path": "ArkLib/Commitments/Functional/KZG/Correctness.lean",
-      "checkedAt": "2026-11-11T10:01:30.358Z",
+      "checkedAt": "2026-11-11T15:26:25.444Z",
       "sha256": "3cc641c865826010c0240feef197be1dde17d623fd658e0da309f91c7a80e195"
     }
   ],
-  "review": {
-    "reviewer": "adust09",
-    "notes": "Inspected Verified-zkEVM/ArkLib 31ff7ddf..e272c348 (fast-forward; #1473 #1474 #1480 #1479). Pinned KZG Basic.lean and Correctness.lean are byte-identical; Algebra.lean (Groups.PowerSrs.generate) is unchanged. KZG.correctness still states that generateOpening verifies via commit, divByMonic and verifyOpening. lean-toolchain stays v4.35.0; mathlib 56a00585 and CompPoly a1ac8925 are unmoved; CompPoly requires only mathlib. The only changed VCVio import in the closure is QueryImpl/Constructions/Core.lean: it drops a redundant LawfulMonad hypothesis from two simulateQ induct lemmas unused by those definitions or KZG.correctness. Inherited PolyFun moved with VCVio and is not imported by the algebraic statement. Changed ToCompPoly Arithmetic and Primitive modules are outside that closure. Claim text, assumptions, limitations and the beacon related-model binding need no edits. Source and applicability review only; no Lean replay or axiom audit. Upstream build succeeded; not an atlas replay.",
-    "checkedAt": "2026-11-11T10:01:30.358Z"
-  }
+  "review": null
 }
