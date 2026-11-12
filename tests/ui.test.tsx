@@ -210,7 +210,7 @@ describe('evidence presentation', () => {
     const {rerender} = render(<Details {...props} />);
     expect(screen.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     rerender(<Details {...props} instanceId="b-bls" />);
-    expect(screen.getByRole('heading', {name: 'Claims: 1'})).toBeTruthy();
+    expect(screen.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     fireEvent.click(screen.getByRole('button', {name: 'Signatures · dependency'}));
     expect(props.onEdge).toHaveBeenCalledWith('b-bls-state');
     rerender(<Details {...props} instanceId="b-state" />);
@@ -262,7 +262,7 @@ describe('map interaction', () => {
     expect(screen.queryByRole('button', {name: 'Select Justification / finalization'})).toBeNull();
     fireEvent.click(await screen.findByRole('button', {name: 'Expand State transition'}));
     expect(await screen.findByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy();
-    fireEvent.click(await screen.findByRole('button', {name: 'Select BLS signatures'}));
+    fireEvent.click(await screen.findByRole('button', {name: 'Select BLS hash-to-G2'}));
     expect(panel.getByRole('heading', {name: 'Claims: 1'})).toBeTruthy();
     expect(panel.getByRole('button', {name: 'BLS hash-to-G2 succeeds with a nonsingular curve point'})).toBeTruthy();
   });
@@ -286,7 +286,7 @@ describe('index presentation', () => {
     fireEvent.click(within(table).getByRole('button', {name: 'Fork choice: No catalogued claims'}));
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
-    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/})).toHaveLength(4);
+    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/})).toHaveLength(5);
     expect(within(table).queryByRole('rowheader', {name: 'Solidity / solc'})).toBeNull();
     expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
     expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();

@@ -115,8 +115,9 @@ recomputed through the packaging validator.
 - [`Kzg.cellToCosetEvals_cosetEvalsToCell`](https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Proofs/Kzg/Cells.lean#L168-L179)
   round-trips an array of exactly 64 scalar-field elements. The
   [Fulu Cell type](https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/das-core.md#L48-L58)
-  supports related-model bindings to KZG and PeerDAS. These are serialization
-  results, not proof-verifier correctness, erasure recovery or data availability.
+  supports the related-model binding to PeerDAS. The cryptographic-function
+  split removes its former duplicate KZG binding: this is a serialization result,
+  not proof-verifier correctness, erasure recovery or data availability.
 - [`Modexp.compute_eq_pow_mod`](https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Precompiles/Proofs/Modexp/Core.lean#L47-L67)
   proves the integer value of the pure computation helper, including modulus
   zero. It is related to the
@@ -158,15 +159,17 @@ component bindings do not create new claims.
 
 | View | Changed component counts |
 | --- | --- |
-| Beacon Spec | State transition 2; finalization 2; consensus networking 1; BLS 1; KZG 3; PeerDAS 1. SSZ remains 2. |
-| Lean Spec | Fork choice 1; consensus networking 1; XMSS 1. State transition and finalization remain 1; SSZ remains 2. |
+| Beacon Spec | State transition 2; finalization 2; Req/Resp codec 1; BLS hash-to-G2 1; BLS signatures 0; KZG 2; PeerDAS 1. SSZ codec and Merkleization each have 1. |
+| Lean Spec | Fork choice 1; Varint codec 1; XMSS signatures 1. Poseidon, XMSS hash chains, XMSS Merkle authentication and signature aggregation have 0. State transition and finalization each have 1; SSZ codec and Merkleization each have 1. |
 | Execution Spec | EVM 1, specifically MODEXP computation. Execution transition, trie, ETH/RLPx and solc remain 0. |
 
 The existing three automatic-update claim scopes and the accepted ArkLib receipt
 are unchanged. Additional Gasper, Lstar and ArkLib models/proofs have separate
 artifact identities and remain pinned; the current updater does not advance
-these new records. All existing claims, evidence, checks, bindings, revisions,
-source locations, component subjects, positions and edges were preserved.
+these new records. The audit preserved the existing proof corpus. The later
+[cryptographic-function split](research.md#cryptographic-function-split-2026-11-12)
+redistributes component bindings and records its source inspections; claims,
+proof evidence and proof review/replay observations remain unchanged.
 
 ## Application verification
 
