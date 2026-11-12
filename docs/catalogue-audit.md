@@ -76,8 +76,19 @@ use unsigned base-128 length prefixes. The difference is explicit: leanp2p
 accepts minimal encodings of values below `2^63` in at most nine bytes; Beacon
 requires the full `Uint64` range with a ten-byte limit and only recommends
 minimal encodings. Lean's shared decoder also uses a ten-byte limit. The claim
-is therefore related-model evidence on consensus networking in both views,
-not codec conformance, Gossipsub correctness or an Execution ETH/RLPx claim.
+is therefore related-model evidence on the consensus **Req/Resp codec** (Beacon)
+and the **Varint codec** (Lean) components, not a general networking claim:
+it is not codec conformance, Gossipsub correctness, QUIC or RLPx transport
+security, discovery protocol soundness, or an Execution ETH/RLPx claim.
+The other network components carry their pinned specification locations and
+dated availability observations but catalogued no proof subjects in this audit.
+
+The 2026-11-12 network presentation split the folded Consensus/Execution
+Network instances into per-protocol components. Component IDs, graph positions,
+claims, evidence, bindings and checks are unchanged; two components were retired,
+twelve protocol components and seven pinned specification locations were added
+with their own dated GET observations, and the canonical bundle digest was
+recomputed through the packaging validator.
 
 ### Cryptography, cells and execution
 

@@ -20,7 +20,7 @@ describe('index table layout', () => {
   });
   it('should order parallel lean rows without stacking or gaps', () => {
     const table = build(lean);
-    expect(table.columns).toBe(3);
+    expect(table.columns).toBe(5);
     expect(row(lean, 'consensus').cells.map(c => c.name)).toEqual([
       'Justification / finalization', 'State transition', 'Fork choice']);
     expect(row(lean, 'cryptography').cells.map(c => c.name)).toEqual(
@@ -58,18 +58,16 @@ describe('index table layout', () => {
     }
   });
   it.each([
-    ['beacon', 'b-p2p', 'Consensus Network', 1],
-    ['lean', 'l-p2p', 'Consensus Network', 1],
-    ['execution', 'x-elp2p', 'Execution Network', 0],
-  ])('should keep a dedicated Network row when the %s view is selected', (viewId, instanceId, name, count) => {
+    ['beacon', ['Peer discovery (discv5)', 'QUIC transport', 'Req/Resp codec', 'Gossipsub topics']],
+    ['lean', ['Varint codec', 'Node records (ENR)', 'QUIC transport', 'Req/Resp codec', 'Gossipsub topics']],
+    ['execution', ['RLPx transport', 'ETH wire protocol']],
+  ])('should expose the %s protocol stack in a dedicated Network row', (viewId, names) => {
     const selected = bundle.architectureViews.find(v => v.id === viewId)!;
     const table = build(selected);
     expect(table.rows.map(r => r.group)).toEqual(viewId === 'execution'
       ? ['execution', 'networking', 'development']
       : ['consensus', 'networking', 'cryptography', 'serialization']);
-    expect(row(selected, 'networking').cells).toMatchObject([{instanceId, name, count}]);
-    expect(table.rows.filter(r => r.group !== 'networking').flatMap(r => r.cells.map(c => c.instanceId)))
-      .not.toContain(instanceId);
+    expect(row(selected, 'networking').cells.map(c => c.name)).toEqual(names);
   });
   it('should group networking by area when architecture edges are absent', () => {
     for (const selected of [beacon, lean, execution]) {

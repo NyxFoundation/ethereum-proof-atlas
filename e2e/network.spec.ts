@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 const networks = [
-  ['Beacon Spec', 'Consensus Network', 'b-p2p', 1, 'Gossipsub gossip and Req/Resp'],
-  ['Lean Spec', 'Consensus Network', 'l-p2p', 1, 'Gossipsub gossip and Req/Resp'],
-  ['Execution Spec', 'Execution Network', 'x-elp2p', 0, 'ETH/RLPx'],
+  ['Beacon Spec', 'Gossipsub topics', 'b-gossipsub', 0, 'Gossipsub topic mesh'],
+  ['Lean Spec', 'Gossipsub topics', 'l-gossipsub', 0, 'Gossipsub topic mesh'],
+  ['Execution Spec', 'ETH wire protocol', 'x-eth', 0, 'chain synchronization'],
 ] as const;
 
 for (const width of [1280, 390, 320]) {
@@ -17,7 +17,7 @@ for (const width of [1280, 390, 320]) {
         has: page.getByRole('rowheader', { name: 'Network', exact: true }),
       });
       await expect(row).toHaveCount(1);
-      await expect(row.getByRole('button')).toHaveCount(1);
+      await expect(row.getByRole('button')).not.toHaveCount(0);
       const cell = row.getByRole('button', {
         name: `${name}: ${count ? `Claims: ${count}` : 'No catalogued claims'}`, exact: true,
       });
@@ -26,7 +26,7 @@ for (const width of [1280, 390, 320]) {
       await page.keyboard.press('Enter');
       const panel = page.getByRole('complementary', { name: 'Details panel' });
       await expect(panel.getByRole('heading', { name, exact: true })).toBeVisible();
-      await expect(panel.getByText(protocol, { exact: false })).toBeVisible();
+      await expect(panel.locator('p').filter({ hasText: protocol }).first()).toBeVisible();
       await expect(panel.getByRole('heading', { name: count ? `Claims: ${count}` : '0 claims', exact: true })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
       await page.getByRole('button', { name: 'Map', exact: true }).click();

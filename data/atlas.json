@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "9978d070cc34878cfccd6299def9ecfd2fb2977d07bea39871fa908543204cdd",
+  "datasetRevision": "e017a284fc6e09d10526deade4dc7c850e170db70725dc67cf901da37ca7ee0f",
   "components": [
     {
       "id": "fork-choice",
@@ -30,13 +30,6 @@
       "name": "PeerDAS",
       "area": "consensus",
       "description": "Fulu data-column availability sampling and verification.",
-      "childComponentIds": []
-    },
-    {
-      "id": "consensus-network",
-      "name": "Consensus Network",
-      "area": "networking",
-      "description": "Consensus Gossipsub gossip and Req/Resp (request/response); not execution ETH/RLPx.",
       "childComponentIds": []
     },
     {
@@ -84,13 +77,6 @@
       "childComponentIds": []
     },
     {
-      "id": "execution-network",
-      "name": "Execution Network",
-      "area": "networking",
-      "description": "Execution ETH/RLPx chain synchronization and transaction exchange; consensus happens elsewhere.",
-      "childComponentIds": []
-    },
-    {
       "id": "compiler",
       "name": "Solidity / solc",
       "area": "development",
@@ -116,6 +102,62 @@
       "name": "Poseidon / Merkle tree",
       "area": "cryptography",
       "description": "Lstar XMSS tree hashing; no proof implied by an implementation.",
+      "childComponentIds": []
+    },
+    {
+      "id": "quic",
+      "name": "QUIC transport",
+      "area": "networking",
+      "description": "QUIC (UDP) transport with TLS 1.3 identities in the consensus transport profile.",
+      "childComponentIds": []
+    },
+    {
+      "id": "gossipsub",
+      "name": "Gossipsub topics",
+      "area": "networking",
+      "description": "Gossipsub topic mesh for consensus block and attestation propagation.",
+      "childComponentIds": []
+    },
+    {
+      "id": "reqresp",
+      "name": "Req/Resp codec",
+      "area": "networking",
+      "description": "Request/response streams with bounded unsigned-varint length prefixes.",
+      "childComponentIds": []
+    },
+    {
+      "id": "discv5",
+      "name": "Peer discovery (discv5)",
+      "area": "networking",
+      "description": "UDP peer discovery with self-certifying records.",
+      "childComponentIds": []
+    },
+    {
+      "id": "enr",
+      "name": "Node records (ENR)",
+      "area": "networking",
+      "description": "Signed Ethereum Node Records carrying identity and endpoint data.",
+      "childComponentIds": []
+    },
+    {
+      "id": "rlpx",
+      "name": "RLPx transport",
+      "area": "networking",
+      "description": "TCP transport with ECIES handshake and capability negotiation.",
+      "childComponentIds": []
+    },
+    {
+      "id": "eth-wire",
+      "name": "ETH wire protocol",
+      "area": "networking",
+      "description": "Execution chain synchronization and transaction exchange over RLPx; consensus happens elsewhere.",
+      "childComponentIds": []
+    },
+    {
+      "id": "varint",
+      "name": "Varint codec",
+      "area": "networking",
+      "description": "Unsigned base-128 length prefixes with a bounded byte budget.",
       "childComponentIds": []
     }
   ],
@@ -212,6 +254,24 @@
           "path": "specs/fulu/das-core.md",
           "label": "Fulu Cell byte encoding",
           "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/das-core.md#L48-L58"
+        },
+        {
+          "id": "consensus-transport",
+          "path": "specs/phase0/p2p-interface.md",
+          "label": "QUIC and TCP transport profile",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/p2p-interface.md#L148-L185"
+        },
+        {
+          "id": "consensus-gossip",
+          "path": "specs/phase0/p2p-interface.md",
+          "label": "Gossipsub domain and topics",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/p2p-interface.md#L501-L546"
+        },
+        {
+          "id": "consensus-discovery",
+          "path": "specs/phase0/p2p-interface.md",
+          "label": "Discovery domain (discv5)",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/p2p-interface.md#L1684-L1692"
         }
       ]
     },
@@ -264,6 +324,12 @@
           "path": "caps/eth.md",
           "label": "ETH over RLPx: execution chain synchronization",
           "url": "https://github.com/ethereum/devp2p/blob/88f1c80800d622cc3a542a2125bbe33cc18c9f9c/caps/eth.md#L1-L68"
+        },
+        {
+          "id": "devp2p-rlpx",
+          "path": "rlpx.md",
+          "label": "RLPx transport over TCP",
+          "url": "https://github.com/ethereum/devp2p/blob/88f1c80800d622cc3a542a2125bbe33cc18c9f9c/rlpx.md#L1-L12"
         }
       ]
     },
@@ -376,6 +442,24 @@
           "path": "src/lean_spec/spec/forks/lstar/fork_choice.py",
           "label": "Lstar ancestor weights and LMD-GHOST walk",
           "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/fork_choice.py#L729-L856"
+        },
+        {
+          "id": "lean-quic",
+          "path": "src/lean_spec/node/networking/transport/quic/connection.py",
+          "label": "QUIC connection and streams",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/transport/quic/connection.py"
+        },
+        {
+          "id": "lean-gossipsub",
+          "path": "src/lean_spec/node/networking/gossipsub/topic.py",
+          "label": "Gossipsub topics and encodings",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/gossipsub/topic.py"
+        },
+        {
+          "id": "lean-enr",
+          "path": "src/lean_spec/node/networking/enr/enr.py",
+          "label": "ENR records and endpoints",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/enr/enr.py"
         }
       ]
     },
@@ -1875,12 +1959,12 @@
       "result": "reviewed"
     },
     {
-      "id": "audit-compare-beacon-b-p2p-varint-codec-roundtrip",
+      "id": "audit-compare-beacon-reqresp-varint-codec-roundtrip",
       "checkedAt": "2026-11-12T03:58:25Z",
       "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
       "kind": "manual-comparison",
       "viewId": "beacon",
-      "componentInstanceId": "b-p2p",
+      "componentInstanceId": "b-reqresp",
       "claimId": "varint-codec-roundtrip",
       "sources": [
         {
@@ -1895,12 +1979,12 @@
       "result": "related"
     },
     {
-      "id": "audit-compare-lean-l-p2p-varint-codec-roundtrip",
+      "id": "audit-compare-lean-varint-varint-codec-roundtrip",
       "checkedAt": "2026-11-12T03:58:25Z",
       "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
       "kind": "manual-comparison",
       "viewId": "lean",
-      "componentInstanceId": "l-p2p",
+      "componentInstanceId": "l-varint",
       "claimId": "varint-codec-roundtrip",
       "sources": [
         {
@@ -2376,6 +2460,83 @@
         }
       ],
       "result": "related"
+    },
+    {
+      "id": "availability-network-consensus-transport",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against consensus returned HTTP 200 and 1,889 bytes (range-excerpt for consensus spec sections). SHA-256: 21e058790dece7ac894059fad57e4e89175935bc9af9ecd9d6709697f4d96825. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "consensus-transport"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-consensus-gossip",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against consensus returned HTTP 200 and 2,104 bytes (range-excerpt for consensus spec sections). SHA-256: 9783866af9b82459aff57b965c8698c04253abe19b774cb368ae6a1daf832fcf. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "consensus-gossip"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-consensus-discovery",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against consensus returned HTTP 200 and 410 bytes (range-excerpt for consensus spec sections). SHA-256: f39277d5c690ec18a99024736d8948770f78d100ff0c425ec1cca98c893060ea. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "consensus-discovery"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-lean-quic",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against leanspec returned HTTP 200 and 22,489 bytes (range-excerpt for consensus spec sections). SHA-256: b4841b0609e16061ac2954b5eb6e990e985bef8022d50431cb1d82e26829eb64. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "lean-quic"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-lean-gossipsub",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against leanspec returned HTTP 200 and 10,645 bytes (range-excerpt for consensus spec sections). SHA-256: 93907075d4769cc08771126c98a45ca4a68996c631424f38158c42902258a1e5. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "lean-gossipsub"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-lean-enr",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against leanspec returned HTTP 200 and 14,254 bytes (range-excerpt for consensus spec sections). SHA-256: 09f8bd62bfbbc93f2480f0ae82a4afe7222bb62af950d6ddce65bc581d87c3a5. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "lean-enr"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-network-devp2p-rlpx",
+      "checkedAt": "2026-11-12T09:28:13Z",
+      "details": "Pinned GitHub Contents API GET against devp2p returned HTTP 200 and 537 bytes (range-excerpt for consensus spec sections). SHA-256: 6b8d615ccda341754a03e5b8d094c7da5d4420dacad49eb819b21468a70957ec. Availability observation only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "devp2p",
+      "locationIds": [
+        "devp2p-rlpx"
+      ],
+      "result": "available"
     }
   ],
   "architectureViews": [
@@ -2518,16 +2679,30 @@
           "parentInstanceId": null
         },
         {
-          "instanceId": "b-p2p",
-          "componentId": "consensus-network",
+          "instanceId": "b-gossipsub",
+          "componentId": "gossipsub",
           "subjectArtifactIds": [
             "consensus"
           ],
           "sources": [
             {
               "artifactId": "consensus",
-              "locationId": "p2p"
-            },
+              "locationId": "consensus-gossip"
+            }
+          ],
+          "position": {
+            "x": 30,
+            "y": 395
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "b-reqresp",
+          "componentId": "reqresp",
+          "subjectArtifactIds": [
+            "consensus"
+          ],
+          "sources": [
             {
               "artifactId": "consensus",
               "locationId": "varint-framing"
@@ -2535,7 +2710,43 @@
           ],
           "position": {
             "x": 30,
-            "y": 465
+            "y": 560
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "b-quic",
+          "componentId": "quic",
+          "subjectArtifactIds": [
+            "consensus"
+          ],
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "consensus-transport"
+            }
+          ],
+          "position": {
+            "x": -220,
+            "y": 500
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "b-discv5",
+          "componentId": "discv5",
+          "subjectArtifactIds": [
+            "consensus"
+          ],
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "consensus-discovery"
+            }
+          ],
+          "position": {
+            "x": 30,
+            "y": 725
           },
           "parentInstanceId": null
         },
@@ -2733,7 +2944,7 @@
           }
         },
         {
-          "componentInstanceId": "b-p2p",
+          "componentInstanceId": "b-reqresp",
           "claimId": "varint-codec-roundtrip",
           "applicabilityKind": "related-model",
           "explanation": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness.",
@@ -2749,7 +2960,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "audit-compare-beacon-b-p2p-varint-codec-roundtrip"
+            "checkId": "audit-compare-beacon-reqresp-varint-codec-roundtrip"
           }
         },
         {
@@ -2982,20 +3193,30 @@
           "parentInstanceId": "l-state"
         },
         {
-          "instanceId": "l-p2p",
-          "componentId": "consensus-network",
+          "instanceId": "l-gossipsub",
+          "componentId": "gossipsub",
           "subjectArtifactIds": [
             "leanspec"
           ],
           "sources": [
             {
               "artifactId": "leanspec",
-              "locationId": "network"
-            },
-            {
-              "artifactId": "leanspec",
-              "locationId": "varint"
-            },
+              "locationId": "lean-gossipsub"
+            }
+          ],
+          "position": {
+            "x": 30,
+            "y": 395
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-reqresp",
+          "componentId": "reqresp",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
             {
               "artifactId": "leanspec",
               "locationId": "reqresp-codec"
@@ -3003,7 +3224,61 @@
           ],
           "position": {
             "x": 30,
-            "y": 465
+            "y": 560
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-quic",
+          "componentId": "quic",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "lean-quic"
+            }
+          ],
+          "position": {
+            "x": -220,
+            "y": 500
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-enr",
+          "componentId": "enr",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "lean-enr"
+            }
+          ],
+          "position": {
+            "x": 30,
+            "y": 725
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-varint",
+          "componentId": "varint",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "varint"
+            }
+          ],
+          "position": {
+            "x": 220,
+            "y": 890
           },
           "parentInstanceId": null
         },
@@ -3191,7 +3466,7 @@
           }
         },
         {
-          "componentInstanceId": "l-p2p",
+          "componentInstanceId": "l-varint",
           "claimId": "varint-codec-roundtrip",
           "applicabilityKind": "related-model",
           "explanation": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness.",
@@ -3201,17 +3476,13 @@
               "locationId": "varint"
             },
             {
-              "artifactId": "leanspec",
-              "locationId": "reqresp-codec"
-            },
-            {
               "artifactId": "leanp2p-model",
               "locationId": "codec"
             }
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "audit-compare-lean-l-p2p-varint-codec-roundtrip"
+            "checkId": "audit-compare-lean-varint-varint-codec-roundtrip"
           }
         },
         {
@@ -3369,8 +3640,26 @@
           "parentInstanceId": null
         },
         {
-          "instanceId": "x-elp2p",
-          "componentId": "execution-network",
+          "instanceId": "x-rlpx",
+          "componentId": "rlpx",
+          "subjectArtifactIds": [
+            "devp2p"
+          ],
+          "sources": [
+            {
+              "artifactId": "devp2p",
+              "locationId": "devp2p-rlpx"
+            }
+          ],
+          "position": {
+            "x": -220,
+            "y": 470
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "x-eth",
+          "componentId": "eth-wire",
           "subjectArtifactIds": [
             "devp2p"
           ],
@@ -3381,7 +3670,7 @@
             }
           ],
           "position": {
-            "x": 100,
+            "x": 30,
             "y": 380
           },
           "parentInstanceId": null
@@ -3516,7 +3805,7 @@
     {
       "id": "b-p2p-head",
       "viewId": "beacon",
-      "source": "b-p2p",
+      "source": "b-gossipsub",
       "target": "b-head",
       "kind": "interface",
       "label": "Block delivery",
@@ -3536,7 +3825,7 @@
       "id": "b-ssz-p2p",
       "viewId": "beacon",
       "source": "b-ssz",
-      "target": "b-p2p",
+      "target": "b-gossipsub",
       "kind": "dependency",
       "label": "SSZ-Snappy",
       "explanation": "Consensus messages use SSZ-Snappy encoding.",
@@ -3565,7 +3854,7 @@
     {
       "id": "b-p2p-da",
       "viewId": "beacon",
-      "source": "b-p2p",
+      "source": "b-gossipsub",
       "target": "b-da",
       "kind": "interface",
       "label": "Data columns",
@@ -3685,7 +3974,7 @@
     {
       "id": "l-p2p-head",
       "viewId": "lean",
-      "source": "l-p2p",
+      "source": "l-gossipsub",
       "target": "l-head",
       "kind": "interface",
       "label": "Block delivery",
@@ -3701,7 +3990,7 @@
       "id": "l-ssz-p2p",
       "viewId": "lean",
       "source": "l-ssz",
-      "target": "l-p2p",
+      "target": "l-gossipsub",
       "kind": "dependency",
       "label": "SSZ-Snappy",
       "explanation": "The pinned Lstar networking topics name SSZ-Snappy payload encoding.",
@@ -3749,7 +4038,7 @@
     {
       "id": "x-elp2p-transition",
       "viewId": "execution",
-      "source": "x-elp2p",
+      "source": "x-eth",
       "target": "x-transition",
       "kind": "interface",
       "label": "Chain synchronization",
