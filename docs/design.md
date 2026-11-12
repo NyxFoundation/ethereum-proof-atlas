@@ -120,6 +120,14 @@ relationships must remain visible.
   Req/Resp codec, the ETH wire protocol), discovery (discv5, ENR) and the varint
   codec. Do not fold them into one component, and do not draw a fictitious single
   P2P implementation.
+- Split Serialization into **SSZ encoding / decoding** and **SSZ Merkleization**
+  in both consensus views, with separate Index cells, Map nodes and claim lists.
+  Bind codec canonicality only to encoding / decoding and branch reconstruction
+  only to Merkleization. Route SSZ-Snappy dependencies from the codec and root
+  dependencies from Merkleization; no edge between them or proof composition is
+  inferred. Keep them in the same foundation band, with the codec at its
+  original position and Merkleization to the right, so the codec's network edge
+  does not pass through the Merkleization node. Execution has no SSZ instance.
 - Keep compilers as development infrastructure with a generated-code relationship
   to their target. Do not imply that an execution client invokes solc to execute
   bytecode.
