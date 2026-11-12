@@ -278,7 +278,7 @@ describe('index presentation', () => {
     fireEvent.click(screen.getByRole('button', {name: 'Index'}));
     const table = screen.getByRole('table');
     expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
-      .toEqual(['Consensus', 'Cryptography', 'Serialization']);
+      .toEqual(['Consensus', 'Network', 'Cryptography', 'Serialization']);
     fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 2'}));
     const panel = within(screen.getByRole('complementary'));
     expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
@@ -342,7 +342,7 @@ describe('index presentation', () => {
     expect(within(screen.getByRole('table')).getByRole('button', {name: /^Solidity \/ solc/})).toBeTruthy();
     expect(within(screen.getByRole('table')).queryByRole('button', {name: 'State transition: Claims: 1'})).toBeNull();
     expect(within(screen.getByRole('table')).getAllByRole('rowheader').map(header => header.textContent))
-      .toEqual(['Execution', 'Development']);
+      .toEqual(['Execution', 'Network', 'Development']);
   });
 });
 

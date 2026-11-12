@@ -154,9 +154,9 @@ The Map / Index toggle is the approved inventory view from
 [design.md](design.md): each tab opens on the table that exposes where the
 catalogue is empty, with the map one toggle away.
 `src/domain/indexLayout.ts` derives everything from the
-same validated bundle: rows hold the catalogued groups present in the view
-(networking instances resolve their side from the view's recorded edges),
-and each group row packs its components one per cell leftwards from the
+same validated bundle: rows hold the catalogued groups present in the view,
+including a dedicated Network row for `networking` components, and each group
+row packs its components one per cell leftwards from the
 leftmost column, in foundations-first reading order over
 `band-0`…`band-3` claim-count shading. A row shorter than the widest row
 stretches its cells across the full table width instead of leaving empty
@@ -265,6 +265,24 @@ and 99.85% lines. New catalogue tests exercise each new claim from Index and
 Map, exact shared counts, fixed-commit theorem links, closed check detail,
 related-model limitations, unchanged no-replay status, tab isolation and a
 320px viewport. No external Lean proof was executed.
+
+## Network presentation acceptance
+
+Network components have a dedicated Index row, ordered after Consensus and
+Execution and before Cryptography. Both presentations use **Consensus Network**
+and **Execution Network**; component descriptions retain Gossipsub, Req/Resp and
+ETH/RLPx. Grouping reads `component.area` directly, without inferring a side from
+architecture edges. Component IDs, graph positions, source pins, claims,
+bindings and checks are unchanged; only two component names/descriptions and the
+canonical bundle digest changed.
+
+On 2026-11-12, `npm run verify` passed 201 unit/component/package cases and
+32 workerd browser cases. Coverage was 99.07% statements, 96.71% branches,
+98.80% functions and 99.84% lines. The nine Network browser cases cover all
+three views at 1280, 390 and 320 pixels, keyboard selection, protocol descriptions,
+unchanged counts, shared Map/Index selection and page-width containment.
+The post-change [UI audit](../anti-slop/audit-001-2026-11-12.md) records the
+approved fixes and rendered checks. These checks do not replay external proofs.
 
 ## Automated update acceptance
 

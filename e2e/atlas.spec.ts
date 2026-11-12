@@ -219,9 +219,9 @@ test('should list referenced repositories as discovery links in the footer', asy
   const leanp2p = page.locator('footer').getByRole('link', { name: 'etheorem/leanp2p', exact: true });
   await expect(leanp2p).toHaveAttribute('href', 'https://github.com/etheorem/leanp2p');
   for (const [tab, networking, count] of [
-    ['Beacon Spec', 'Consensus Gossipsub', 'Claims: 1'],
-    ['Lean Spec', 'Consensus Gossipsub', 'Claims: 1'],
-    ['Execution Spec', 'Execution ETH / RLPx', 'No catalogued claims'],
+    ['Beacon Spec', 'Consensus Network', 'Claims: 1'],
+    ['Lean Spec', 'Consensus Network', 'Claims: 1'],
+    ['Execution Spec', 'Execution Network', 'No catalogued claims'],
   ]) {
     await page.getByRole('tab', { name: tab, exact: true }).click();
     await expect(leanp2p).toBeVisible();
@@ -243,7 +243,7 @@ test('should inventory catalogued claims in the index table across views', async
       .reduce((sum, cell) => sum + Number((cell as HTMLTableCellElement).colSpan), 0));
     return sums.every(sum => sum === sums[0]);
   })).toBe(true);
-  for (const group of ['Consensus', 'Cryptography', 'Serialization']) {
+  for (const group of ['Consensus', 'Network', 'Cryptography', 'Serialization']) {
     await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
   }
   await expect(table.getByRole('rowheader', { name: 'Development', exact: true })).toHaveCount(0);

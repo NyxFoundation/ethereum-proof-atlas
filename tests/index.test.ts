@@ -12,35 +12,36 @@ const row = (view: typeof beacon, group: string) => build(view).rows.find(r => r
 
 describe('index table layout', () => {
   it('should pack each group row left to right in foundations-first reading order', () => {
-    expect(build(beacon).columns).toBe(5);
+    expect(build(beacon).columns).toBe(4);
     expect(row(beacon, 'consensus').cells.map(c => c.name)).toEqual([
-      'Consensus Gossipsub', 'Justification / finalization', 'PeerDAS', 'State transition', 'Fork choice']);
+      'Justification / finalization', 'PeerDAS', 'State transition', 'Fork choice']);
     expect(row(beacon, 'cryptography').cells.map(c => c.name)).toEqual(['KZG commitments', 'BLS signatures']);
     expect(row(beacon, 'serialization').cells.map(c => c.name)).toEqual(['SSZ / Merkleization']);
   });
   it('should order parallel lean rows without stacking or gaps', () => {
     const table = build(lean);
-    expect(table.columns).toBe(4);
+    expect(table.columns).toBe(3);
     expect(row(lean, 'consensus').cells.map(c => c.name)).toEqual([
-      'Consensus Gossipsub', 'Justification / finalization', 'State transition', 'Fork choice']);
+      'Justification / finalization', 'State transition', 'Fork choice']);
     expect(row(lean, 'cryptography').cells.map(c => c.name)).toEqual(
       ['Poseidon / Merkle tree', 'XMSS signatures', 'Signature aggregation']);
     expect(row(lean, 'serialization').cells.map(c => c.name)).toEqual(['SSZ / Merkleization']);
   });
   it('should pack the execution view rows independently of other views', () => {
     const table = build(execution);
-    expect(table.columns).toBe(4);
+    expect(table.columns).toBe(3);
     expect(row(execution, 'execution').cells.map(c => c.name)).toEqual(
-      ['Execution ETH / RLPx', 'EVM', 'State / Patricia trie', 'Execution transition']);
+      ['EVM', 'State / Patricia trie', 'Execution transition']);
     expect(row(execution, 'development').cells.map(c => c.name)).toEqual(['Solidity / solc']);
     expect(table.rows.find(r => r.group === 'consensus')).toBeUndefined();
   });
   it('should stretch short group rows across the full table width without empty cells', () => {
     const table = build(beacon);
-    expect(table.columns).toBe(5);
-    expect(cellSpans(table.columns, 5)).toEqual([1, 1, 1, 1, 1]);
-    expect(cellSpans(table.columns, 2)).toEqual([3, 2]);
-    expect(cellSpans(table.columns, 1)).toEqual([5]);
+    expect(table.columns).toBe(4);
+    expect(cellSpans(table.columns, 4)).toEqual([1, 1, 1, 1]);
+    expect(cellSpans(table.columns, 2)).toEqual([2, 2]);
+    expect(cellSpans(table.columns, 1)).toEqual([4]);
+    expect(cellSpans(5, 2)).toEqual([3, 2]);
     expect(cellSpans(table.columns, 0)).toEqual([]);
     expect(cellSpans(0, 2)).toEqual([]);
     expect(cellSpans(3, 5)).toEqual([]);
@@ -56,10 +57,24 @@ describe('index table layout', () => {
       }
     }
   });
-  it('should resolve networking rows from recorded edges of the selected view', () => {
-    expect(row(execution, 'execution').cells.find(c => c.name === 'Execution ETH / RLPx')).toBeTruthy();
-    expect(row(beacon, 'consensus').cells.find(c => c.name === 'Consensus Gossipsub')).toBeTruthy();
-    expect(row(lean, 'consensus').cells.find(c => c.name === 'Consensus Gossipsub')).toBeTruthy();
+  it.each([
+    ['beacon', 'b-p2p', 'Consensus Network', 1],
+    ['lean', 'l-p2p', 'Consensus Network', 1],
+    ['execution', 'x-elp2p', 'Execution Network', 0],
+  ])('should keep a dedicated Network row when the %s view is selected', (viewId, instanceId, name, count) => {
+    const selected = bundle.architectureViews.find(v => v.id === viewId)!;
+    const table = build(selected);
+    expect(table.rows.map(r => r.group)).toEqual(viewId === 'execution'
+      ? ['execution', 'networking', 'development']
+      : ['consensus', 'networking', 'cryptography', 'serialization']);
+    expect(row(selected, 'networking').cells).toMatchObject([{instanceId, name, count}]);
+    expect(table.rows.filter(r => r.group !== 'networking').flatMap(r => r.cells.map(c => c.instanceId)))
+      .not.toContain(instanceId);
+  });
+  it('should group networking by area when architecture edges are absent', () => {
+    for (const selected of [beacon, lean, execution]) {
+      expect(buildIndex({...bundle, architectureEdges: []}, selected)).toEqual(build(selected));
+    }
   });
   it('should expose catalogued claim counts per view without inflating evidence', () => {
     expect(row(beacon, 'consensus').cells.find(c => c.instanceId === 'b-state')!.count).toBe(2);
