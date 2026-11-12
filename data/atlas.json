@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "05e28210f340e88367f732443feff55cacab6f9839d7e3f84c3bf97038296d59",
+  "datasetRevision": "9978d070cc34878cfccd6299def9ecfd2fb2977d07bea39871fa908543204cdd",
   "components": [
     {
       "id": "fork-choice",
@@ -34,9 +34,9 @@
     },
     {
       "id": "consensus-network",
-      "name": "Consensus Gossipsub",
+      "name": "Consensus Network",
       "area": "networking",
-      "description": "Consensus-specific gossip and request/response; not execution RLPx.",
+      "description": "Consensus Gossipsub gossip and Req/Resp (request/response); not execution ETH/RLPx.",
       "childComponentIds": []
     },
     {
@@ -85,9 +85,9 @@
     },
     {
       "id": "execution-network",
-      "name": "Execution ETH / RLPx",
+      "name": "Execution Network",
       "area": "networking",
-      "description": "Execution chain synchronization and transaction exchange; consensus happens elsewhere.",
+      "description": "Execution ETH/RLPx chain synchronization and transaction exchange; consensus happens elsewhere.",
       "childComponentIds": []
     },
     {

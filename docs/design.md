@@ -115,8 +115,10 @@ relationships must remain visible.
   Similar positions or names do not establish semantic equivalence.
 - Store deliberate overview positions with each view. Do not make the initial
   experience depend on a continuously moving force-directed layout.
-- Distinguish consensus-side and execution-side networking where their protocols
-  differ; do not draw a fictitious single P2P implementation.
+- Label networking components **Consensus Network** and **Execution Network**
+  in both Map and Index. Keep Gossipsub and Req/Resp in the consensus description,
+  and ETH/RLPx in the execution description. These are separate, view-scoped
+  components, not a fictitious single P2P implementation.
 - Keep compilers as development infrastructure with a generated-code relationship
   to their target. Do not imply that an execution client invokes solc to execute
   bytecode.
@@ -192,12 +194,12 @@ second map, a dashboard, or a coverage report.
 cell selects that component instance in both presentations; zero-claim cells
 are selectable and open the neutral "No catalogued claims" panel state.
 - Rows are the catalogued groups present in the selected view, always in the
-fixed order: Consensus, Execution, Cryptography, Serialization, Development.
-A group with no instance in the view renders no row instead of an empty row.
-A component instance appears in the row of its `component.area`; networking
-instances resolve their side from the recorded architecture edges of that
-instance in the selected view, so consensus-side and execution-side
-networking never share one cell.
+fixed order: Consensus, Execution, Network, Cryptography, Serialization,
+Development. A group with no instance in the view renders no row instead of an
+empty row. Each component instance appears in the row of its `component.area`;
+`networking` has its own **Network** row rather than being folded into Consensus
+or Execution. Row membership never depends on architecture edges. The selected
+view still determines which networking component and claims appear.
 - The table is independent of the map's deliberate geometry: no column is a
 layer. Each group row packs its components one per cell, left to right, in
 foundations-first reading order. A row with fewer components than the widest
@@ -494,7 +496,7 @@ checking. Target at least 80% application code coverage and cover these flows:
 - Switching tabs changes the snapshot, relationships, and applicable claims
   without leaking a claim or check result from the other view; the Execution
   snapshot renders its own map and an index table whose populated cells are
-  execution- and development-only. Its EVM cell can carry explicitly scoped
+  execution-, network- and development-only. Its EVM cell can carry explicitly scoped
   precompile-related model claims without implying whole-EVM correctness;
   components without applicable records retain zero counts.
 - Component selection, expansion, pan/zoom, and claim detail navigation work
