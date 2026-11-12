@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "4a4465012ea15c8f9ee9f3dbdc55d8ea3de3e84f8765a2e626d5b4a0117a8e49",
+  "datasetRevision": "e017a284fc6e09d10526deade4dc7c850e170db70725dc67cf901da37ca7ee0f",
   "components": [
     {
       "id": "fork-choice",
@@ -1959,7 +1959,7 @@
       "result": "reviewed"
     },
     {
-      "id": "audit-compare-beacon-b-p2p-varint-codec-roundtrip",
+      "id": "audit-compare-beacon-reqresp-varint-codec-roundtrip",
       "checkedAt": "2026-11-12T03:58:25Z",
       "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
       "kind": "manual-comparison",
@@ -1979,7 +1979,7 @@
       "result": "related"
     },
     {
-      "id": "audit-compare-lean-l-p2p-varint-codec-roundtrip",
+      "id": "audit-compare-lean-varint-varint-codec-roundtrip",
       "checkedAt": "2026-11-12T03:58:25Z",
       "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
       "kind": "manual-comparison",
@@ -2960,7 +2960,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "audit-compare-beacon-b-p2p-varint-codec-roundtrip"
+            "checkId": "audit-compare-beacon-reqresp-varint-codec-roundtrip"
           }
         },
         {
@@ -3482,7 +3482,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "audit-compare-lean-l-p2p-varint-codec-roundtrip"
+            "checkId": "audit-compare-lean-varint-varint-codec-roundtrip"
           }
         },
         {

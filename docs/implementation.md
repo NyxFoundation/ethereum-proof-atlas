@@ -269,21 +269,23 @@ related-model limitations, unchanged no-replay status, tab isolation and a
 
 ## Network presentation acceptance
 
-Network components have a dedicated Index row, ordered after Consensus and
-Execution and before Cryptography. Both presentations use **Consensus Network**
-and **Execution Network**; component descriptions retain Gossipsub, Req/Resp and
-ETH/RLPx. Grouping reads `component.area` directly, without inferring a side from
-architecture edges. Component IDs, graph positions, source pins, claims,
-bindings and checks are unchanged; only two component names/descriptions and the
-canonical bundle digest changed.
+Network components occupy a dedicated Index row, ordered after Consensus and
+Execution and before Cryptography. The 2026-11-12 protocol split replaced the
+folded single instances with pinned per-protocol components: transport (QUIC,
+RLPx), message domains (Gossipsub topics, Req/Resp codec, ETH wire protocol),
+discovery (discv5, ENR) and the varint codec. The varint claim sits on the
+Req/Resp codec (Beacon) and Varint codec (Lean) instances; two audit check IDs
+were renamed to their carrier instances, and no record keeps a retired instance
+ID. Claims, evidence, bindings, source revisions and check results are unchanged;
+twelve components, seven pinned specification locations with dated GET
+observations, and the recomputed canonical bundle digest were added.
 
-On 2026-11-12, `npm run verify` passed 201 unit/component/package cases and
-32 workerd browser cases. Coverage was 99.07% statements, 96.71% branches,
-98.80% functions and 99.84% lines. The nine Network browser cases cover all
-three views at 1280, 390 and 320 pixels, keyboard selection, protocol descriptions,
-unchanged counts, shared Map/Index selection and page-width containment.
-The post-change [UI audit](../anti-slop/audit-001-2026-11-12.md) records the
-approved fixes and rendered checks. These checks do not replay external proofs.
+On 2026-11-12 the split revision passed `npm run verify` with 201
+unit/component/package cases and 32 workerd browser cases. Coverage was 99.07%
+statements, 96.71% branches, 98.80% functions and 99.84% lines. Browser cases
+cover all three views at 1280, 390 and 320 pixels, keyboard selection, protocol
+descriptions, unchanged counts, shared Map/Index selection and page-width
+containment. These checks do not replay external proofs.
 
 ## Automated update acceptance
 
