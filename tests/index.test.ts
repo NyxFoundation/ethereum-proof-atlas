@@ -16,7 +16,8 @@ describe('index table layout', () => {
     expect(row(beacon, 'consensus').cells.map(c => c.name)).toEqual([
       'Justification / finalization', 'PeerDAS', 'State transition', 'Fork choice']);
     expect(row(beacon, 'cryptography').cells.map(c => c.name)).toEqual(['KZG commitments', 'BLS signatures']);
-    expect(row(beacon, 'serialization').cells.map(c => c.name)).toEqual(['SSZ / Merkleization']);
+    expect(row(beacon, 'serialization').cells.map(c => c.name)).toEqual([
+      'SSZ encoding / decoding', 'SSZ Merkleization']);
   });
   it('should order parallel lean rows without stacking or gaps', () => {
     const table = build(lean);
@@ -25,7 +26,8 @@ describe('index table layout', () => {
       'Justification / finalization', 'State transition', 'Fork choice']);
     expect(row(lean, 'cryptography').cells.map(c => c.name)).toEqual(
       ['Poseidon / Merkle tree', 'XMSS signatures', 'Signature aggregation']);
-    expect(row(lean, 'serialization').cells.map(c => c.name)).toEqual(['SSZ / Merkleization']);
+    expect(row(lean, 'serialization').cells.map(c => c.name)).toEqual([
+      'SSZ encoding / decoding', 'SSZ Merkleization']);
   });
   it('should pack the execution view rows independently of other views', () => {
     const table = build(execution);

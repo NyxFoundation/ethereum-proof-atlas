@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "e017a284fc6e09d10526deade4dc7c850e170db70725dc67cf901da37ca7ee0f",
+  "datasetRevision": "97abce19115ce5ec8d141cb9c3699878c73d085fdda11222cbe391bff92709ca",
   "components": [
     {
       "id": "fork-choice",
@@ -33,10 +33,17 @@
       "childComponentIds": []
     },
     {
-      "id": "ssz",
-      "name": "SSZ / Merkleization",
+      "id": "ssz-codec",
+      "name": "SSZ encoding / decoding",
       "area": "serialization",
-      "description": "Consensus encoding and hash-tree roots; not a correctness endorsement of any library.",
+      "description": "SSZ byte encoding and decoding; codec claims do not establish hash-tree-root or Merkle-branch correctness.",
+      "childComponentIds": []
+    },
+    {
+      "id": "ssz-merkleization",
+      "name": "SSZ Merkleization",
+      "area": "serialization",
+      "description": "SSZ hash-tree roots and Merkle branches; structural claims do not establish codec correctness or hash security.",
       "childComponentIds": []
     },
     {
@@ -2751,8 +2758,8 @@
           "parentInstanceId": null
         },
         {
-          "instanceId": "b-ssz",
-          "componentId": "ssz",
+          "instanceId": "b-ssz-codec",
+          "componentId": "ssz-codec",
           "subjectArtifactIds": [
             "consensus",
             "ssz-specs",
@@ -2779,6 +2786,39 @@
           ],
           "position": {
             "x": 310,
+            "y": 610
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "b-ssz-merkleization",
+          "componentId": "ssz-merkleization",
+          "subjectArtifactIds": [
+            "consensus",
+            "ssz-specs",
+            "ssz-lean",
+            "ethlib"
+          ],
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "phase0"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-container"
+            },
+            {
+              "artifactId": "ssz-lean",
+              "locationId": "ssz-lean-entry"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            }
+          ],
+          "position": {
+            "x": 825,
             "y": 610
           },
           "parentInstanceId": null
@@ -2898,10 +2938,10 @@
           }
         },
         {
-          "componentInstanceId": "b-ssz",
+          "componentInstanceId": "b-ssz-codec",
           "claimId": "ssz-canonical-codec",
           "applicabilityKind": "direct-subject",
-          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
+          "explanation": "Versioned subject of the SSZ encoding / decoding instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
           "sources": [
             {
               "artifactId": "ethlib-proof",
@@ -2921,10 +2961,10 @@
           }
         },
         {
-          "componentInstanceId": "b-ssz",
+          "componentInstanceId": "b-ssz-merkleization",
           "claimId": "ssz-branch-rebuilds-root",
           "applicabilityKind": "direct-subject",
-          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
+          "explanation": "Versioned subject of the SSZ Merkleization instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
           "sources": [
             {
               "artifactId": "ethlib-proof",
@@ -3283,8 +3323,8 @@
           "parentInstanceId": null
         },
         {
-          "instanceId": "l-ssz",
-          "componentId": "ssz",
+          "instanceId": "l-ssz-codec",
+          "componentId": "ssz-codec",
           "subjectArtifactIds": [
             "leanspec",
             "ssz-specs",
@@ -3311,6 +3351,39 @@
           ],
           "position": {
             "x": 310,
+            "y": 610
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-ssz-merkleization",
+          "componentId": "ssz-merkleization",
+          "subjectArtifactIds": [
+            "leanspec",
+            "ssz-specs",
+            "ssz-lean",
+            "ethlib"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "ssz"
+            },
+            {
+              "artifactId": "ssz-specs",
+              "locationId": "ssz-container"
+            },
+            {
+              "artifactId": "ssz-lean",
+              "locationId": "ssz-lean-entry"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "ssz-spec-proofs"
+            }
+          ],
+          "position": {
+            "x": 825,
             "y": 610
           },
           "parentInstanceId": null
@@ -3420,10 +3493,10 @@
           }
         },
         {
-          "componentInstanceId": "l-ssz",
+          "componentInstanceId": "l-ssz-codec",
           "claimId": "ssz-canonical-codec",
           "applicabilityKind": "direct-subject",
-          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
+          "explanation": "Versioned subject of the SSZ encoding / decoding instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list, not equality with the Python codec or a refinement proof.",
           "sources": [
             {
               "artifactId": "ethlib-proof",
@@ -3443,10 +3516,10 @@
           }
         },
         {
-          "componentInstanceId": "l-ssz",
+          "componentInstanceId": "l-ssz-merkleization",
           "claimId": "ssz-branch-rebuilds-root",
           "applicabilityKind": "direct-subject",
-          "explanation": "Versioned subject of the SSZ instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
+          "explanation": "Versioned subject of the SSZ Merkleization instance: the reference implementation's Lean build pins this exact Ethereum/EthLib revision. Direct-subject applicability records the component's own subject list; it is not a refinement against a recorded checkpoint or root producer.",
           "sources": [
             {
               "artifactId": "ethlib-proof",
@@ -3775,7 +3848,7 @@
     {
       "id": "b-ssz-state",
       "viewId": "beacon",
-      "source": "b-ssz",
+      "source": "b-ssz-merkleization",
       "target": "b-state",
       "kind": "dependency",
       "label": "Hash-tree roots",
@@ -3824,7 +3897,7 @@
     {
       "id": "b-ssz-p2p",
       "viewId": "beacon",
-      "source": "b-ssz",
+      "source": "b-ssz-codec",
       "target": "b-gossipsub",
       "kind": "dependency",
       "label": "SSZ-Snappy",
@@ -3899,7 +3972,7 @@
     {
       "id": "l-ssz-state",
       "viewId": "lean",
-      "source": "l-ssz",
+      "source": "l-ssz-merkleization",
       "target": "l-state",
       "kind": "dependency",
       "label": "Hash-tree roots",
@@ -3944,7 +4017,7 @@
     {
       "id": "l-ssz-signatures",
       "viewId": "lean",
-      "source": "l-ssz",
+      "source": "l-ssz-merkleization",
       "target": "l-signatures",
       "kind": "dependency",
       "label": "Message roots",
@@ -3989,7 +4062,7 @@
     {
       "id": "l-ssz-p2p",
       "viewId": "lean",
-      "source": "l-ssz",
+      "source": "l-ssz-codec",
       "target": "l-gossipsub",
       "kind": "dependency",
       "label": "SSZ-Snappy",

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import raw from '../data/atlas.json';
 import { buildIndex } from '../src/domain/indexLayout';
-import { claimsFor, availabilityFor } from '../src/domain/selectors';
+import { claimsFor, availabilityFor, visibleEdges, visibleInstances } from '../src/domain/selectors';
 import { validateStructure } from '../src/domain/validate';
 
 const bundle = validateStructure(raw);
@@ -23,6 +23,46 @@ const expected = [
   ['lean', 'l-xmss', 1, 'xmss-signature-correctness'],
   ['execution', 'x-evm', 1, 'modexp-output-correctness'],
 ] as const;
+
+describe('SSZ component boundaries', () => {
+  it.each([['beacon', 'b'], ['lean', 'l']])(
+    'should separate codec and Merkle claims in the index and map when %s is selected', (viewId, prefix) => {
+      const view = bundle.architectureViews.find(candidate => candidate.id === viewId)!;
+      const cells = buildIndex(bundle, view).rows.find(row => row.group === 'serialization')!.cells;
+      expect(cells).toEqual([
+        { instanceId: `${prefix}-ssz-codec`, componentId: 'ssz-codec',
+          name: 'SSZ encoding / decoding', count: 1, band: 1 },
+        { instanceId: `${prefix}-ssz-merkleization`, componentId: 'ssz-merkleization',
+          name: 'SSZ Merkleization', count: 1, band: 1 },
+      ]);
+      const visible = visibleInstances(view, new Set()).map(instance => instance.instanceId);
+      for (const cell of cells) expect(visible).toContain(cell.instanceId);
+      expect(claimsFor(bundle, viewId, cells[0].instanceId).map(claim => claim.id)).toEqual(['ssz-canonical-codec']);
+      expect(claimsFor(bundle, viewId, cells[1].instanceId).map(claim => claim.id)).toEqual(['ssz-branch-rebuilds-root']);
+      for (const cell of cells) {
+        expect(view.claimBindings.find(binding => binding.componentInstanceId === cell.instanceId))
+          .toMatchObject({ applicabilityKind: 'direct-subject', basis: { kind: 'version-match' } });
+      }
+      expect(view.componentInstances.some(instance => instance.componentId === 'ssz')).toBe(false);
+    });
+  it.each([['beacon', 'b'], ['lean', 'l']])(
+    'should route encoding and root consumers to their own providers when %s is mapped', (viewId, prefix) => {
+      const view = bundle.architectureViews.find(candidate => candidate.id === viewId)!;
+      const edges = visibleEdges(bundle, view, new Set());
+      expect(edges.filter(edge => edge.source === `${prefix}-ssz-codec`).map(edge => [edge.target, edge.label]))
+        .toEqual([[`${prefix}-gossipsub`, 'SSZ-Snappy']]);
+      expect(edges.filter(edge => edge.source === `${prefix}-ssz-merkleization`).map(edge => [edge.target, edge.label]))
+        .toEqual(viewId === 'beacon'
+          ? [[`${prefix}-state`, 'Hash-tree roots']]
+          : [[`${prefix}-state`, 'Hash-tree roots'], [`${prefix}-signatures`, 'Message roots']]);
+    });
+  it('should omit consensus serialization when the execution view is selected', () => {
+    const view = bundle.architectureViews.find(candidate => candidate.id === 'execution')!;
+    expect(buildIndex(bundle, view).rows.some(row => row.group === 'serialization')).toBe(false);
+    expect(visibleInstances(view, new Set()).some(instance => instance.componentId.startsWith('ssz'))).toBe(false);
+    expect(view.claimBindings.some(binding => binding.claimId.startsWith('ssz-'))).toBe(false);
+  });
+});
 
 describe('inspected proof catalogue', () => {
   it.each(expected)('should expose %s/%s with %i claims including %s when indexed', (viewId, instanceId, count, claimId) => {
@@ -89,9 +129,7 @@ describe('inspected proof catalogue', () => {
       expect(bundle.claims.some(claim => claim.subjectArtifactIds.includes(artifactId))).toBe(false);
       expect(bundle.evidence.some(record => record.artifactId === artifactId)).toBe(false);
     }
-    expect(claimsFor(bundle, 'beacon', 'b-ssz').map(claim => claim.id))
-      .toEqual(['ssz-canonical-codec', 'ssz-branch-rebuilds-root']);
-    expect(claimsFor(bundle, 'lean', 'l-ssz').map(claim => claim.id))
+    expect(bundle.claims.filter(claim => claim.id.startsWith('ssz-')).map(claim => claim.id))
       .toEqual(['ssz-canonical-codec', 'ssz-branch-rebuilds-root']);
   });
 });

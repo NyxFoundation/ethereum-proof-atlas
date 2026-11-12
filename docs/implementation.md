@@ -134,6 +134,7 @@ status as JSON; public errors never include the thrown value.
 | Historic source details survive external outage | Availability mutation test, panel fixture, failed external-navigation browser test |
 | English text, escaped imported content | ASCII English data contract, English UI tests, script-text escaping fixture |
 | Worker, assets, UI and source navigation exercised together | Playwright uses the packaged local Worker, not a mock API server |
+| SSZ codec and Merkleization keep separate claims, counts and dependencies in both consensus views | Catalogue/index unit tests and `e2e/serialization.spec.ts`: keyboard selection, pinned evidence, Map/Index continuity, non-overlapping nodes and 320/390/1280px containment |
 | Index mode shares selection, derives rows/columns from recorded data, keeps exact counts visible and zero cells neutral | Index layout suite, React mode-toggle and tab-persistence tests, Index browser journey and narrow-viewport containment test |
 
 `npm run test:coverage` enforces 80% across statements, branches, functions and

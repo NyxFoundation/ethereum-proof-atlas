@@ -184,14 +184,23 @@ Two claims were published from this inspection:
 - **SSZ canonical codec** (`ssz-canonical-codec`):
   `Codec.Canonicality.serialize_of_deserialize` — every accepted encoding of a
   well-formed declaration re-encodes to its own input. Bound direct-subject to
-  the `b-ssz` and `l-ssz` instances through the artifact's presence in their
-  versioned subject lists (`version-match`); no refinement to the Python codec
+  the `b-ssz-codec` and `l-ssz-codec` instances through the artifact's presence
+  in their versioned subject lists (`version-match`); no refinement to the Python codec
   is claimed.
 - **SSZ branch correctness** (`ssz-branch-rebuilds-root`):
   `Codec.ProofCorrectness.buildProof_rebuilds_value_root` — a constructed
-  branch for a readable gindex rebuilds the value's hash-tree root. Same
-  direct-subject binding. The `combine` parameter stays abstract, so the
-  result is structural and no hash-security property is recorded.
+  branch for a readable gindex rebuilds the value's hash-tree root. Bound
+  direct-subject to `b-ssz-merkleization` and `l-ssz-merkleization`. The `combine`
+  parameter stays abstract, so the result is structural and no hash-security
+  property is recorded.
+
+The 2026-11-12 component split separates these existing claims into **SSZ
+encoding / decoding** and **SSZ Merkleization**, one claim per component in
+both consensus views. Artifact revisions, evidence and check records are
+unchanged. The Merkleization instances cite the already-recorded `ssz-container`
+source; encoding keeps `ssz-reference`. Existing SSZ-Snappy edges now originate
+from encoding, while hash-tree-root and message-root edges originate from
+Merkleization. This is a catalogue reorganization, not new proof intake or replay.
 
 Two corrections and one boundary from the same inspection:
 
