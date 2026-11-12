@@ -115,10 +115,11 @@ relationships must remain visible.
   Similar positions or names do not establish semantic equivalence.
 - Store deliberate overview positions with each view. Do not make the initial
   experience depend on a continuously moving force-directed layout.
-- Label networking components **Consensus Network** and **Execution Network**
-  in both Map and Index. Keep Gossipsub and Req/Resp in the consensus description,
-  and ETH/RLPx in the execution description. These are separate, view-scoped
-  components, not a fictitious single P2P implementation.
+- Split the networking stack into components that each pinned specification
+  actually names: transport (QUIC, RLPx), message domains (Gossipsub topics,
+  Req/Resp codec, the ETH wire protocol), discovery (discv5, ENR) and the varint
+  codec. Do not fold them into one component, and do not draw a fictitious single
+  P2P implementation.
 - Keep compilers as development infrastructure with a generated-code relationship
   to their target. Do not imply that an execution client invokes solc to execute
   bytecode.

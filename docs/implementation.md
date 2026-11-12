@@ -155,7 +155,8 @@ The Map / Index toggle is the approved inventory view from
 catalogue is empty, with the map one toggle away.
 `src/domain/indexLayout.ts` derives everything from the
 same validated bundle: rows hold the catalogued groups present in the view,
-including a dedicated Network row for `networking` components, and each group
+including a dedicated Network row whose cells are the view's individually pinned
+protocol components (transport, message domains, discovery, codec), and each group
 row packs its components one per cell leftwards from the
 leftmost column, in foundations-first reading order over
 `band-0`…`band-3` claim-count shading. A row shorter than the widest row

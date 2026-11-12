@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 const cases = [
-  ['Beacon Spec', 'b-p2p', 'Consensus Network', 1,
+  ['Beacon Spec', 'b-reqresp', 'Req/Resp codec', 1,
     'Varint encoding round-trips and accepted prefixes are canonical',
     'Varint.decodeEncodeSuffix', 'etheorem/leanp2p', '63-bit'],
-  ['Lean Spec', 'l-p2p', 'Consensus Network', 1,
+  ['Lean Spec', 'l-varint', 'Varint codec', 1,
     'Varint encoding round-trips and accepted prefixes are canonical',
     'Varint.encodeDecode', 'etheorem/leanp2p', '64-bit'],
   ['Beacon Spec', 'b-state', 'State transition', 2,
@@ -65,13 +65,13 @@ for (const [tab, instance, component, count, title, theorem, repository, limitat
 test('should keep related networking claims out of execution and retain narrow-screen usability', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
   await page.goto('/');
-  await page.getByRole('button', { name: 'Consensus Network: Claims: 1', exact: true }).click();
+  await page.getByRole('button', { name: 'Req/Resp codec: Claims: 1', exact: true }).click();
   await page.getByRole('button', { name: cases[0][4], exact: true }).click();
   const article = page.getByRole('article', { name: 'Claim details' });
   await expect(article.getByRole('link', { name: 'Varint.encodeDecode', exact: true })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
-  await page.getByRole('button', { name: 'Execution Network: No catalogued claims', exact: true }).click();
+  await page.getByRole('button', { name: 'ETH wire protocol: No catalogued claims', exact: true }).click();
   await expect(page.getByRole('heading', { name: '0 claims', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: cases[0][4], exact: true })).toHaveCount(0);
 });

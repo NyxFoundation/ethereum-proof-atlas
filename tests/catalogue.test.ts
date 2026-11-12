@@ -13,13 +13,13 @@ const additions = [
 const expected = [
   ['beacon', 'b-state', 2, 'ffg-churn-intersection-bound'],
   ['beacon', 'b-finality', 2, 'ffg-churn-intersection-bound'],
-  ['beacon', 'b-p2p', 1, 'varint-codec-roundtrip'],
+  ['beacon', 'b-reqresp', 1, 'varint-codec-roundtrip'],
   ['beacon', 'b-bls', 1, 'bls-hash-to-g2-valid'],
   ['beacon', 'b-kzg', 3, 'kzg-binding-reduction'],
   ['beacon', 'b-kzg', 3, 'kzg-cell-roundtrip'],
   ['beacon', 'b-da', 1, 'kzg-cell-roundtrip'],
   ['lean', 'l-head', 1, 'lstar-incremental-head'],
-  ['lean', 'l-p2p', 1, 'varint-codec-roundtrip'],
+  ['lean', 'l-varint', 1, 'varint-codec-roundtrip'],
   ['lean', 'l-xmss', 1, 'xmss-signature-correctness'],
   ['execution', 'x-evm', 1, 'modexp-output-correctness'],
 ] as const;
@@ -60,10 +60,15 @@ describe('inspected proof catalogue', () => {
 
   it('should count one codec property when two leanp2p theorem locations support it', () => {
     expect(bundle.evidence.filter(record => record.claimId === 'varint-codec-roundtrip')).toHaveLength(2);
-    for (const [view, instance] of [['beacon', 'b-p2p'], ['lean', 'l-p2p']]) {
+    for (const [view, instance] of [['beacon', 'b-reqresp'], ['lean', 'l-varint']]) {
       expect(claimsFor(bundle, view, instance).map(claim => claim.id)).toEqual(['varint-codec-roundtrip']);
     }
-    expect(claimsFor(bundle, 'execution', 'x-elp2p')).toEqual([]);
+    for (const other of bundle.architectureViews.flatMap(view => view.componentInstances)
+      .filter(instance => !['b-reqresp', 'l-varint'].includes(instance.instanceId))) {
+      expect(claimsFor(bundle, bundle.architectureViews.find(view => view.claimBindings.some(
+        binding => binding.componentInstanceId === other.instanceId))?.id ?? 'execution', other.instanceId)
+        .map(claim => claim.id)).not.toContain('varint-codec-roundtrip');
+    }
   });
 
   it('should preserve scope differences when a related model is bound to a protocol', () => {

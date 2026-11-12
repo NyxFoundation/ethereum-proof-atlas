@@ -219,9 +219,9 @@ test('should list referenced repositories as discovery links in the footer', asy
   const leanp2p = page.locator('footer').getByRole('link', { name: 'etheorem/leanp2p', exact: true });
   await expect(leanp2p).toHaveAttribute('href', 'https://github.com/etheorem/leanp2p');
   for (const [tab, networking, count] of [
-    ['Beacon Spec', 'Consensus Network', 'Claims: 1'],
-    ['Lean Spec', 'Consensus Network', 'Claims: 1'],
-    ['Execution Spec', 'Execution Network', 'No catalogued claims'],
+    ['Beacon Spec', 'Gossipsub topics', 'No catalogued claims'],
+    ['Lean Spec', 'Gossipsub topics', 'No catalogued claims'],
+    ['Execution Spec', 'ETH wire protocol', 'No catalogued claims'],
   ]) {
     await page.getByRole('tab', { name: tab, exact: true }).click();
     await expect(leanp2p).toBeVisible();
@@ -264,7 +264,7 @@ test('should inventory catalogued claims in the index table across views', async
   await page.getByRole('tab', { name: 'Execution Spec', exact: true }).click();
   const execTable = page.getByRole('table');
   await expect(execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' })).toBeVisible();
-  expect(await execTable.getByRole('button').count()).toBe(5);
+  expect(await execTable.getByRole('button').count()).toBe(6);
   await expect(execTable.getByRole('button', { name: 'Fork choice: No catalogued claims' })).toHaveCount(0);
   await execTable.getByRole('button', { name: 'Solidity / solc: No catalogued claims' }).click();
   await expect(page.getByRole('complementary', { name: 'Details panel' }).getByRole('heading', { name: '0 claims' })).toBeVisible();
