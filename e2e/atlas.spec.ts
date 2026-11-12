@@ -37,7 +37,7 @@ test('should navigate independently sourced views and evidence in the Workers ru
   await expect(page.getByRole('button', { name: 'Select BLS signatures', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Select State transition', exact: true }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
-  await expect(panel.getByText('Formal model · Related model')).toBeVisible();
+  await expect(panel.getByText('Formal model · Related model')).toHaveCount(2);
   await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
   const replay = panel.getByRole('button', { name: 'No replay', exact: true });
   await page.mouse.move(0, 0);
@@ -65,7 +65,8 @@ test('should navigate independently sourced views and evidence in the Workers ru
   await expect(panel.getByText(/genesis anchoring is excluded/)).toBeVisible();
   await expect(panel.getByRole('link', { name: 'State.checkpoint_forward' })).toHaveAttribute('href', /ba7284513031eac5c66bfb8221d27b6154cf240b/);
   await page.getByRole('button', { name: 'Select XMSS signatures', exact: true }).click();
-  await expect(panel.getByRole('heading', { name: '0 claims' })).toBeVisible();
+  await expect(panel.getByRole('heading', { name: 'Claims: 1' })).toBeVisible();
+  await expect(panel.getByRole('button', { name: 'Generated leanXMSS keys verify successfully produced signatures' })).toBeVisible();
   expect(foreignRequests).toEqual([]);
   expect(errors).toEqual([]);
 });
@@ -204,7 +205,7 @@ test('should list referenced repositories as discovery links in the footer', asy
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:4173/')) foreignRequests.push(request.url()); });
   await page.goto('/');
   const links = page.locator('footer').getByRole('link');
-  await expect(links).toHaveCount(7);
+  await expect(links).toHaveCount(8);
   await expect(links.filter({ hasText: 'NyxFoundation/gasper-lean4' }))
     .toHaveAttribute('href', 'https://github.com/NyxFoundation/gasper-lean4');
   await expect(links.filter({ hasText: 'ethereum/EthLib' }))
@@ -215,6 +216,18 @@ test('should list referenced repositories as discovery links in the footer', asy
     expect(await link.getAttribute('target')).toBe('_blank');
   }
   await expect(links.filter({ hasText: 'Verified-zkEVM/ArkLib' })).toBeVisible();
+  const leanp2p = page.locator('footer').getByRole('link', { name: 'etheorem/leanp2p', exact: true });
+  await expect(leanp2p).toHaveAttribute('href', 'https://github.com/etheorem/leanp2p');
+  for (const [tab, networking, count] of [
+    ['Beacon Spec', 'Consensus Gossipsub', 'Claims: 1'],
+    ['Lean Spec', 'Consensus Gossipsub', 'Claims: 1'],
+    ['Execution Spec', 'Execution ETH / RLPx', 'No catalogued claims'],
+  ]) {
+    await page.getByRole('tab', { name: tab, exact: true }).click();
+    await expect(leanp2p).toBeVisible();
+    await expect(page.getByRole('button', { name: `${networking}: ${count}`, exact: true }))
+      .toBeVisible();
+  }
   expect(foreignRequests).toEqual([]);
 });
 
@@ -234,7 +247,7 @@ test('should inventory catalogued claims in the index table across views', async
     await expect(table.getByRole('rowheader', { name: group, exact: true })).toBeVisible();
   }
   await expect(table.getByRole('rowheader', { name: 'Development', exact: true })).toHaveCount(0);
-  await table.getByRole('button', { name: 'State transition: Claims: 1' }).click();
+  await table.getByRole('button', { name: 'State transition: Claims: 2' }).click();
   const panel = page.getByRole('complementary', { name: 'Details panel' });
   await panel.getByRole('button', { name: 'Conflicting finality implies a slashed quorum intersection' }).click();
   await expect(panel.getByText('Property')).toBeVisible();
@@ -263,5 +276,5 @@ test('should keep the index table inside its container at narrow widths', async 
   await page.setViewportSize({width: 320, height: 844});
   await page.goto('/');
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
-  await expect(page.getByRole('button', {name: 'State transition: Claims: 1'})).toBeVisible();
+  await expect(page.getByRole('button', {name: 'State transition: Claims: 2'})).toBeVisible();
 });

@@ -1,6 +1,6 @@
 ---
 title: Ethereum Proof Atlas Design
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 tags:
   - architecture
   - formal-verification
@@ -494,7 +494,9 @@ checking. Target at least 80% application code coverage and cover these flows:
 - Switching tabs changes the snapshot, relationships, and applicable claims
   without leaking a claim or check result from the other view; the Execution
   snapshot renders its own map and an index table whose populated cells are
-  execution- and development-only with zero catalogued claims.
+  execution- and development-only. Its EVM cell can carry explicitly scoped
+  precompile-related model claims without implying whole-EVM correctness;
+  components without applicable records retain zero counts.
 - Component selection, expansion, pan/zoom, and claim detail navigation work
   together and remain usable by keyboard.
 - Read-only interactions cannot move, delete, or reconnect components.

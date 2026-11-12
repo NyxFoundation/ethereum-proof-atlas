@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "4d5371440baee9caa4feb0bad16e5a5da582fe19d149f62fa2c7eabe2133f934",
+  "datasetRevision": "05e28210f340e88367f732443feff55cacab6f9839d7e3f84c3bf97038296d59",
   "components": [
     {
       "id": "fork-choice",
@@ -194,6 +194,24 @@
           "path": "specs/fulu/fork-choice.md",
           "label": "Fulu on_block and PeerDAS availability",
           "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/fork-choice.md#L83-L161"
+        },
+        {
+          "id": "varint-framing",
+          "path": "specs/phase0/p2p-interface.md",
+          "label": "Req/Resp unsigned-varint length prefixes",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/p2p-interface.md#L1343-L1366"
+        },
+        {
+          "id": "bls-ciphersuite",
+          "path": "specs/phase0/beacon-chain.md",
+          "label": "Beacon BLS12-381 G2 ciphersuite",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/beacon-chain.md#L1070-L1084"
+        },
+        {
+          "id": "das-cell",
+          "path": "specs/fulu/das-core.md",
+          "label": "Fulu Cell byte encoding",
+          "url": "https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/fulu/das-core.md#L48-L58"
         }
       ]
     },
@@ -217,6 +235,18 @@
           "path": "src/ethereum/forks/osaka/vm/interpreter.py",
           "label": "Osaka EVM interpreter",
           "url": "https://github.com/ethereum/execution-specs/blob/a7dbafac0c0ec82e7b2e20959cc7c00ce958442a/src/ethereum/forks/osaka/vm/interpreter.py"
+        },
+        {
+          "id": "modexp",
+          "path": "src/ethereum/forks/osaka/vm/precompiled_contracts/modexp.py",
+          "label": "Osaka MODEXP precompile",
+          "url": "https://github.com/ethereum/execution-specs/blob/a7dbafac0c0ec82e7b2e20959cc7c00ce958442a/src/ethereum/forks/osaka/vm/precompiled_contracts/modexp.py#L22-L71"
+        },
+        {
+          "id": "precompiles",
+          "path": "src/ethereum/forks/osaka/vm/precompiled_contracts/mapping.py",
+          "label": "Osaka precompile address mapping",
+          "url": "https://github.com/ethereum/execution-specs/blob/a7dbafac0c0ec82e7b2e20959cc7c00ce958442a/src/ethereum/forks/osaka/vm/precompiled_contracts/mapping.py#L53-L65"
         }
       ]
     },
@@ -328,6 +358,24 @@
           "path": "src/lean_spec/spec/crypto/xmss/merkle.py",
           "label": "XMSS tree using Poseidon",
           "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/merkle.py"
+        },
+        {
+          "id": "varint",
+          "path": "src/lean_spec/node/networking/varint.py",
+          "label": "Lean Spec LEB128 codec and limits",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/varint.py#L101-L234"
+        },
+        {
+          "id": "reqresp-codec",
+          "path": "src/lean_spec/node/networking/reqresp/codec.py",
+          "label": "Req/Resp length-prefix codec",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/reqresp/codec.py#L78-L162"
+        },
+        {
+          "id": "head-tally",
+          "path": "src/lean_spec/spec/forks/lstar/fork_choice.py",
+          "label": "Lstar ancestor weights and LMD-GHOST walk",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/forks/lstar/fork_choice.py#L729-L856"
         }
       ]
     },
@@ -545,12 +593,42 @@
           "path": "EthLib/Consensus.lean",
           "label": "Consensus primitives root",
           "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus.lean"
+        },
+        {
+          "id": "bls-hash",
+          "path": "EthLib/Cryptography/Bls/HashToCurve.lean",
+          "label": "EthLib BLS12-381 hash-to-G2 model",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Bls/HashToCurve.lean#L261-L270"
+        },
+        {
+          "id": "xmss-verify",
+          "path": "EthLib/Cryptography/Xmss/Verify.lean",
+          "label": "EthLib leanXMSS verification model",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Xmss/Verify.lean#L75-L108"
+        },
+        {
+          "id": "xmss-design",
+          "path": "EthLib/Cryptography/Xmss/README.md",
+          "label": "Keccak-based two-layer leanXMSS design",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Xmss/README.md#L1-L59"
+        },
+        {
+          "id": "kzg-cell",
+          "path": "EthLib/Cryptography/Kzg/Cells.lean",
+          "label": "Cell and coset-evaluation codecs",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Kzg/Cells.lean#L26-L49"
+        },
+        {
+          "id": "modexp-core",
+          "path": "EthLib/Precompiles/Modexp/Core.lean",
+          "label": "MODEXP input and output model",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Precompiles/Modexp/Core.lean#L38-L139"
         }
       ]
     },
     {
       "id": "ethlib-proof",
-      "title": "EthLib SSZ codec and branch proofs",
+      "title": "EthLib SSZ and cryptographic primitive proofs",
       "kind": "proof",
       "repository": "https://github.com/ethereum/EthLib",
       "revisionKind": "git-commit",
@@ -568,6 +646,178 @@
           "path": "EthLib/Consensus/Proofs/Ssz/Codec/ProofCorrectness.lean",
           "label": "Codec.ProofCorrectness.buildProof_rebuilds_value_root",
           "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Consensus/Proofs/Ssz/Codec/ProofCorrectness.lean#L11-L21"
+        },
+        {
+          "id": "hash-to-g2",
+          "path": "EthLib/Cryptography/Proofs/Bls/HashToCurveValidity.lean",
+          "label": "HashToCurve.hashToG2_total",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Proofs/Bls/HashToCurveValidity.lean#L151-L160"
+        },
+        {
+          "id": "xmss-correctness",
+          "path": "EthLib/Cryptography/Proofs/Xmss/Correctness.lean",
+          "label": "Xmss.verify_keyGen_sign",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Proofs/Xmss/Correctness.lean#L60-L67"
+        },
+        {
+          "id": "cell-roundtrip",
+          "path": "EthLib/Cryptography/Proofs/Kzg/Cells.lean",
+          "label": "Kzg.cellToCosetEvals_cosetEvalsToCell",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Cryptography/Proofs/Kzg/Cells.lean#L168-L179"
+        },
+        {
+          "id": "modexp-output",
+          "path": "EthLib/Precompiles/Proofs/Modexp/Core.lean",
+          "label": "Modexp.compute_eq_pow_mod",
+          "url": "https://github.com/ethereum/EthLib/blob/6b87b0d4951766864af432455c44344fd12b5cdc/EthLib/Precompiles/Proofs/Modexp/Core.lean#L47-L67"
+        }
+      ]
+    },
+    {
+      "id": "leanp2p-proof",
+      "title": "leanp2p unsigned-varint codec proofs",
+      "kind": "proof",
+      "repository": "https://github.com/etheorem/leanp2p",
+      "revisionKind": "git-commit",
+      "revision": "0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7",
+      "version": "Lean 4.34.0; inspected hackathon26 snapshot; no atlas replay",
+      "locations": [
+        {
+          "id": "encode-decode",
+          "path": "packages/codec/varint/Varint/Theorems.lean",
+          "label": "Varint.encodeDecode",
+          "url": "https://github.com/etheorem/leanp2p/blob/0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7/packages/codec/varint/Varint/Theorems.lean#L20-L28"
+        },
+        {
+          "id": "decode-encode-suffix",
+          "path": "packages/codec/varint/Varint/UVarint.lean",
+          "label": "Varint.decodeEncodeSuffix",
+          "url": "https://github.com/etheorem/leanp2p/blob/0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7/packages/codec/varint/Varint/UVarint.lean#L230-L241"
+        }
+      ]
+    },
+    {
+      "id": "leanp2p-model",
+      "title": "leanp2p unsigned-varint model",
+      "kind": "formal-model",
+      "repository": "https://github.com/etheorem/leanp2p",
+      "revisionKind": "git-commit",
+      "revision": "0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7",
+      "version": "Lean 4.34.0; 63-bit List Nat codec; no Atlas replay",
+      "locations": [
+        {
+          "id": "codec",
+          "path": "packages/codec/varint/Varint/UVarint.lean",
+          "label": "Varint.UVarint, encode and decode?",
+          "url": "https://github.com/etheorem/leanp2p/blob/0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7/packages/codec/varint/Varint/UVarint.lean#L37-L95"
+        }
+      ]
+    },
+    {
+      "id": "gasper-weights-model",
+      "title": "Gasper dynamic-validator-set weight model",
+      "kind": "formal-model",
+      "repository": "https://github.com/NyxFoundation/gasper-lean4",
+      "revisionKind": "git-commit",
+      "revision": "7650709170327c5f10c8b5da99b10941e208ef5d",
+      "version": "Lean 4.31.0; pinned dynamic-set model; no Atlas replay",
+      "locations": [
+        {
+          "id": "weights",
+          "path": "GasperBeaconChain/Core/Theories/SlashableBound.lean",
+          "label": "Activation, exit and intersection weights",
+          "url": "https://github.com/NyxFoundation/gasper-lean4/blob/7650709170327c5f10c8b5da99b10941e208ef5d/GasperBeaconChain/Core/Theories/SlashableBound.lean#L82-L102"
+        }
+      ]
+    },
+    {
+      "id": "gasper-weights-proof",
+      "title": "Gasper churn-adjusted intersection proof",
+      "kind": "proof",
+      "repository": "https://github.com/NyxFoundation/gasper-lean4",
+      "revisionKind": "git-commit",
+      "revision": "7650709170327c5f10c8b5da99b10941e208ef5d",
+      "version": "Lean 4.31.0; no Atlas replay",
+      "locations": [
+        {
+          "id": "bound",
+          "path": "GasperBeaconChain/Core/Theories/SlashableBound.lean",
+          "label": "GasperBeaconChain.Core.slashable_bound",
+          "url": "https://github.com/NyxFoundation/gasper-lean4/blob/7650709170327c5f10c8b5da99b10941e208ef5d/GasperBeaconChain/Core/Theories/SlashableBound.lean#L526-L558"
+        }
+      ]
+    },
+    {
+      "id": "lstar-forkchoice-model",
+      "title": "Lstar Lean fork-choice weight model",
+      "kind": "formal-model",
+      "repository": "https://github.com/NyxFoundation/formal-leanSpec",
+      "revisionKind": "git-commit",
+      "revision": "ba7284513031eac5c66bfb8221d27b6154cf240b",
+      "version": "Lean 4.29.1; finite-fuel store model; no Atlas replay",
+      "locations": [
+        {
+          "id": "walk",
+          "path": "LeanSpec/Forks/Lstar/Store/Store.lean",
+          "label": "Store ancestor tally and LMD-GHOST walk",
+          "url": "https://github.com/NyxFoundation/formal-leanSpec/blob/ba7284513031eac5c66bfb8221d27b6154cf240b/LeanSpec/Forks/Lstar/Store/Store.lean#L310-L396"
+        }
+      ]
+    },
+    {
+      "id": "lstar-forkchoice-proof",
+      "title": "Lstar incremental-weight head-selection proof",
+      "kind": "proof",
+      "repository": "https://github.com/NyxFoundation/formal-leanSpec",
+      "revisionKind": "git-commit",
+      "revision": "ba7284513031eac5c66bfb8221d27b6154cf240b",
+      "version": "Lean 4.29.1; no Atlas replay",
+      "locations": [
+        {
+          "id": "head",
+          "path": "LeanSpec/Forks/Lstar/Store/IncrementalWeights.lean",
+          "label": "Store.computeLmdGhostHead_incremental",
+          "url": "https://github.com/NyxFoundation/formal-leanSpec/blob/ba7284513031eac5c66bfb8221d27b6154cf240b/LeanSpec/Forks/Lstar/Store/IncrementalWeights.lean#L258-L278"
+        }
+      ]
+    },
+    {
+      "id": "ark-binding-model",
+      "title": "ArkLib KZG evaluation-binding game",
+      "kind": "formal-model",
+      "repository": "https://github.com/Verified-zkEVM/ArkLib",
+      "revisionKind": "git-commit",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "version": "Lean 4.35.0; algebraic probabilistic game; no Atlas replay",
+      "locations": [
+        {
+          "id": "game",
+          "path": "ArkLib/Commitments/Functional/KZG/Binding.lean",
+          "label": "KZG binding adversary and extended game",
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Binding.lean#L71-L115"
+        },
+        {
+          "id": "hardness",
+          "path": "ArkLib/Commitments/Functional/KZG/HardnessAssumptions.lean",
+          "label": "Groups t-SDH experiment and adversary class",
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/HardnessAssumptions.lean#L49-L170"
+        }
+      ]
+    },
+    {
+      "id": "ark-binding-proof",
+      "title": "ArkLib KZG evaluation-binding reduction",
+      "kind": "proof",
+      "repository": "https://github.com/Verified-zkEVM/ArkLib",
+      "revisionKind": "git-commit",
+      "revision": "e272c34851e039e0e3b93a16c16000e464731961",
+      "version": "Lean 4.35.0; no Atlas replay",
+      "locations": [
+        {
+          "id": "reduction",
+          "path": "ArkLib/Commitments/Functional/KZG/Binding.lean",
+          "label": "KZG.CommitmentScheme.binding_reduces_to_tSdh",
+          "url": "https://github.com/Verified-zkEVM/ArkLib/blob/e272c34851e039e0e3b93a16c16000e464731961/ArkLib/Commitments/Functional/KZG/Binding.lean#L744-L778"
         }
       ]
     }
@@ -704,6 +954,216 @@
         "The atlas review compared the recorded top-level theorem and its local proof body; Lean has not been replayed and transitive dependencies and axioms are not audited."
       ],
       "relation": null
+    },
+    {
+      "id": "varint-codec-roundtrip",
+      "title": "Varint encoding round-trips and accepted prefixes are canonical",
+      "statement": "For every leanp2p UVarint value and suffix, decoding its encoding followed by that suffix returns the value and untouched suffix. Every successful decode consumes exactly the canonical encoding of its returned value.",
+      "subjectArtifactIds": [
+        "leanp2p-model"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "UVarint carries a value below 2^63; encode and decode? operate on List Nat.",
+          "The accepted-input direction assumes decode? succeeds. The decoder enforces minimal encodings and a nine-byte budget."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "The 63-bit, nine-byte codec does not cover the full 64-bit, ten-byte range required by Beacon Req/Resp and used by Lean Spec framing.",
+        "Beacon requires support for the full Uint64 range and only recommends minimal encodings; leanp2p rejects non-minimal encodings. This is not codec conformance.",
+        "No ByteArray adapter, Snappy decompression, Gossipsub correctness, transport security or network liveness is proved here."
+      ],
+      "relation": null
+    },
+    {
+      "id": "ffg-churn-intersection-bound",
+      "title": "Conflicting k-finality yields a churn-adjusted intersection bound",
+      "statement": "For two mutually non-ancestral k-finalized blocks, the model constructs validator subsets qL and qR whose intersection weight is at least max(wt(VL) - activationL - exitR, wt(VR) - activationR - exitL) minus the two one-third residuals. All subtraction is truncated Nat subtraction, relative to a reference validator set.",
+      "subjectArtifactIds": [
+        "gasper-weights-model"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "Two k-finalization hypotheses and mutual non-ancestry; a reference block supplies the reference validator set.",
+          "Finite validators, Nat-valued stake, abstract parent links, validator sets and a Threshold instance."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "The lower bound can be zero; no unconditional positive slashed weight or one-third stake loss is asserted.",
+        "The theorem conclusion retains subset witnesses and the weight inequality, not a slashing predicate; the existing structural accountable-safety claim is separate.",
+        "No conformance to Beacon epoch, balance, churn or penalty implementation rules is established."
+      ],
+      "relation": null
+    },
+    {
+      "id": "lstar-incremental-head",
+      "title": "Equivalent vote tallies select the same LMD-GHOST head",
+      "statement": "If the start root resolves to an anchor and a maintained weight map is pointwise equal to the full ancestor tally, the Lean GHOST walk using that map selects exactly the head returned by computeLmdGhostHead, including the threshold filter and tie-break.",
+      "subjectArtifactIds": [
+        "lstar-forkchoice-model"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "The start root must resolve to an anchor block.",
+          "Weights.Equiv requires the maintained map to equal accumulateAncestorWeights at every root."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "This is a theorem within the Lean store model, not a refinement proof about the Python specification or a production client.",
+        "The model walk uses st.blocks.length + 1 fuel; a full correspondence to the Python while-loop is not established.",
+        "Correct incremental maintenance, removed-vote handling and proto-array best-child caches are not proved by this theorem."
+      ],
+      "relation": null
+    },
+    {
+      "id": "kzg-binding-reduction",
+      "title": "KZG evaluation-binding advantage reduces to t-SDH",
+      "statement": "For each evaluation-binding adversary in the ArkLib KZG game, its probability of producing conflicting valid openings is at most the t-SDH success probability of the constructed bindingReduction.",
+      "subjectArtifactIds": [
+        "ark-binding-model"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "Prime-order groups and the recorded bilinear pairing/module structure.",
+          "The pairing of the chosen generators is nonzero; games use the specified private uniform-sampling semantics."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "This reduction does not prove t-SDH hardness or a concrete negligible advantage; the reduced success probability can be large.",
+        "The separate binding corollary requires a hardness assumption over an explicit adversary class containing the reduction.",
+        "No refinement to Fulu batched cell proofs, concrete curve encodings, trusted-setup secrecy or deployed verifier code is established."
+      ],
+      "relation": null
+    },
+    {
+      "id": "bls-hash-to-g2-valid",
+      "title": "BLS hash-to-G2 succeeds with a nonsingular curve point",
+      "statement": "For every message and domain-separation byte array, the EthLib hashToG2 function returns a point satisfying G2.Valid, the nonsingularity predicate on the BLS12-381 twist.",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "The statement concerns EthLib hashToG2 and its fixed BLS12-381 field and curve definitions."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "Curve membership is not prime-order subgroup membership, signature verification correctness or unforgeability.",
+        "No refinement to the Beacon BLS implementation or proof of the full ciphersuite is established."
+      ],
+      "relation": null
+    },
+    {
+      "id": "xmss-signature-correctness",
+      "title": "Generated leanXMSS keys verify successfully produced signatures",
+      "statement": "If keyGen returns a secret/public-key pair and sign succeeds for a leaf index and message, EthLib verify accepts that signature under the generated public key.",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "keyGen seed must return the recorded key pair, and sign succeeds with .ok signature.",
+          "The theorem uses the EthLib Keccak-based, two-layer leanXMSS model and its typed messages and leaf indices."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "EthLib uses Keccak-256 and WOTS+C in a two-layer height-16 draft; the selected Lean Spec uses a Poseidon-based generalized XMSS scheme with different parameters.",
+        "Signing success is a hypothesis; the theorem does not bound grinding failure or prove unforgeability.",
+        "Leaf-index reuse prevention, state management, signature aggregation and equivalence to the selected Lean Spec are not proved."
+      ],
+      "relation": null
+    },
+    {
+      "id": "kzg-cell-roundtrip",
+      "title": "Encoding and decoding a KZG cell preserves its field elements",
+      "statement": "For an EthLib CosetEvals array containing exactly FIELD_ELEMENTS_PER_CELL (64) BLS scalar-field elements, cellToCosetEvals (cosetEvalsToCell ys) returns .ok ys.",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "The array has exactly 64 elements of the typed BLS12-381 scalar field."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "This is a cell serialization theorem, not correctness or binding of KZG proof verification.",
+        "It does not prove Reed-Solomon recovery, PeerDAS sampling availability, arbitrary-input acceptance or Python/client conformance."
+      ],
+      "relation": null
+    },
+    {
+      "id": "modexp-output-correctness",
+      "title": "MODEXP computation returns modular exponentiation",
+      "statement": "For every EthLib input byte array and Lengths value, the integer represented by compute output is base^exponent modulo modulus, or zero when the decoded modulus is zero, using the model input offsets and zero-padding semantics.",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "assumptions": {
+        "status": "known",
+        "details": [
+          "The property concerns the pure compute helper with the supplied Lengths record, not the entire precompile call."
+        ]
+      },
+      "dependencies": {
+        "status": "unknown",
+        "details": [
+          "Local statements and proof bodies were inspected. A complete transitive dependency and axiom audit was not performed."
+        ]
+      },
+      "limitations": [
+        "The proof does not assert Osaka gas-accounting, exceptional-halt, input-length validation or EVM state-transition correctness.",
+        "EthLib describes a BPO2-oriented model; only the modular-exponentiation output behavior was compared with the pinned Osaka source. No cross-fork conformance or client refinement is claimed."
+      ],
+      "relation": null
     }
   ],
   "evidence": [
@@ -780,6 +1240,143 @@
           "Per-index node function with an opaque combine parameter bound by a MerkleTree predicate."
         ],
         "configuration": "Lean 4.35.0 (lean-toolchain); Mathlib @ v4.35.0 lakefile; git 6b87b0d4951766864af432455c44344fd12b5cdc; buildProof_rebuilds_value_root only."
+      }
+    },
+    {
+      "id": "leanp2p-encode-decode",
+      "claimId": "varint-codec-roundtrip",
+      "artifactId": "leanp2p-proof",
+      "locationId": "encode-decode",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Every successfully decoded prefix re-encodes to the consumed bytes.",
+        "abstractions": [
+          "Universal theorem over a 63-bit value type and List Nat byte model, not bounded model checking.",
+          "The production byte-buffer adapter is outside this statement."
+        ],
+        "configuration": "Lean 4.34.0; https://github.com/etheorem/leanp2p@0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7; encode-decode; no Atlas replay."
+      }
+    },
+    {
+      "id": "leanp2p-decode-encode-suffix",
+      "claimId": "varint-codec-roundtrip",
+      "artifactId": "leanp2p-proof",
+      "locationId": "decode-encode-suffix",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Every well-typed value round-trips with an arbitrary untouched suffix.",
+        "abstractions": [
+          "Universal theorem over a 63-bit value type and List Nat byte model, not bounded model checking.",
+          "The production byte-buffer adapter is outside this statement."
+        ],
+        "configuration": "Lean 4.34.0; https://github.com/etheorem/leanp2p@0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7; decode-encode-suffix; no Atlas replay."
+      }
+    },
+    {
+      "id": "gasper-churn-bound-theorem",
+      "claimId": "ffg-churn-intersection-bound",
+      "artifactId": "gasper-weights-proof",
+      "locationId": "bound",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universally quantified churn-adjusted Nat intersection-weight inequality.",
+        "abstractions": [
+          "Abstract FFG finalization, symbolic ancestry and finite validator sets; no network or client implementation."
+        ],
+        "configuration": "Lean 4.31.0; https://github.com/NyxFoundation/gasper-lean4@7650709170327c5f10c8b5da99b10941e208ef5d; bound; no Atlas replay."
+      }
+    },
+    {
+      "id": "lstar-incremental-head-theorem",
+      "claimId": "lstar-incremental-head",
+      "artifactId": "lstar-forkchoice-proof",
+      "locationId": "head",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal head-selection equality under pointwise tally equality and an existing anchor.",
+        "abstractions": [
+          "Finite-list store and explicit walk fuel, with abstract block roots and attestation data."
+        ],
+        "configuration": "Lean 4.29.1; https://github.com/NyxFoundation/formal-leanSpec@ba7284513031eac5c66bfb8221d27b6154cf240b; head; no Atlas replay."
+      }
+    },
+    {
+      "id": "ark-kzg-binding-reduction",
+      "claimId": "kzg-binding-reduction",
+      "artifactId": "ark-binding-proof",
+      "locationId": "reduction",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal inequality between evaluation-binding and reduced t-SDH experiment probabilities.",
+        "abstractions": [
+          "Abstract prime-order groups, degree parameter, bilinear pairing and probabilistic oracle games; no concrete runtime or adversary complexity bound."
+        ],
+        "configuration": "Lean 4.35.0; https://github.com/Verified-zkEVM/ArkLib@e272c34851e039e0e3b93a16c16000e464731961; reduction; no Atlas replay."
+      }
+    },
+    {
+      "id": "ethlib-hash-to-g2-theorem",
+      "claimId": "bls-hash-to-g2-valid",
+      "artifactId": "ethlib-proof",
+      "locationId": "hash-to-g2",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal successful-return and nonsingular-curve-membership theorem.",
+        "abstractions": [
+          "Pure Lean finite-field and twist model; compiled client code and cryptographic security games are outside the statement."
+        ],
+        "configuration": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; hash-to-g2; no Atlas replay."
+      }
+    },
+    {
+      "id": "ethlib-xmss-correctness-theorem",
+      "claimId": "xmss-signature-correctness",
+      "artifactId": "ethlib-proof",
+      "locationId": "xmss-correctness",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal sign/verify correctness conditional on successful signing and key generation.",
+        "abstractions": [
+          "The recorded Keccak-based leanXMSS draft, not the selected Poseidon-based protocol implementation."
+        ],
+        "configuration": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; xmss-correctness; no Atlas replay."
+      }
+    },
+    {
+      "id": "ethlib-cell-roundtrip-theorem",
+      "claimId": "kzg-cell-roundtrip",
+      "artifactId": "ethlib-proof",
+      "locationId": "cell-roundtrip",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal round-trip theorem for correctly sized arrays of field elements.",
+        "abstractions": [
+          "Typed finite-field arrays and byte encoding; no networking, availability or proof-security game."
+        ],
+        "configuration": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; cell-roundtrip; no Atlas replay."
+      }
+    },
+    {
+      "id": "ethlib-modexp-output-theorem",
+      "claimId": "modexp-output-correctness",
+      "artifactId": "ethlib-proof",
+      "locationId": "modexp-output",
+      "method": "theorem-proving",
+      "scope": {
+        "kind": "unbounded",
+        "statement": "Universal equality between the decoded model output and mathematical modular exponentiation.",
+        "abstractions": [
+          "Natural-number arithmetic, big-endian byte fields and zero padding; gas and VM execution are outside this theorem."
+        ],
+        "configuration": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; modexp-output; no Atlas replay."
       }
     }
   ],
@@ -1129,6 +1726,656 @@
         }
       ],
       "result": "related"
+    },
+    {
+      "id": "availability-leanp2p-encode-decode",
+      "checkedAt": "2026-11-12T03:37:31Z",
+      "details": "GitHub Contents API GET at the recorded commit returned HTTP 200 and the 2,590-byte Theorems.lean source. SHA-256: 809ba2db3ab0c1600c1047b361e39339ee5dd3566a8bc28235df5ec300d50a77. Source inspection only; no proof replay or complete transitive dependency/axiom audit.",
+      "kind": "availability",
+      "artifactId": "leanp2p-proof",
+      "locationIds": [
+        "encode-decode"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-leanp2p-decode-encode-suffix",
+      "checkedAt": "2026-11-12T03:37:32Z",
+      "details": "GitHub Contents API GET at the recorded commit returned HTTP 200 and the 10,361-byte UVarint.lean source. SHA-256: e0b563091ac21b0f81d71445af115b805290fe7a7d218d9b54f6769fb3190beb. Source inspection only; no proof replay or complete transitive dependency/axiom audit.",
+      "kind": "availability",
+      "artifactId": "leanp2p-proof",
+      "locationIds": [
+        "decode-encode-suffix"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-consensus-varint-framing",
+      "checkedAt": "2026-11-12T03:47:42Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 123001 bytes. SHA-256: 998e78cfccf58094c264f92dd4a5b99c32d5a5dedf2462485d7c62d42ad9005f. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "varint-framing"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-consensus-bls-ciphersuite",
+      "checkedAt": "2026-11-12T03:47:42Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 83312 bytes. SHA-256: abacdd96d4edc49705002ea3fcd4bf5f39ea6b7b6e06a77ab8cf89e138a7d3fb. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "bls-ciphersuite"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-consensus-das-cell",
+      "checkedAt": "2026-11-12T03:52:01Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 16156 bytes. SHA-256: 864ab865fdb399e85fa5a1db55e65985892c5b11503d88bab91ae2ea1c605a9d. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "consensus",
+      "locationIds": [
+        "das-cell"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-leanspec-varint",
+      "checkedAt": "2026-11-12T03:47:41Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 7431 bytes. SHA-256: 39219fccd0df1cd1e24a252aa761ed9609d9c773955059c71b4aa4e0587d1065. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "varint"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-leanspec-reqresp-codec",
+      "checkedAt": "2026-11-12T03:47:41Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 10614 bytes. SHA-256: bd29598befa89f8a858c77150543d1122b5b9a104ed03410725932bf23dcae8e. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "reqresp-codec"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-leanspec-head-tally",
+      "checkedAt": "2026-11-12T03:50:14Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 42678 bytes. SHA-256: b3506fe05adc1c58ff0459676bfb5c9c09ab6e99f5377f3d5834afc1d30afaa5. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "head-tally"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-execution-modexp",
+      "checkedAt": "2026-11-12T03:50:13Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 4710 bytes. SHA-256: 1bc039260aea4ce641bcb3f5d937e9cbf940d7c699ef5bd91a205cb75006ef9c. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "execution",
+      "locationIds": [
+        "modexp"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-execution-precompiles",
+      "checkedAt": "2026-11-12T03:50:13Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 2127 bytes. SHA-256: 5a9a33067eb1998ced0d5973d039c850efd55cbbd61a3defdc20f8682643983c. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "execution",
+      "locationIds": [
+        "precompiles"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-leanp2p-model-codec",
+      "checkedAt": "2026-11-12T03:47:41Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 10361 bytes. SHA-256: e0b563091ac21b0f81d71445af115b805290fe7a7d218d9b54f6769fb3190beb. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "leanp2p-model",
+      "locationIds": [
+        "codec"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-review-leanp2p-encode-decode",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "leanp2p-proof",
+      "evidenceId": "leanp2p-encode-decode",
+      "subjectArtifactIds": [
+        "leanp2p-model"
+      ],
+      "scope": "Lean 4.34.0; https://github.com/etheorem/leanp2p@0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7; encode-decode; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-review-leanp2p-decode-encode-suffix",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "leanp2p-proof",
+      "evidenceId": "leanp2p-decode-encode-suffix",
+      "subjectArtifactIds": [
+        "leanp2p-model"
+      ],
+      "scope": "Lean 4.34.0; https://github.com/etheorem/leanp2p@0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7; decode-encode-suffix; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-beacon-b-p2p-varint-codec-roundtrip",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-p2p",
+      "claimId": "varint-codec-roundtrip",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "varint-framing"
+        },
+        {
+          "artifactId": "leanp2p-model",
+          "locationId": "codec"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-compare-lean-l-p2p-varint-codec-roundtrip",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "lean",
+      "componentInstanceId": "l-p2p",
+      "claimId": "varint-codec-roundtrip",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "varint"
+        },
+        {
+          "artifactId": "leanspec",
+          "locationId": "reqresp-codec"
+        },
+        {
+          "artifactId": "leanp2p-model",
+          "locationId": "codec"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-available-gasper-weights-model-weights",
+      "checkedAt": "2026-11-12T03:47:37Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 22059 bytes. SHA-256: 42268a523edbe82f00b457a41bac5ee0b2100615093d907f79431ed96a486984. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "gasper-weights-model",
+      "locationIds": [
+        "weights"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-gasper-weights-proof-bound",
+      "checkedAt": "2026-11-12T03:47:37Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 22059 bytes. SHA-256: 42268a523edbe82f00b457a41bac5ee0b2100615093d907f79431ed96a486984. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "gasper-weights-proof",
+      "locationIds": [
+        "bound"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-review-gasper-churn-bound-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "gasper-weights-proof",
+      "evidenceId": "gasper-churn-bound-theorem",
+      "subjectArtifactIds": [
+        "gasper-weights-model"
+      ],
+      "scope": "Lean 4.31.0; https://github.com/NyxFoundation/gasper-lean4@7650709170327c5f10c8b5da99b10941e208ef5d; bound; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-beacon-b-state-ffg-churn-intersection-bound",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related quantitative FFG model: Beacon checkpoint finalization uses validator balances, while this theorem bounds a model intersection under abstract dynamic validator sets. It neither proves a positive lower bound for this snapshot nor verifies the Beacon churn or slashing implementation. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-state",
+      "claimId": "ffg-churn-intersection-bound",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "ffg"
+        },
+        {
+          "artifactId": "gasper-weights-model",
+          "locationId": "weights"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-compare-beacon-b-finality-ffg-churn-intersection-bound",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related quantitative FFG model: Beacon checkpoint finalization uses validator balances, while this theorem bounds a model intersection under abstract dynamic validator sets. It neither proves a positive lower bound for this snapshot nor verifies the Beacon churn or slashing implementation. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-finality",
+      "claimId": "ffg-churn-intersection-bound",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "ffg"
+        },
+        {
+          "artifactId": "gasper-weights-model",
+          "locationId": "weights"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-available-lstar-forkchoice-model-walk",
+      "checkedAt": "2026-11-12T03:50:13Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 26288 bytes. SHA-256: 906d6df5c2c82dd74761e93e795ab4d19a80121e687ef1093ff128aebcfd928f. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "lstar-forkchoice-model",
+      "locationIds": [
+        "walk"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-lstar-forkchoice-proof-head",
+      "checkedAt": "2026-11-12T03:47:37Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 11433 bytes. SHA-256: bebf54d8903fb7b57a730143c594f1dc12468d4eb652864d287bc730e9f0edef. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "lstar-forkchoice-proof",
+      "locationIds": [
+        "head"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-review-lstar-incremental-head-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "lstar-forkchoice-proof",
+      "evidenceId": "lstar-incremental-head-theorem",
+      "subjectArtifactIds": [
+        "lstar-forkchoice-model"
+      ],
+      "scope": "Lean 4.29.1; https://github.com/NyxFoundation/formal-leanSpec@ba7284513031eac5c66bfb8221d27b6154cf240b; head; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-lean-l-head-lstar-incremental-head",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "The pinned Python fork choice tallies ancestors and walks the heaviest children with a hash tie-break; the Lean Store models those operations. The proof is conditional on equal tallies inside the Lean model, not correctness of an incremental client or equivalence of the Python loop and fuelled Lean walk. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "lean",
+      "componentInstanceId": "l-head",
+      "claimId": "lstar-incremental-head",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "head-tally"
+        },
+        {
+          "artifactId": "lstar-forkchoice-model",
+          "locationId": "walk"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-available-ark-binding-model-game",
+      "checkedAt": "2026-11-12T03:47:38Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 44263 bytes. SHA-256: 2a22d079c5c1d11cfd4334c05095f7e426968a08eb3908754dba16a302b80900. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ark-binding-model",
+      "locationIds": [
+        "game"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ark-binding-model-hardness",
+      "checkedAt": "2026-11-12T03:47:37Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 11298 bytes. SHA-256: 04381425bdde355f52674276b8f6e4be8f7fe7127ceffdb3f19c789d3cacefb2. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ark-binding-model",
+      "locationIds": [
+        "hardness"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ark-binding-proof-reduction",
+      "checkedAt": "2026-11-12T03:47:38Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 44263 bytes. SHA-256: 2a22d079c5c1d11cfd4334c05095f7e426968a08eb3908754dba16a302b80900. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ark-binding-proof",
+      "locationIds": [
+        "reduction"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-review-ark-kzg-binding-reduction",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "ark-binding-proof",
+      "evidenceId": "ark-kzg-binding-reduction",
+      "subjectArtifactIds": [
+        "ark-binding-model"
+      ],
+      "scope": "Lean 4.35.0; https://github.com/Verified-zkEVM/ArkLib@e272c34851e039e0e3b93a16c16000e464731961; reduction; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-beacon-b-kzg-kzg-binding-reduction",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related algebraic KZG security research. Fulu verifies batched cell proofs; this source proves a two-opening evaluation-binding reduction for its own KZG game. It does not establish hardness, cell-proof conformance or production verifier security. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-kzg",
+      "claimId": "kzg-binding-reduction",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "kzg"
+        },
+        {
+          "artifactId": "ark-binding-model",
+          "locationId": "game"
+        },
+        {
+          "artifactId": "ark-binding-model",
+          "locationId": "hardness"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-available-ethlib-bls-hash",
+      "checkedAt": "2026-11-12T03:50:13Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 9723 bytes. SHA-256: 12880ff7399325078d685373425744f958a5a9d21f74bf8533f2323abaabf5e1. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib",
+      "locationIds": [
+        "bls-hash"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-xmss-verify",
+      "checkedAt": "2026-11-12T03:50:12Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 3777 bytes. SHA-256: cf298763572243309c06b688fcc0865f39a1ef3ada25309b0a0b6668f7b35f4f. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib",
+      "locationIds": [
+        "xmss-verify"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-xmss-design",
+      "checkedAt": "2026-11-12T03:50:12Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 7265 bytes. SHA-256: 11c8619b34e794fcbd578c57549da49c9cd108f7c864958d591326f08a2dfe29. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib",
+      "locationIds": [
+        "xmss-design"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-kzg-cell",
+      "checkedAt": "2026-11-12T03:50:14Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 17226 bytes. SHA-256: df6e0d8c51ca8abeb097d1a0746a853c6569d8f9cac972c8cda38f3772f7e46d. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib",
+      "locationIds": [
+        "kzg-cell"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-modexp-core",
+      "checkedAt": "2026-11-12T03:50:14Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 5594 bytes. SHA-256: cf25b906a57dd31cb2d03676512575f97fce63c358965da2011c24c7055f4217. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib",
+      "locationIds": [
+        "modexp-core"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-proof-hash-to-g2",
+      "checkedAt": "2026-11-12T03:49:09Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 6187 bytes. SHA-256: e26acd790a55f385dd93fdcda166646ede206ff7cb22fba559664bd5da68682c. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "hash-to-g2"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-proof-xmss-correctness",
+      "checkedAt": "2026-11-12T03:48:06Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 2941 bytes. SHA-256: 9e1365222547842d465cb956900d9ae74ef6a4010b88313b27730ee395ca69f0. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "xmss-correctness"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-proof-cell-roundtrip",
+      "checkedAt": "2026-11-12T03:50:13Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 23118 bytes. SHA-256: cbb87af8eebc03b950d90c3e9a1ba2da7e293d25eae06fb85cf64d1e03ecee26. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "cell-roundtrip"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-available-ethlib-proof-modexp-output",
+      "checkedAt": "2026-11-12T03:49:09Z",
+      "details": "Pinned GitHub Contents API GET returned HTTP 200 and 17434 bytes. SHA-256: ecc2bd9ae7d8f9c46adc54a831c42943abe612a8a3e8537b4c7024c55d2aa45b. Source availability only, not a proof replay.",
+      "kind": "availability",
+      "artifactId": "ethlib-proof",
+      "locationIds": [
+        "modexp-output"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "audit-review-ethlib-hash-to-g2-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ethlib-hash-to-g2-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; hash-to-g2; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-beacon-b-bls-bls-hash-to-g2-valid",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Beacon specifies the BLS12-381 G2 SHA-256/SSWU ciphersuite. EthLib models that hash-to-curve family and proves totality and nonsingular curve membership. The relation does not establish subgroup membership, full BLS correctness or client conformance. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-bls",
+      "claimId": "bls-hash-to-g2-valid",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "bls-ciphersuite"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "bls-hash"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-review-ethlib-xmss-correctness-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ethlib-xmss-correctness-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; xmss-correctness; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-lean-l-xmss-xmss-signature-correctness",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Related hash-based XMSS signature model only. EthLib implements the Keccak/WOTS+C two-layer leanXMSS draft, whereas this Lean Spec snapshot uses Poseidon-based generalized XMSS. Both use one-time signatures and Merkle authentication, but this theorem does not transfer to the selected scheme, parameters or aggregation. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "lean",
+      "componentInstanceId": "l-xmss",
+      "claimId": "xmss-signature-correctness",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "xmss"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "xmss-verify"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "xmss-design"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-review-ethlib-cell-roundtrip-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ethlib-cell-roundtrip-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; cell-roundtrip; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-beacon-b-kzg-kzg-cell-roundtrip",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-kzg",
+      "claimId": "kzg-cell-roundtrip",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "das-cell"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "kzg-cell"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-compare-beacon-b-da-kzg-cell-roundtrip",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "beacon",
+      "componentInstanceId": "b-da",
+      "claimId": "kzg-cell-roundtrip",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "das-cell"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "kzg-cell"
+        }
+      ],
+      "result": "related"
+    },
+    {
+      "id": "audit-review-ethlib-modexp-output-theorem",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "Compared the declaration and local proof body with the recorded property, hypotheses and limitations. This is source inspection, not Lean execution or a complete dependency/axiom audit.",
+      "artifactId": "ethlib-proof",
+      "evidenceId": "ethlib-modexp-output-theorem",
+      "subjectArtifactIds": [
+        "ethlib"
+      ],
+      "scope": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; modexp-output; no Atlas replay.",
+      "kind": "source-review",
+      "result": "reviewed"
+    },
+    {
+      "id": "audit-compare-execution-x-evm-modexp-output-correctness",
+      "checkedAt": "2026-11-12T03:58:25Z",
+      "details": "The Osaka EVM maps MODEXP_ADDRESS to modexp, whose output branch computes pow(base, exp, modulus) or zero bytes for modulus zero. The EthLib compute theorem concerns this arithmetic sub-operation only, not the Osaka gas schedule, call validation or whole EVM. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
+      "kind": "manual-comparison",
+      "viewId": "execution",
+      "componentInstanceId": "x-evm",
+      "claimId": "modexp-output-correctness",
+      "sources": [
+        {
+          "artifactId": "execution",
+          "locationId": "modexp"
+        },
+        {
+          "artifactId": "execution",
+          "locationId": "precompiles"
+        },
+        {
+          "artifactId": "ethlib",
+          "locationId": "modexp-core"
+        }
+      ],
+      "result": "related"
     }
   ],
   "architectureViews": [
@@ -1158,6 +2405,26 @@
         {
           "artifactId": "ethlib",
           "locationId": "ssz-spec-proofs"
+        },
+        {
+          "artifactId": "consensus",
+          "locationId": "varint-framing"
+        },
+        {
+          "artifactId": "consensus",
+          "locationId": "ffg"
+        },
+        {
+          "artifactId": "consensus",
+          "locationId": "kzg"
+        },
+        {
+          "artifactId": "consensus",
+          "locationId": "bls-ciphersuite"
+        },
+        {
+          "artifactId": "consensus",
+          "locationId": "das-cell"
         }
       ],
       "inheritance": [
@@ -1194,6 +2461,10 @@
             {
               "artifactId": "consensus",
               "locationId": "fulu"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "ffg"
             }
           ],
           "position": {
@@ -1212,6 +2483,10 @@
             {
               "artifactId": "consensus",
               "locationId": "finality"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "ffg"
             }
           ],
           "position": {
@@ -1230,6 +2505,10 @@
             {
               "artifactId": "consensus",
               "locationId": "peerdas"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "das-cell"
             }
           ],
           "position": {
@@ -1248,6 +2527,10 @@
             {
               "artifactId": "consensus",
               "locationId": "p2p"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "varint-framing"
             }
           ],
           "position": {
@@ -1299,6 +2582,10 @@
             {
               "artifactId": "consensus",
               "locationId": "phase0"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "bls-ciphersuite"
             }
           ],
           "position": {
@@ -1317,6 +2604,10 @@
             {
               "artifactId": "consensus",
               "locationId": "kzg"
+            },
+            {
+              "artifactId": "consensus",
+              "locationId": "das-cell"
             }
           ],
           "position": {
@@ -1440,6 +2731,150 @@
           "basis": {
             "kind": "version-match"
           }
+        },
+        {
+          "componentInstanceId": "b-p2p",
+          "claimId": "varint-codec-roundtrip",
+          "applicabilityKind": "related-model",
+          "explanation": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "varint-framing"
+            },
+            {
+              "artifactId": "leanp2p-model",
+              "locationId": "codec"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-p2p-varint-codec-roundtrip"
+          }
+        },
+        {
+          "componentInstanceId": "b-state",
+          "claimId": "ffg-churn-intersection-bound",
+          "applicabilityKind": "related-model",
+          "explanation": "Related quantitative FFG model: Beacon checkpoint finalization uses validator balances, while this theorem bounds a model intersection under abstract dynamic validator sets. It neither proves a positive lower bound for this snapshot nor verifies the Beacon churn or slashing implementation.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "ffg"
+            },
+            {
+              "artifactId": "gasper-weights-model",
+              "locationId": "weights"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-state-ffg-churn-intersection-bound"
+          }
+        },
+        {
+          "componentInstanceId": "b-finality",
+          "claimId": "ffg-churn-intersection-bound",
+          "applicabilityKind": "related-model",
+          "explanation": "Related quantitative FFG model: Beacon checkpoint finalization uses validator balances, while this theorem bounds a model intersection under abstract dynamic validator sets. It neither proves a positive lower bound for this snapshot nor verifies the Beacon churn or slashing implementation.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "ffg"
+            },
+            {
+              "artifactId": "gasper-weights-model",
+              "locationId": "weights"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-finality-ffg-churn-intersection-bound"
+          }
+        },
+        {
+          "componentInstanceId": "b-kzg",
+          "claimId": "kzg-binding-reduction",
+          "applicabilityKind": "related-model",
+          "explanation": "Related algebraic KZG security research. Fulu verifies batched cell proofs; this source proves a two-opening evaluation-binding reduction for its own KZG game. It does not establish hardness, cell-proof conformance or production verifier security.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "kzg"
+            },
+            {
+              "artifactId": "ark-binding-model",
+              "locationId": "game"
+            },
+            {
+              "artifactId": "ark-binding-model",
+              "locationId": "hardness"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-kzg-kzg-binding-reduction"
+          }
+        },
+        {
+          "componentInstanceId": "b-bls",
+          "claimId": "bls-hash-to-g2-valid",
+          "applicabilityKind": "related-model",
+          "explanation": "Beacon specifies the BLS12-381 G2 SHA-256/SSWU ciphersuite. EthLib models that hash-to-curve family and proves totality and nonsingular curve membership. The relation does not establish subgroup membership, full BLS correctness or client conformance.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "bls-ciphersuite"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "bls-hash"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-bls-bls-hash-to-g2-valid"
+          }
+        },
+        {
+          "componentInstanceId": "b-kzg",
+          "claimId": "kzg-cell-roundtrip",
+          "applicabilityKind": "related-model",
+          "explanation": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "das-cell"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "kzg-cell"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-kzg-kzg-cell-roundtrip"
+          }
+        },
+        {
+          "componentInstanceId": "b-da",
+          "claimId": "kzg-cell-roundtrip",
+          "applicabilityKind": "related-model",
+          "explanation": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability.",
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "das-cell"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "kzg-cell"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-beacon-b-da-kzg-cell-roundtrip"
+          }
         }
       ]
     },
@@ -1465,6 +2900,22 @@
         {
           "artifactId": "ethlib",
           "locationId": "ssz-spec-proofs"
+        },
+        {
+          "artifactId": "leanspec",
+          "locationId": "varint"
+        },
+        {
+          "artifactId": "leanspec",
+          "locationId": "reqresp-codec"
+        },
+        {
+          "artifactId": "leanspec",
+          "locationId": "head-tally"
+        },
+        {
+          "artifactId": "leanspec",
+          "locationId": "xmss"
         }
       ],
       "inheritance": [
@@ -1482,6 +2933,10 @@
             {
               "artifactId": "leanspec",
               "locationId": "fork-choice"
+            },
+            {
+              "artifactId": "leanspec",
+              "locationId": "head-tally"
             }
           ],
           "position": {
@@ -1536,6 +2991,14 @@
             {
               "artifactId": "leanspec",
               "locationId": "network"
+            },
+            {
+              "artifactId": "leanspec",
+              "locationId": "varint"
+            },
+            {
+              "artifactId": "leanspec",
+              "locationId": "reqresp-codec"
             }
           ],
           "position": {
@@ -1726,6 +3189,74 @@
           "basis": {
             "kind": "version-match"
           }
+        },
+        {
+          "componentInstanceId": "l-p2p",
+          "claimId": "varint-codec-roundtrip",
+          "applicabilityKind": "related-model",
+          "explanation": "Related length-prefix codec model for consensus request/response networking. Both sources use unsigned base-128 framing, but leanp2p restricts values to 63 bits and requires minimal encodings; the selected networking specification supports a 64-bit, ten-byte range. This does not establish protocol conformance or Gossipsub correctness.",
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "varint"
+            },
+            {
+              "artifactId": "leanspec",
+              "locationId": "reqresp-codec"
+            },
+            {
+              "artifactId": "leanp2p-model",
+              "locationId": "codec"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-lean-l-p2p-varint-codec-roundtrip"
+          }
+        },
+        {
+          "componentInstanceId": "l-head",
+          "claimId": "lstar-incremental-head",
+          "applicabilityKind": "related-model",
+          "explanation": "The pinned Python fork choice tallies ancestors and walks the heaviest children with a hash tie-break; the Lean Store models those operations. The proof is conditional on equal tallies inside the Lean model, not correctness of an incremental client or equivalence of the Python loop and fuelled Lean walk.",
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "head-tally"
+            },
+            {
+              "artifactId": "lstar-forkchoice-model",
+              "locationId": "walk"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-lean-l-head-lstar-incremental-head"
+          }
+        },
+        {
+          "componentInstanceId": "l-xmss",
+          "claimId": "xmss-signature-correctness",
+          "applicabilityKind": "related-model",
+          "explanation": "Related hash-based XMSS signature model only. EthLib implements the Keccak/WOTS+C two-layer leanXMSS draft, whereas this Lean Spec snapshot uses Poseidon-based generalized XMSS. Both use one-time signatures and Merkle authentication, but this theorem does not transfer to the selected scheme, parameters or aggregation.",
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "xmss"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "xmss-verify"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "xmss-design"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-lean-l-xmss-xmss-signature-correctness"
+          }
         }
       ]
     },
@@ -1759,6 +3290,14 @@
         {
           "artifactId": "ssz-lean",
           "locationId": "ssz-lean-entry"
+        },
+        {
+          "artifactId": "execution",
+          "locationId": "modexp"
+        },
+        {
+          "artifactId": "execution",
+          "locationId": "precompiles"
         }
       ],
       "inheritance": [
@@ -1795,6 +3334,14 @@
             {
               "artifactId": "execution",
               "locationId": "evm"
+            },
+            {
+              "artifactId": "execution",
+              "locationId": "modexp"
+            },
+            {
+              "artifactId": "execution",
+              "locationId": "precompiles"
             }
           ],
           "position": {
@@ -1858,7 +3405,32 @@
           "parentInstanceId": null
         }
       ],
-      "claimBindings": []
+      "claimBindings": [
+        {
+          "componentInstanceId": "x-evm",
+          "claimId": "modexp-output-correctness",
+          "applicabilityKind": "related-model",
+          "explanation": "The Osaka EVM maps MODEXP_ADDRESS to modexp, whose output branch computes pow(base, exp, modulus) or zero bytes for modulus zero. The EthLib compute theorem concerns this arithmetic sub-operation only, not the Osaka gas schedule, call validation or whole EVM.",
+          "sources": [
+            {
+              "artifactId": "execution",
+              "locationId": "modexp"
+            },
+            {
+              "artifactId": "execution",
+              "locationId": "precompiles"
+            },
+            {
+              "artifactId": "ethlib",
+              "locationId": "modexp-core"
+            }
+          ],
+          "basis": {
+            "kind": "manual-comparison",
+            "checkId": "audit-compare-execution-x-evm-modexp-output-correctness"
+          }
+        }
+      ]
     }
   ],
   "architectureEdges": [

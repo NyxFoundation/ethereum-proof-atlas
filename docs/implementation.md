@@ -1,6 +1,6 @@
 ---
 title: Implementation and local acceptance
-last_updated: 2026-11-09
+last_updated: 2026-11-12
 tags:
   - implementation
   - testing
@@ -247,6 +247,24 @@ href targets of location links. The mode toggle now leads with Index. Local acce
 13 workerd browser cases passed, including hash-absence assertions over the
 rendered page and details panel, a hash-free sources fixture (sha256 artifact
 and version strings never displayed) and the Index-first toggle order.
+
+## Catalogue audit acceptance
+
+The [2026-11-12 eight-repository audit](catalogue-audit.md) adds eight claims
+and nine evidence records, bringing the catalogue to 13 distinct claims.
+Existing `claimBindings` drive both map nodes and table cells; no parallel
+repository-to-UI list or renderer special cases were added. All new bindings
+are related-model comparisons with explicit limitations, not protocol
+conformance or whole-component certification. Existing data and the accepted
+ArkLib update receipt remain intact; new Gasper/Lstar/ArkLib artifact scopes
+are independently pinned and are not advanced by the legacy three-claim updater.
+
+Local `npm run verify` passed 198 unit/component/package cases and 23 workerd
+browser cases. Coverage was 99.09% statements, 96.40% branches, 98.81% functions
+and 99.85% lines. New catalogue tests exercise each new claim from Index and
+Map, exact shared counts, fixed-commit theorem links, closed check detail,
+related-model limitations, unchanged no-replay status, tab isolation and a
+320px viewport. No external Lean proof was executed.
 
 ## Automated update acceptance
 

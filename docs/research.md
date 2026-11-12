@@ -1,6 +1,6 @@
 ---
 title: Research and intake notes
-last_updated: 2026-11-08
+last_updated: 2026-11-12
 tags:
   - evidence
   - research
@@ -212,6 +212,46 @@ Two corrections and one boundary from the same inspection:
 - Availability observations are GET observations, not replays; the
   `datasetRevision` was recomputed through the packaging validator and the
   two fixture-coupled component tests followed the recorded data.
+
+### leanp2p intake (2026-11-12)
+
+[etheorem/leanp2p](https://github.com/etheorem/leanp2p) was inspected at
+`0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7`, the head of its default branch
+`hackathon26` at intake. The pinned README targets Ethereum consensus-layer
+networking, and `lean-toolchain` selects Lean 4.34.0. The README's bootstrap
+status is not a proof inventory: the source contains unsigned-varint proofs.
+
+The `leanp2p-proof` artifact records two inspected theorem locations:
+
+- [`Varint.encodeDecode`](https://github.com/etheorem/leanp2p/blob/0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7/packages/codec/varint/Varint/Theorems.lean#L20-L28):
+  a successful decode splits its input into the decoded value's encoding and
+  the untouched suffix.
+- [`Varint.decodeEncodeSuffix`](https://github.com/etheorem/leanp2p/blob/0ab5e9a4d7bd5d30fabc43742938acb075d8dbe7/packages/codec/varint/Varint/UVarint.lean#L230-L241):
+  decoding an encoding followed by any suffix returns that value and suffix.
+  The `UVarint` type restricts values to less than `2^63`, with a nine-byte
+  encoding budget; the codec model operates on `List Nat`.
+
+Both theorem bodies and their local codec definitions were inspected. Neither
+module contains `sorry`, `admit` or an `axiom` declaration; this is not a
+complete transitive dependency/axiom audit or an Atlas-side Lean replay.
+GitHub Contents API GETs for the two pinned files returned HTTP 200 at
+2026-11-12T03:37:31Z and 2026-11-12T03:37:32Z respectively. Their byte counts
+and SHA-256 digests are recorded in the artifact's availability checks.
+
+The initial repository-only intake added a footer link without claims or
+bindings. The subsequent [eight-repository catalogue audit](catalogue-audit.md)
+adds one codec claim with two evidence locations and related-model bindings
+in both consensus views. The comparison records the 63-bit/64-bit range and
+minimal-encoding differences; it does not establish Gossipsub, transport or
+whole-stack correctness.
+
+The same audit adds seven further claims from gasper-lean4, formal-leanSpec,
+ArkLib and EthLib, bringing the bundle to 13 distinct claims. BLS, XMSS,
+PeerDAS, fork choice and EVM now expose individually scoped results in both
+Map and Index. The audit records the source inventory and admission or
+non-association reasons for all eight repositories, including OTS research
+and ssz-specs conformance tests. Existing automatic-update scopes remain
+unchanged; the additional claims are pinned but not automatically updated.
 
 ## Other initial candidates
 

@@ -206,9 +206,11 @@ describe('evidence presentation', () => {
     expect(screen.getByText(/gasper-lean4 abstract FFG model → Ethereum consensus specifications: Model to implementation\./)).toBeTruthy();
   });
   it('should show neutral empty states and source-backed relationships when components change', () => {
-    const props = {bundle,view,instanceId: 'b-bls',claimId: null,edgeId: null,onClaim: vi.fn(),onEdge: vi.fn()};
+    const props = {bundle,view,instanceId: 'b-head',claimId: null,edgeId: null,onClaim: vi.fn(),onEdge: vi.fn()};
     const {rerender} = render(<Details {...props} />);
     expect(screen.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+    rerender(<Details {...props} instanceId="b-bls" />);
+    expect(screen.getByRole('heading', {name: 'Claims: 1'})).toBeTruthy();
     fireEvent.click(screen.getByRole('button', {name: 'Signatures · dependency'}));
     expect(props.onEdge).toHaveBeenCalledWith('b-bls-state');
     rerender(<Details {...props} instanceId="b-state" />);
@@ -261,7 +263,8 @@ describe('map interaction', () => {
     fireEvent.click(await screen.findByRole('button', {name: 'Expand State transition'}));
     expect(await screen.findByRole('button', {name: 'Select Justification / finalization'})).toBeTruthy();
     fireEvent.click(await screen.findByRole('button', {name: 'Select BLS signatures'}));
-    expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
+    expect(panel.getByRole('heading', {name: 'Claims: 1'})).toBeTruthy();
+    expect(panel.getByRole('button', {name: 'BLS hash-to-G2 succeeds with a nonsingular curve point'})).toBeTruthy();
   });
 });
 
@@ -276,14 +279,14 @@ describe('index presentation', () => {
     const table = screen.getByRole('table');
     expect(within(table).getAllByRole('rowheader').map(header => header.textContent))
       .toEqual(['Consensus', 'Cryptography', 'Serialization']);
-    fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 1'}));
+    fireEvent.click(within(table).getByRole('button', {name: 'State transition: Claims: 2'}));
     const panel = within(screen.getByRole('complementary'));
     expect(panel.getByRole('heading', {name: 'State transition'})).toBeTruthy();
     expect(panel.getByRole('button', {name: claim.title})).toBeTruthy();
     fireEvent.click(within(table).getByRole('button', {name: 'Fork choice: No catalogued claims'}));
     expect(panel.getByRole('heading', {name: '0 claims'})).toBeTruthy();
     expect(panel.getByText(/does not mean unproved or unsafe/)).toBeTruthy();
-    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/}).length).toBeGreaterThanOrEqual(4);
+    expect(within(table).getAllByRole('button', {name: /: No catalogued claims$/})).toHaveLength(1);
     expect(within(table).queryByRole('rowheader', {name: 'Solidity / solc'})).toBeNull();
     expect(screen.getByText(/Shading reflects the claim count, not a coverage score/)).toBeTruthy();
     expect(screen.getByRole('list', {name: 'Claim-count shading legend'})).toBeTruthy();
@@ -297,9 +300,10 @@ describe('index presentation', () => {
     render(<Atlas bundle={bundle} view={view} mode="map" onMode={vi.fn()} />);
     const links = within(screen.getByRole('contentinfo')).getAllByRole('link');
     const hrefs = links.map(link => link.getAttribute('href'));
-    expect(hrefs).toHaveLength(7);
+    expect(hrefs).toHaveLength(8);
     expect(new Set(hrefs)).toEqual(new Set([
       'https://github.com/ethereum/EthLib', 'https://github.com/ethereum/ssz-specs',
+      'https://github.com/etheorem/leanp2p',
       'https://github.com/leanEthereum/ots.golf-dev', 'https://github.com/leanEthereum/ots.golf-submissions',
       'https://github.com/NyxFoundation/formal-leanSpec',
       'https://github.com/NyxFoundation/gasper-lean4', 'https://github.com/Verified-zkEVM/ArkLib',
@@ -309,6 +313,8 @@ describe('index presentation', () => {
       expect(link.getAttribute('target')).toBe('_blank');
     }
     expect(screen.queryByRole('link', {name: 'ethereum/consensus-specs'})).toBeNull();
+    expect(screen.getByRole('link', {name: 'etheorem/leanp2p'}).getAttribute('href'))
+      .toBe('https://github.com/etheorem/leanp2p');
     expect(screen.getByRole('link', {name: 'leanEthereum/ots.golf-submissions'}).textContent).toBe('leanEthereum/ots.golf-submissions');
   });
   it('should open the index table first and keep the mode across view changes', async () => {
@@ -320,7 +326,7 @@ describe('index presentation', () => {
     const toggleOrder = screen.getAllByRole('button', { name: /^(Index|Map)$/ })
       .map(button => button.textContent);
     expect(toggleOrder).toEqual(['Index', 'Map']);
-    expect(within(beaconTable).getByRole('button', {name: 'State transition: Claims: 1'})).toBeTruthy();
+    expect(within(beaconTable).getByRole('button', {name: 'State transition: Claims: 2'})).toBeTruthy();
     fireEvent.click(screen.getByRole('button', {name: 'Map'}));
     expect(screen.getByRole('button', {name: 'Map'}).getAttribute('aria-pressed')).toBe('true');
     fireEvent.keyDown(screen.getByRole('tab', {name: 'Beacon Spec'}), {key: 'ArrowRight'});

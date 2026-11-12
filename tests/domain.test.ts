@@ -40,7 +40,7 @@ describe('bundle integrity', () => {
     }));
     const view = bundle.architectureViews[0];
     const binding = view.claimBindings[0];
-    expect(claimsFor(bundle, view.id, binding.componentInstanceId)).toHaveLength(1);
+    expect(claimsFor(bundle, view.id, binding.componentInstanceId)).toHaveLength(2);
     expect(claimsFor(bundle, bundle.architectureViews[1].id, binding.componentInstanceId)).toHaveLength(0);
   });
   it('should preserve a claim when its source becomes unavailable after intake', async () => {

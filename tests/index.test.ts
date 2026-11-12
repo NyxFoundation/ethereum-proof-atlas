@@ -62,8 +62,8 @@ describe('index table layout', () => {
     expect(row(lean, 'consensus').cells.find(c => c.name === 'Consensus Gossipsub')).toBeTruthy();
   });
   it('should expose catalogued claim counts per view without inflating evidence', () => {
-    expect(row(beacon, 'consensus').cells.find(c => c.instanceId === 'b-state')!.count).toBe(1);
-    expect(row(beacon, 'cryptography').cells.find(c => c.instanceId === 'b-kzg')!.count).toBe(1);
+    expect(row(beacon, 'consensus').cells.find(c => c.instanceId === 'b-state')!.count).toBe(2);
+    expect(row(beacon, 'cryptography').cells.find(c => c.instanceId === 'b-kzg')!.count).toBe(3);
     expect(row(lean, 'consensus').cells.find(c => c.instanceId === 'l-state')!.count).toBe(1);
     expect(row(execution, 'execution').cells.find(c => c.instanceId === 'x-transition')!.count).toBe(0);
   });

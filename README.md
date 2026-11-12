@@ -75,6 +75,8 @@ and recovery steps are in [docs/proof-updates.md](docs/proof-updates.md).
   boundaries, data model and presentation contract.
 - [docs/research.md](docs/research.md) — source research, intake evidence and
   candidate decisions.
+- [docs/catalogue-audit.md](docs/catalogue-audit.md) — the eight-repository audit,
+  admitted claims, applicability limits and map/index verification.
 - [docs/proof-updates.md](docs/proof-updates.md) — upstream update review
   procedure.
 - [docs/implementation.md](docs/implementation.md) — module boundaries, data
