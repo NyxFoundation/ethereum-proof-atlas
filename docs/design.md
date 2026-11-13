@@ -120,6 +120,15 @@ relationships must remain visible.
   Req/Resp codec, the ETH wire protocol), discovery (discv5, ENR) and the varint
   codec. Do not fold them into one component, and do not draw a fictitious single
   P2P implementation.
+- Keep Cryptography at functional boundaries. Beacon separates **BLS
+  hash-to-G2** from **BLS signatures** and **KZG commitments**. Lean separates
+  **Poseidon hashing**, **XMSS hash chains**, **XMSS Merkle authentication**,
+  **XMSS signatures** and **Signature aggregation**. Keep the signature-scheme
+  claim on XMSS, not on its foundations, and distinguish XMSS authentication
+  from SSZ Merkleization. Map providers sit below their consumers; hash chains
+  and authentication are parallel inputs to XMSS, not one universal chain.
+  Cell encoding is outside Cryptography: retain its existing PeerDAS binding,
+  omit the KZG binding and do not add an encoding component for this split.
 - Split Serialization into **SSZ encoding / decoding** and **SSZ Merkleization**
   in both consensus views, with separate Index cells, Map nodes and claim lists.
   Bind codec canonicality only to encoding / decoding and branch reconstruction

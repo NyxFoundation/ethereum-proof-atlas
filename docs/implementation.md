@@ -288,6 +288,30 @@ cover all three views at 1280, 390 and 320 pixels, keyboard selection, protocol
 descriptions, unchanged counts, shared Map/Index selection and page-width
 containment. These checks do not replay external proofs.
 
+## Cryptographic function acceptance
+
+The 2026-11-12 split adds independent BLS hash-to-G2, XMSS hash-chain and
+XMSS Merkle-authentication components, and narrows Poseidon to hashing. Beacon
+now shows hash-to-G2 (1 claim), KZG (2) and BLS signatures (0); Lean shows
+Poseidon (0), Merkle authentication (0), hash chains (0), XMSS signatures (1)
+and signature aggregation (0). Existing cell serialization evidence stays on
+PeerDAS, outside Cryptography, with no added encoding component.
+
+Fixed positions keep hashing below its consumers and place the two XMSS inputs
+side by side. Existing colors, typography, count bands and interaction controls
+are unchanged. The purpose is separating proof subjects, not adding visual
+categories or transferring guarantees through dependencies.
+
+Local `npm run verify` passed 212 unit/component/package tests and 44 browser
+tests. Coverage was 99.07% statements, 96.71% branches, 98.80% functions and
+99.84% lines. `tests/cryptography.test.ts` verifies exact claim scopes, sourced
+dependencies and unchanged Serialization; `e2e/cryptography.spec.ts` exercises
+all eight cryptographic functions in Index and Map at 320, 390 and 1280px,
+including keyboard selection, neutral zero states, non-overlapping nodes,
+page-width containment and view isolation. Existing catalogue journeys check
+the moved theorem's pinned evidence and related-model limitations. No external
+proof code was executed.
+
 ## Automated update acceptance
 
 The updater captures one upstream head per candidate and fetches only fixed-commit

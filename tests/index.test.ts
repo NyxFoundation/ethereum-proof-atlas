@@ -15,7 +15,7 @@ describe('index table layout', () => {
     expect(build(beacon).columns).toBe(4);
     expect(row(beacon, 'consensus').cells.map(c => c.name)).toEqual([
       'Justification / finalization', 'PeerDAS', 'State transition', 'Fork choice']);
-    expect(row(beacon, 'cryptography').cells.map(c => c.name)).toEqual(['KZG commitments', 'BLS signatures']);
+    expect(row(beacon, 'cryptography').cells.map(c => c.name)).toEqual(['BLS hash-to-G2', 'KZG commitments', 'BLS signatures']);
     expect(row(beacon, 'serialization').cells.map(c => c.name)).toEqual([
       'SSZ encoding / decoding', 'SSZ Merkleization']);
   });
@@ -25,7 +25,7 @@ describe('index table layout', () => {
     expect(row(lean, 'consensus').cells.map(c => c.name)).toEqual([
       'Justification / finalization', 'State transition', 'Fork choice']);
     expect(row(lean, 'cryptography').cells.map(c => c.name)).toEqual(
-      ['Poseidon / Merkle tree', 'XMSS signatures', 'Signature aggregation']);
+      ['Poseidon hashing', 'XMSS Merkle authentication', 'XMSS hash chains', 'XMSS signatures', 'Signature aggregation']);
     expect(row(lean, 'serialization').cells.map(c => c.name)).toEqual([
       'SSZ encoding / decoding', 'SSZ Merkleization']);
   });
@@ -78,7 +78,7 @@ describe('index table layout', () => {
   });
   it('should expose catalogued claim counts per view without inflating evidence', () => {
     expect(row(beacon, 'consensus').cells.find(c => c.instanceId === 'b-state')!.count).toBe(2);
-    expect(row(beacon, 'cryptography').cells.find(c => c.instanceId === 'b-kzg')!.count).toBe(3);
+    expect(row(beacon, 'cryptography').cells.find(c => c.instanceId === 'b-kzg')!.count).toBe(2);
     expect(row(lean, 'consensus').cells.find(c => c.instanceId === 'l-state')!.count).toBe(1);
     expect(row(execution, 'execution').cells.find(c => c.instanceId === 'x-transition')!.count).toBe(0);
   });

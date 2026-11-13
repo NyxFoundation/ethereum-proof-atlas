@@ -262,6 +262,43 @@ non-association reasons for all eight repositories, including OTS research
 and ssz-specs conformance tests. Existing automatic-update scopes remain
 unchanged; the additional claims are pinned but not automatically updated.
 
+### Cryptographic function split (2026-11-12)
+
+This split changes component boundaries, not the proof corpus or architecture
+snapshot revisions. Beacon's **BLS hash-to-G2** carries the existing
+curve-membership claim; **BLS signatures** has zero catalogued claims. The
+manual-comparison record retains its original date, sources and conclusion
+while its instance/check IDs move to the narrower component.
+
+The pinned [Beacon ciphersuite](https://github.com/ethereum/consensus-specs/blob/204fb4a19774eabb7a2e91505365deed6b8afef8/specs/phase0/beacon-chain.md#L1070-L1084)
+adopts IETF BLS draft 04. The [versioned draft](https://www.ietf.org/archive/id/draft-irtf-cfrg-bls-signature-04.txt),
+sections 2.7 and 4.2.3, confirms that CoreVerify hashes the message to G2 before
+checking pairings. The architecture edge cites the pinned adoption site, not a
+moving BLS implementation. The draft GET returned HTTP 200 and 55,338 bytes;
+the Beacon source GET returned HTTP 200 and 83,312 bytes. Neither observation
+is a proof replay.
+
+At the already-selected Lean Spec revision, source inspection distinguishes:
+
+- [Poseidon compression and tweakable hashing](https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/poseidon.py#L16-L235).
+- [Winternitz hash-chain iteration](https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/poseidon.py#L237-L269).
+- [Merkle authentication](https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/merkle.py#L551-L620).
+- [XMSS verification](https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/interface.py#L283-L362),
+  which completes the chains and then verifies the authentication path.
+
+Raw GETs returned HTTP 200 for `poseidon.py` (11,063 bytes), `merkle.py`
+(22,920 bytes) and `interface.py` (19,321 bytes). Four new pinned locations and
+three dated availability records preserve these inspections. Poseidon supplies
+both chain and tree hashing; chains and authentication independently supply
+XMSS. The existing related Keccak/WOTS+C theorem stays on **XMSS signatures**,
+not on these Poseidon-based subcomponents. None gains a claim through an edge.
+
+The cell round-trip claim and its evidence remain on **PeerDAS**. Its duplicate
+KZG binding and that binding's manual-comparison record are removed, leaving
+KZG's correctness and binding-reduction claims. No encoding component is added;
+the Serialization row is unchanged. Claims, proof evidence, proof review/replay
+records and the three automatic-update scopes are unchanged.
+
 ## Other initial candidates
 
 All five approved candidates were investigated; inclusion in the research

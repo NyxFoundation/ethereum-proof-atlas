@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "datasetRevision": "97abce19115ce5ec8d141cb9c3699878c73d085fdda11222cbe391bff92709ca",
+  "datasetRevision": "01b3e3f1befd813f446ad6674b2786345030df5ad90b4ec2465917f9b7544963",
   "components": [
     {
       "id": "fork-choice",
@@ -50,14 +50,21 @@
       "id": "bls",
       "name": "BLS signatures",
       "area": "cryptography",
-      "description": "Beacon signature verification used by consensus processing.",
+      "description": "Beacon BLS signature and aggregate verification; hash-to-G2 evidence is catalogued separately and does not prove signature correctness.",
+      "childComponentIds": []
+    },
+    {
+      "id": "bls-hash-to-g2",
+      "name": "BLS hash-to-G2",
+      "area": "cryptography",
+      "description": "Map messages to BLS12-381 G2 using the Beacon ciphersuite. Related curve-membership evidence does not prove subgroup membership or BLS security.",
       "childComponentIds": []
     },
     {
       "id": "kzg",
       "name": "KZG commitments",
       "area": "cryptography",
-      "description": "KZG-backed data availability. Related abstract claims do not prove the cell verifier.",
+      "description": "KZG commitment/opening correctness and binding models related to Fulu cell-proof verification; no production-verifier guarantee.",
       "childComponentIds": []
     },
     {
@@ -106,9 +113,23 @@
     },
     {
       "id": "poseidon",
-      "name": "Poseidon / Merkle tree",
+      "name": "Poseidon hashing",
       "area": "cryptography",
-      "description": "Lstar XMSS tree hashing; no proof implied by an implementation.",
+      "description": "Poseidon compression and sponge hashing used by Lean XMSS chains and Merkle authentication; no hash-security guarantee is inferred.",
+      "childComponentIds": []
+    },
+    {
+      "id": "xmss-merkle",
+      "name": "XMSS Merkle authentication",
+      "area": "cryptography",
+      "description": "Verify XMSS authentication paths against public-key roots. Separate from SSZ Merkleization.",
+      "childComponentIds": []
+    },
+    {
+      "id": "xmss-chains",
+      "name": "XMSS hash chains",
+      "area": "cryptography",
+      "description": "Winternitz-style hash-chain evaluation inside generalized XMSS. A signature-scheme claim is not a standalone proof of these chains.",
       "childComponentIds": []
     },
     {
@@ -467,6 +488,30 @@
           "path": "src/lean_spec/node/networking/enr/enr.py",
           "label": "ENR records and endpoints",
           "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/node/networking/enr/enr.py"
+        },
+        {
+          "id": "poseidon-hash",
+          "path": "src/lean_spec/spec/crypto/xmss/poseidon.py",
+          "label": "Poseidon compression and tweakable hashing",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/poseidon.py#L16-L235"
+        },
+        {
+          "id": "xmss-chains",
+          "path": "src/lean_spec/spec/crypto/xmss/poseidon.py",
+          "label": "XMSS Winternitz hash-chain iteration",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/poseidon.py#L237-L269"
+        },
+        {
+          "id": "merkle-auth",
+          "path": "src/lean_spec/spec/crypto/xmss/merkle.py",
+          "label": "XMSS authentication-path verification",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/merkle.py#L551-L620"
+        },
+        {
+          "id": "xmss-verify",
+          "path": "src/lean_spec/spec/crypto/xmss/interface.py",
+          "label": "XMSS chain completion and Merkle verification",
+          "url": "https://github.com/leanEthereum/leanSpec/blob/0b7d33ecbc9ee2435759c92de4da4d08d7faf1c8/src/lean_spec/spec/crypto/xmss/interface.py#L283-L362"
         }
       ]
     },
@@ -2322,12 +2367,12 @@
       "result": "reviewed"
     },
     {
-      "id": "audit-compare-beacon-b-bls-bls-hash-to-g2-valid",
+      "id": "audit-compare-beacon-b-bls-hash-to-g2-bls-hash-to-g2-valid",
       "checkedAt": "2026-11-12T03:58:25Z",
       "details": "Beacon specifies the BLS12-381 G2 SHA-256/SSWU ciphersuite. EthLib models that hash-to-curve family and proves totality and nonsingular curve membership. The relation does not establish subgroup membership, full BLS correctness or client conformance. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
       "kind": "manual-comparison",
       "viewId": "beacon",
-      "componentInstanceId": "b-bls",
+      "componentInstanceId": "b-bls-hash-to-g2",
       "claimId": "bls-hash-to-g2-valid",
       "sources": [
         {
@@ -2390,26 +2435,6 @@
       "scope": "Lean 4.35.0; https://github.com/ethereum/EthLib@6b87b0d4951766864af432455c44344fd12b5cdc; cell-roundtrip; no Atlas replay.",
       "kind": "source-review",
       "result": "reviewed"
-    },
-    {
-      "id": "audit-compare-beacon-b-kzg-kzg-cell-roundtrip",
-      "checkedAt": "2026-11-12T03:58:25Z",
-      "details": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability. Source-level comparison only; no formal refinement or equivalence to the selected specification or a production client is established.",
-      "kind": "manual-comparison",
-      "viewId": "beacon",
-      "componentInstanceId": "b-kzg",
-      "claimId": "kzg-cell-roundtrip",
-      "sources": [
-        {
-          "artifactId": "consensus",
-          "locationId": "das-cell"
-        },
-        {
-          "artifactId": "ethlib",
-          "locationId": "kzg-cell"
-        }
-      ],
-      "result": "related"
     },
     {
       "id": "audit-compare-beacon-b-da-kzg-cell-roundtrip",
@@ -2542,6 +2567,40 @@
       "artifactId": "devp2p",
       "locationIds": [
         "devp2p-rlpx"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-crypto-poseidon-functions",
+      "checkedAt": "2026-11-12T14:55:50.776Z",
+      "details": "Raw GET at the pinned Lean Spec commit returned HTTP 200 and 11063 bytes for poseidon.py. The compression, tweak_hash and hash_chain definitions were inspected for component boundaries; no proof replay was performed.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "poseidon-hash",
+        "xmss-chains"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-crypto-merkle-auth",
+      "checkedAt": "2026-11-12T14:55:11.770Z",
+      "details": "Raw GET at the pinned Lean Spec commit returned HTTP 200 and 22920 bytes for merkle.py. verify_path was inspected for its Poseidon dependency; no proof replay was performed.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "merkle-auth"
+      ],
+      "result": "available"
+    },
+    {
+      "id": "availability-crypto-xmss-verify",
+      "checkedAt": "2026-11-12T14:55:11.779Z",
+      "details": "Raw GET at the pinned Lean Spec commit returned HTTP 200 and 19321 bytes for interface.py. Signature verification completes hash chains and checks a Merkle authentication path; no proof replay was performed.",
+      "kind": "availability",
+      "artifactId": "leanspec",
+      "locationIds": [
+        "xmss-verify"
       ],
       "result": "available"
     }
@@ -2846,6 +2905,24 @@
           "parentInstanceId": null
         },
         {
+          "instanceId": "b-bls-hash-to-g2",
+          "componentId": "bls-hash-to-g2",
+          "subjectArtifactIds": [
+            "consensus"
+          ],
+          "sources": [
+            {
+              "artifactId": "consensus",
+              "locationId": "bls-ciphersuite"
+            }
+          ],
+          "position": {
+            "x": 545,
+            "y": 780
+          },
+          "parentInstanceId": null
+        },
+        {
           "instanceId": "b-kzg",
           "componentId": "kzg",
           "subjectArtifactIds": [
@@ -3068,7 +3145,7 @@
           }
         },
         {
-          "componentInstanceId": "b-bls",
+          "componentInstanceId": "b-bls-hash-to-g2",
           "claimId": "bls-hash-to-g2-valid",
           "applicabilityKind": "related-model",
           "explanation": "Beacon specifies the BLS12-381 G2 SHA-256/SSWU ciphersuite. EthLib models that hash-to-curve family and proves totality and nonsingular curve membership. The relation does not establish subgroup membership, full BLS correctness or client conformance.",
@@ -3084,27 +3161,7 @@
           ],
           "basis": {
             "kind": "manual-comparison",
-            "checkId": "audit-compare-beacon-b-bls-bls-hash-to-g2-valid"
-          }
-        },
-        {
-          "componentInstanceId": "b-kzg",
-          "claimId": "kzg-cell-roundtrip",
-          "applicabilityKind": "related-model",
-          "explanation": "Fulu defines a Cell as the bytes of FIELD_ELEMENTS_PER_CELL field elements and uses cells in PeerDAS/KZG processing. EthLib proves its corresponding field-array encoding round-trip. This is related serialization evidence, not correctness of cell-proof verification or data availability.",
-          "sources": [
-            {
-              "artifactId": "consensus",
-              "locationId": "das-cell"
-            },
-            {
-              "artifactId": "ethlib",
-              "locationId": "kzg-cell"
-            }
-          ],
-          "basis": {
-            "kind": "manual-comparison",
-            "checkId": "audit-compare-beacon-b-kzg-kzg-cell-roundtrip"
+            "checkId": "audit-compare-beacon-b-bls-hash-to-g2-bls-hash-to-g2-valid"
           }
         },
         {
@@ -3433,7 +3490,43 @@
           "sources": [
             {
               "artifactId": "leanspec",
-              "locationId": "merkle"
+              "locationId": "poseidon-hash"
+            }
+          ],
+          "position": {
+            "x": 825,
+            "y": 930
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-xmss-merkle",
+          "componentId": "xmss-merkle",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "merkle-auth"
+            }
+          ],
+          "position": {
+            "x": 570,
+            "y": 760
+          },
+          "parentInstanceId": null
+        },
+        {
+          "instanceId": "l-xmss-chains",
+          "componentId": "xmss-chains",
+          "subjectArtifactIds": [
+            "leanspec"
+          ],
+          "sources": [
+            {
+              "artifactId": "leanspec",
+              "locationId": "xmss-chains"
             }
           ],
           "position": {
@@ -3876,6 +3969,21 @@
       ]
     },
     {
+      "id": "b-hash-to-g2-bls",
+      "viewId": "beacon",
+      "source": "b-bls-hash-to-g2",
+      "target": "b-bls",
+      "kind": "dependency",
+      "label": "Message hash-to-G2",
+      "explanation": "The Beacon ciphersuite cites IETF BLS draft 04. Its CoreVerify hashes the message to G2 before checking the pairing equation. A curve-membership claim does not establish signature correctness.",
+      "sources": [
+        {
+          "artifactId": "consensus",
+          "locationId": "bls-ciphersuite"
+        }
+      ]
+    },
+    {
       "id": "b-p2p-head",
       "viewId": "beacon",
       "source": "b-gossipsub",
@@ -4030,17 +4138,62 @@
       ]
     },
     {
-      "id": "l-poseidon-xmss",
+      "id": "l-poseidon-merkle",
       "viewId": "lean",
       "source": "l-poseidon",
-      "target": "l-xmss",
+      "target": "l-xmss-merkle",
       "kind": "dependency",
       "label": "Tree hashing",
-      "explanation": "The XMSS Merkle tree uses PoseidonXmss to hash tree layers.",
+      "explanation": "XMSS authentication-path verification uses Poseidon tweak_hash for the leaf and each sibling layer.",
       "sources": [
         {
           "artifactId": "leanspec",
-          "locationId": "merkle"
+          "locationId": "merkle-auth"
+        }
+      ]
+    },
+    {
+      "id": "l-poseidon-chains",
+      "viewId": "lean",
+      "source": "l-poseidon",
+      "target": "l-xmss-chains",
+      "kind": "dependency",
+      "label": "Chain hashing",
+      "explanation": "Each Winternitz chain step applies the Poseidon-based tweakable hash with a distinct chain tweak.",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "xmss-chains"
+        }
+      ]
+    },
+    {
+      "id": "l-merkle-xmss",
+      "viewId": "lean",
+      "source": "l-xmss-merkle",
+      "target": "l-xmss",
+      "kind": "dependency",
+      "label": "Authentication path",
+      "explanation": "XMSS signature verification calls verify_path to compare the reconstructed Merkle root with the public-key root.",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "xmss-verify"
+        }
+      ]
+    },
+    {
+      "id": "l-chains-xmss",
+      "viewId": "lean",
+      "source": "l-xmss-chains",
+      "target": "l-xmss",
+      "kind": "dependency",
+      "label": "Chain endpoints",
+      "explanation": "XMSS signature verification completes the Winternitz chains before authenticating their endpoints against the public-key root.",
+      "sources": [
+        {
+          "artifactId": "leanspec",
+          "locationId": "xmss-verify"
         }
       ]
     },
